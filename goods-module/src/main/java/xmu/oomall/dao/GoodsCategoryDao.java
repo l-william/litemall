@@ -25,11 +25,18 @@ public class GoodsCategoryDao {
     public int addGoodsCategory(GoodsCategory goodsCategory)
     {
         goodsCategory.setGmtCreate(LocalDateTime.now());
+        goodsCategory.setGmtModified(LocalDateTime.now());
         goodsCategory.setBeDeleted(false);
         return goodsCategoryMapper.addGoodsCategory(goodsCategory);
     }
     public int deleteGoodsCategory(Integer id)
     {
+        GoodsCategory goodsCategory=goodsCategoryMapper.findGoodsCategoryById(id);
+        if(goodsCategory!=null)
+        {
+            goodsCategory.setGmtModified(LocalDateTime.now());
+            goodsCategoryMapper.updateGoodsCategory(goodsCategory);
+        }
         return goodsCategoryMapper.deleteGoodsCategoryById(id);
     }
     public int updateGoodsCategory(GoodsCategory goodsCategory)

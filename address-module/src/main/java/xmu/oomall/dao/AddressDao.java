@@ -37,6 +37,10 @@ public class AddressDao {
     }
 
     public int updateAddress(Address address){
+        if(addressMapper.findAddressById(address.getId())!=null)
+        {
+            address.setGmtCreate(addressMapper.findAddressById(address.getId()).getGmtCreate());
+        }
         address.setGmtModified(LocalDateTime.now());
         return addressMapper.updateAddress(address);
     }
@@ -45,6 +49,7 @@ public class AddressDao {
         Address address=addressMapper.findAddressById(id);
         if(address!=null) {
             address.setGmtModified(LocalDateTime.now());
+            addressMapper.updateAddress(address);
         }
         return addressMapper.deleteAddressById(id);
     }
