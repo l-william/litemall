@@ -16,7 +16,7 @@ import java.util.List;
 
 @Repository
 public class BrandDao {
-    @Autowired
+    @Autowired(required = false)
     private BrandMapper brandMapper;
 
     public List<Brand> findBrandList(){

@@ -13,7 +13,7 @@
     </select>
 
     <insert id="addProduct" parameterType="product" useGeneratedKeys="true" keyProperty="id">
-        insert into product(product_ids, pic_Url, specifications, goods_id, price, safty_stock, gmt_create, gmt_modified, is_deleted)
+        insert into product(product_ids, pic_Url, specifications, goods_id, price, safety_stock, gmt_create, gmt_modified, is_deleted)
         values (#{productIds}, #{picUrl}, #{specifications}, #{goodsId}, #{price}, #{saftyStock}, #{gmtCreate}, #{gmtModified}, #{beDeleted})
     </insert>
 
@@ -24,7 +24,7 @@
             specifications = #{specifications},
             goods_id = #{goodsId},
             price = #{price},
-            safty_stock = #{saftyStock},
+            safety_stock = #{saftyStock},
             gmt_create = #{gmtCreate},
             gmt_modified = #{gmtModified},
             is_deleted = #{beDeleted}
