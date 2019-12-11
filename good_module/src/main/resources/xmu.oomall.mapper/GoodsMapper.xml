@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xmu.oomall.mapper.GoodsMapper">
+    <select id="findGoodsById" resultType="goods" parameterType="Integer">
+        select * from goods
+        where id = #{id} and is_deleted = 0
+    </select>
+
+    <select id="findGoodsListByGoodsSnAndName" resultType="goods" parameterType="String">
+        select * from goods
+        where
+        <if test="goodsSn != null">
+            goods_sn like #{goodsSn} and
+        </if>
+        <if test="name != null">
+            name like #{name} and
+        </if>
+        is_deleted = 0
+    </select>
+
+    <select id="getGoodsCount" resultType="Integer">
+        select count(id) from goods
+        where status = 1
+        and is_deleted = 0
+    </select>
+
+    <insert id="addGoods" parameterType="goods" useGeneratedKeys="true" keyProperty="id">
+        insert into goods(
+                    gmt_create,
+                    gmt_modified,
+                    name,
+                    goods_sn,
+                    short_name,
+                    description,
+                    brief,
+                    pic_url,
+                    detail,
+                    status,
+                    share_url,
+                    gallery,
+                    goods_category_id,
+                    brand_id,
+                    is_deleted,
+                    weight,
+                    volume,
+                    special_freight_id,
+                    is_spacial,
+                    price)
+        values (    #{gmtCreate},
+                    #{gmtModified},
+                    #{name},
+                    #{goodsSn},
+                    #{shortName},
+                    #(description),
+                    #(brief),
+                    #(picUrl),
+                    #(detail)
+                    #(status),
+                    #(shareUrl),
+                    #(gallery),
+                    #(goodsCategoryId),
+                    #(brandId),
+                    #(beDeleted),
+                    #(weight),
+                    #(volume),
+                    #(specialFreightId),
+                    #(isSpecial),
+                    #(price))
+    </insert>
+
+    <update id="updateGoods" parameterType="goods">
+        update goods
+        set gmt_create = #{gmt_create},
+            gmt_modified = #{gmt_modified},
+            name = #{name},
+            goods_sn = #{goods_sn},
+            short_name = #{short_name},
+            description = #{description},
+            brief = #{brief},
+            pic_url = #{pic_url},
+            detail = #{detail},
+            status = #{status},
+            share_url = #{share_url},
+            gallery = #{gallery},
+            goods_category_id = #{goods_category_id},
+            brand_id = #{brand_id},
+            is_deleted = #{is_deleted},
+            weight = #{weight},
+            volume = #{volume},
+            special_freight_id = #{special_freight_id},
+            is_spacial = #{is_spacial}
+            price = #{price}
+        where id = #{id}
+    </update>
+
+    <update id="deleteGoodsById" parameterType="Integer">
+        update goods
+        set is_deleted = 1
+        where id = #{id}
+    </update>
+
+</mapper>

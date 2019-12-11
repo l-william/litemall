@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xmu.oomall.mapper.AdMapper">
+    <select id="findAdById" resultType="Ad" parameterType="Integer">
+        select * from ad
+        where id = #{id} and is_deleted = 0
+    </select>
+
+    <select id="findAdList" resultType="Ad" parameterType="String">
+        select * from ad
+        where is_deleted = 0
+    </select>
+
+    <select id="findAdListByNameAndContent" resultType="Ad" parameterType="String">
+        select * from ad
+        where name like concat('%', #{name}, '%')
+        and content like concat('%', #{content}, '%')
+        and is_deleted = 0
+    </select>
+
+    <insert id="addAd" parameterType="Ad" useGeneratedKeys="true" keyProperty="id">
+        insert into ad(link, name, content, pic_url, is_default, is_enabled, start_time, end_time, gmt_create, gmt_modified, is_deleted)
+        values (#{link}, #{name}, #{content}, #{picUrl}, #{beDefault}, #{beEnable}, #{startTime}, #{endTime}, #{gmtCreate}, #{gmtModified}, #{beDeleted})
+    </insert>
+
+    <update id="updateAd" parameterType="Ad">
+        update ad
+        set link = #{link},
+            name = #{name},
+            content = #{content},
+            pic_url = #{picUrl},
+            is_default = #{beDefault},
+            is_enabled = #{beEnable},
+            start_time = #{startTime},
+            end_time = #{endTime},
+            gmt_create = #{gmtCreate},
+            gmt_modified = #{gmtModified},
+            is_deleted = #{beDeleted}
+        where id = #{id}
+    </update>
+
+    <update id="deleteAdById" parameterType="Integer">
+        update ad
+        set is_deleted = 1
+        where id = #{id}
+    </update>
+
+</mapper>
