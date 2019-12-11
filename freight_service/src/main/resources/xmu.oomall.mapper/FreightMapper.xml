@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="xmu.oomall.mapper.FreightMapper">
+    <select id="findDefaultFreightById" resultType="DefaultFreight" parameterType="Integer">
+        select * from default_freight
+        where id = #{id} and is_deleted = 0
+    </select>
+
+    <select id="findDefaultFreightList" resultType="DefaultFreight">
+        select * from default_freight
+        where is_deleted = 0
+    </select>
+
+    <insert id="addDefaultFreight" parameterType="DefaultFreight" useGeneratedKeys="true" keyProperty="id">
+        insert into default_freight(destination, first_heavy_price, continue_heavy_price, over10_price, over50_price, over100_price, over300_price, require_days, gmt_create, gmt_modified)
+        values (#{destination}, #{firstHeavyPrice}, #{continueHeavyPrice}, #{over10Price}, #{over50Price}, #{over100Price}, #{over300Price},
+        #{require_days}, #{gmt_create}, #{gmt_modified})
+    </insert>
+
+    <update id="updateDefaultFreight" parameterType="DefaultFreight">
+        update default_freight
+        set destination = #{destination},
+            first_heavy_price = #{firstHeavyPrice},
+            continue_heavy_price = #{continueHeavyPrice},
+            over10_price = #{over10Price},
+            over50_price = #{over50Price},
+            over100_price = #{over100Price},
+            over300_price = #{over300Price},
+            require_days = #{require_days},
+            gmt_create = #{gmt_create},
+            gmt_modified = #{gmt_modified}
+        where id = #{id}
+    </update>
+
+    <update id="deleteDefaultFreightById" parameterType="Integer">
+        update default_freight
+        set is_deleted = 1
+        where id = #{id}
+    </update>
+
+    <select id="findDefaultPieceFreightById" resultType="DefaultPieceFreight" parameterType="Integer">
+        select * from default_piece_freight
+        where id = #{id} and is_deleted = 0
+    </select>
+
+    <select id="findDefaultPieceFreightList" resultType="DefaultPieceFreight">
+        select * from default_piece_freight
+        where is_deleted = 0
+    </select>
+
+    <insert id="addDefaultPieceFreight" parameterType="DefaultPieceFreight" useGeneratedKeys="true" keyProperty="id">
+        insert into default_piece_freight(destination, require_days, unit_rate, gmt_create, gmt_modified)
+        values (#{destination}, #{requireDays}, #{unitRate}, #{gmtCreate}, #{gmtModified})
+    </insert>
+
+    <update id="updateDefaultPieceFreight" parameterType="DefaultPieceFreight">
+        update default_piece_freight
+        set destination = #{destination},
+            require_days = #{requireDays},
+            unit_rate = #{unitRate},
+            gmt_modified = #{gmtCreate},
+            gmt_create = #{gmtModified}
+        where id = #{id}
+    </update>
+
+    <update id="deleteDefaultPieceFreightById" parameterType="Integer">
+        update default_piece_freight
+        set is_deleted = 1
+        where id = #{id}
+    </update>
+
+</mapper>
