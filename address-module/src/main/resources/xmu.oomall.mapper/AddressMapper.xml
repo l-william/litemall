@@ -6,9 +6,9 @@
         where id = #{id} and is_deleted = 0
     </select>
 
-    <select id="findAddressListByUserId" resultType="Address" parameterType="String">
+    <select id="findAddressListByUserId" resultType="Address" parameterType="Integer">
         select * from address
-        where userId = #{userId} and is_deleted = 0
+        where user_id = #{userId} and is_deleted = 0
     </select>
 
     <insert id="addAddress" parameterType="Address" useGeneratedKeys="true" keyProperty="id">
@@ -18,9 +18,9 @@
 
     <update id="updateAddress" parameterType="Address">
         update address
-        set user_id = #{name},
-        city_id = #{description},
-        province_id = #{picUrl},
+        set user_id = #{userId},
+        city_id = #{cityId},
+        province_id = #{provinceId},
         county_id =#{countyId},
         address_detail = #{addressDetail},
         postal_code = #{postalCode},
