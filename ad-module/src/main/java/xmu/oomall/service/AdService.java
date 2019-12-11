@@ -10,12 +10,18 @@ import xmu.oomall.domain.Ad;
 
 import java.util.List;
 
+
+/**
+ * @author xiaoyutian
+ * @date 2019/12/11
+ */
 @Service
 public interface AdService {
     /**
+     * 通过id寻找广告
+     *
      * @param id
      * @return Ad
-     * 通过id寻找广告
      */
     Ad findAdById(Integer id);
 
@@ -25,12 +31,12 @@ public interface AdService {
      * @param ad
      * @return 是否成功操作
      */
-    public int createAd(Ad ad);
+    int createAd(Ad ad);
 
     /**
      * 管理员查询广告列表
      *
-     * @param ad 广告
+     * @param ad
      * @return 更新是否成功
      */
     boolean updateAd(Ad ad);
@@ -41,7 +47,7 @@ public interface AdService {
      * @param content 广告内容
      * @return 包含相应关键信息的广告列表
      */
-    public List<Ad> adminFindAdList(String name, String content);
+    List<Ad> adminFindAdList(String name, String content);
 
     /**
      * 管理员删除广告
@@ -55,6 +61,7 @@ public interface AdService {
     /**
      * 用户查询广告列表
      *
+     * 无参数
      * @return 包含相应关键信息的广告列表
      */
     public List<Ad> userFindAd();

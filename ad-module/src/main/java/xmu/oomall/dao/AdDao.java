@@ -14,24 +14,54 @@ import xmu.oomall.mapper.AdMapper;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * @author xyt
+ * @date 2019/12/11
+ */
 @Repository
 public class AdDao {
 
     @Autowired(required = false)
     private AdMapper adMapper;
 
+    /**
+     * 通过Id查找
+     *
+     * @param id
+     * @return Ad
+     */
     public Ad findAdById(Integer id)
     {
         return adMapper.findAdById(id);
     }
+
+    /**
+     * 查找Ad
+     *
+     * 无参数
+     * @return List<Ad>
+     */
     public List<Ad> findAdList(){
         return adMapper.findAdList();
     }
 
+    /**
+     * 通过名字和内容查找
+     *
+     * @param name
+     * @param content
+     * @return List<Ad>
+     */
     public List<Ad> findAdListByNameAndContent(String name, String content){
         return adMapper.findAdListByNameAndContent(name, content);
     }
 
+    /**
+     * 添加广告
+     *
+     * @param ad
+     * @return 是否成功
+     */
     public int addAd(Ad ad)
     {
         ad.setGmtCreate(LocalDateTime.now());
@@ -40,12 +70,24 @@ public class AdDao {
         return adMapper.addAd(ad);
     }
 
+    /**
+     * 更新广告
+     *
+     * @param ad
+     * @return 是否更新成功
+     */
     public int updateAd(Ad ad)
     {
         ad.setGmtModified(LocalDateTime.now());
         return adMapper.updateAd(ad);
     }
 
+    /**
+     * 通过Id删除广告
+     *
+     * @param id
+     * @return 是否删除成功
+     */
     public int deleteAdById(Integer id)
     {
         Ad ad=adMapper.findAdById(id);
