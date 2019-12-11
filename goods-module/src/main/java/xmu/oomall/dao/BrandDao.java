@@ -16,7 +16,7 @@ import java.util.List;
 
 @Repository
 public class BrandDao {
-    @Autowired
+    @Autowired(required = false)
     private BrandMapper brandMapper;
 
     public List<Brand> findBrandList(){
@@ -33,6 +33,7 @@ public class BrandDao {
 
     public int addBrand(Brand brand){
         brand.setGmtCreate(LocalDateTime.now());
+        brand.setGmtModified(LocalDateTime.now());
         brand.setBeDeleted(false);
         return brandMapper.addBrand(brand);
     }
@@ -43,6 +44,12 @@ public class BrandDao {
     }
 
     public int deleteBrandById(Integer id){
+        Brand brand=brandMapper.findBrandById(id);
+        if(brand!=null)
+        {
+            brand.setGmtModified(LocalDateTime.now());
+            brandMapper.updateBrand(brand);
+        }
         return brandMapper.deleteBrandById(id);
     }
 }

@@ -87,6 +87,7 @@ public class GoodsDao {
     public int addGoods(Goods goods)
     {
         goods.setGmtCreate(LocalDateTime.now());
+        goods.setGmtModified(LocalDateTime.now());
         goods.setBeDeleted(false);
 
         return goodsMapper.addGoods(goods);
@@ -98,6 +99,11 @@ public class GoodsDao {
      */
     public int updateGoods(Goods goods)
     {
+        if(goodsMapper.findGoodsById(goods.getId())!=null)
+        {
+            goods.setGmtCreate(goodsMapper.findGoodsById(goods.getId()).getGmtCreate());
+        }
+        goods.setGmtModified(LocalDateTime.now());
         return goodsMapper.updateGoods(goods);
     }
 
@@ -107,6 +113,12 @@ public class GoodsDao {
      */
     public int deleteGoodsById(Integer id)
     {
+        Goods goods=goodsMapper.findGoodsById(id);
+        if(goods!=null)
+        {
+            goods.setGmtModified(LocalDateTime.now());
+            goodsMapper.updateGoods(goods);
+        }
         return goodsMapper.deleteGoodsById(id);
     }
 
