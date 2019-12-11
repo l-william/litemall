@@ -49,7 +49,6 @@ public class GoodsDaoTest {
     public void addGoods()
     {
         Goods goods = new Goods();
-        goods.setId(10006);
         goods.setName("水杯");
 
         System.out.println(goods);
