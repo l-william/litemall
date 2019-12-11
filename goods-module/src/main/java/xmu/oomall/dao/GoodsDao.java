@@ -24,6 +24,8 @@ public class GoodsDao {
     private GoodsMapper goodsMapper;
 
     /**
+     * 管理员通过商品流水号或者名称搜索商品
+     *
      * @param goodsSn
      * @param name
      * @return 关键词的模糊查找
@@ -86,6 +88,7 @@ public class GoodsDao {
     {
         goods.setGmtCreate(LocalDateTime.now());
         goods.setBeDeleted(false);
+
         return goodsMapper.addGoods(goods);
     }
 
