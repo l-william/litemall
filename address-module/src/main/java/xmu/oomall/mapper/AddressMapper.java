@@ -1,5 +1,6 @@
 package xmu.oomall.mapper;
 
+import org.apache.ibatis.annotations.Mapper;
 import xmu.oomall.domain.Address;
 
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.List;
  * @date 2019/12/8 23:50
  * @version 1.0
  */
+@Mapper
 public interface AddressMapper {
     /**
      * 根据地址ID查找地址
@@ -24,7 +26,7 @@ public interface AddressMapper {
      * @param userId 用户ID
      * @return 该用户的地址列表
      */
-    List<Address> findAddressListByUserId(String userId);
+    List<Address> findAddressListByUserId(Integer userId);
 
     /**
      * 添加地址

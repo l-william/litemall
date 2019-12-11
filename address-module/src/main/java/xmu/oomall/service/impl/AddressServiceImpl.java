@@ -1,6 +1,7 @@
 package xmu.oomall.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import xmu.oomall.dao.AddressDao;
 import xmu.oomall.domain.Address;
 import xmu.oomall.service.AddressService;
@@ -12,6 +13,7 @@ import java.util.List;
  * @date 2019/12/9 00:17
  * @version 1.0
  */
+@Service
 public class AddressServiceImpl implements AddressService {
     @Autowired
     AddressDao addressDao;
@@ -22,7 +24,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public List<Address> findAddressListByUserId(String userId) {
+    public List<Address> findAddressListByUserId(Integer userId) {
         return addressDao.findAddressListByUserId(userId);
     }
 
@@ -44,7 +46,7 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public int setDefaultAddress(Address address) {
         String userId=address.getUserId();
-        List<Address> userAddressList=addressDao.findAddressListByUserId(userId);
+        List<Address> userAddressList=addressDao.findAddressListByUserId(Integer.valueOf(userId));
         for (Address userAddress:userAddressList) {
             if(userAddress.isBeDefault()){
                 userAddress.setBeDefault(false);

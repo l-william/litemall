@@ -52,6 +52,7 @@ public class FreightDao {
      */
     public int addDefaultFreight(DefaultFreight defaultFreight) {
         defaultFreight.setGmtCreate(LocalDateTime.now());
+        defaultFreight.setGmtModified(LocalDateTime.now());
         defaultFreight.setBeDeleted(false);
 
         return freightMapper.addDefaultFreight(defaultFreight);
@@ -64,6 +65,7 @@ public class FreightDao {
      * @return 操作状态码
      */
     public int updateDefaultFreight(DefaultFreight defaultFreight) {
+        defaultFreight.setGmtModified(LocalDateTime.now());
         return freightMapper.updateDefaultFreight(defaultFreight);
     }
 
@@ -74,6 +76,11 @@ public class FreightDao {
      * @return 操作状态码
      */
     public int deleteDefaultFreightById(Integer id) {
+        DefaultFreight defaultFreight=freightMapper.findDefaultFreightById(id);
+        if(defaultFreight!=null)
+        {
+            defaultFreight.setGmtModified(LocalDateTime.now());
+        }
         return freightMapper.deleteDefaultFreightById(id);
     }
 
@@ -104,6 +111,7 @@ public class FreightDao {
      */
     public int addDefaultPieceFreight(DefaultPieceFreight defaultPieceFreight) {
         defaultPieceFreight.setGmtCreate(LocalDateTime.now());
+        defaultPieceFreight.setGmtModified(LocalDateTime.now());
         defaultPieceFreight.setBeDeleted(false);
 
         return freightMapper.addDefaultPieceFreight(defaultPieceFreight);
@@ -116,6 +124,7 @@ public class FreightDao {
      * @return 操作状态码
      */
     public int updateDefaultPieceFreight(DefaultPieceFreight defaultPieceFreight) {
+        defaultPieceFreight.setGmtModified(LocalDateTime.now());
         return freightMapper.updateDefaultPieceFreight(defaultPieceFreight);
     }
 
@@ -126,6 +135,11 @@ public class FreightDao {
      * @return 操作状态码
      */
     public int deleteDefaultPieceFreightById(Integer id) {
+        DefaultPieceFreight defaultPieceFreight=freightMapper.findDefaultPieceFreightById(id);
+        if(defaultPieceFreight!=null)
+        {
+            defaultPieceFreight.setGmtModified(LocalDateTime.now());
+        }
         return freightMapper.deleteDefaultPieceFreightById(id);
     }
 }

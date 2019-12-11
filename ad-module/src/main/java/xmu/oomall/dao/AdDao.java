@@ -35,6 +35,7 @@ public class AdDao {
     public int addAd(Ad ad)
     {
         ad.setGmtCreate(LocalDateTime.now());
+        ad.setGmtModified(LocalDateTime.now());
         ad.setBeDeleted(false);
         return adMapper.addAd(ad);
     }
@@ -47,6 +48,11 @@ public class AdDao {
 
     public int deleteAdById(Integer id)
     {
+        Ad ad=adMapper.findAdById(id);
+        if(ad!=null)
+        {
+            ad.setGmtModified(LocalDateTime.now());
+        }
         return adMapper.deleteAdById(id);
     }
 }
