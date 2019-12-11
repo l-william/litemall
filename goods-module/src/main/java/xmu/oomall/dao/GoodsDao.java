@@ -17,6 +17,8 @@ import java.util.List;
 /**
  * @author lianh
  * @date 2019/12/07
+ * 商品dao层
+ *
  */
 @Repository
 public class GoodsDao {
@@ -36,6 +38,8 @@ public class GoodsDao {
     }
 
     /**
+     * 通过id查找商品
+     *
      * @param id
      * @return 商品的详细信息
      */
@@ -81,6 +85,8 @@ public class GoodsDao {
     }
 
     /**
+     * 添加商品
+     *
      * @param goods
      * @return 操作状态码
      */
@@ -94,6 +100,8 @@ public class GoodsDao {
     }
 
     /**
+     * 更新商品信息
+     *
      * @param goods
      * @return 操作状态码
      */
@@ -108,6 +116,8 @@ public class GoodsDao {
     }
 
     /**
+     * 通过id删除商品
+     *
      * @param id
      * @return 操作状态码
      */
@@ -123,6 +133,8 @@ public class GoodsDao {
     }
 
     /**
+     * 获取商品在售的总数
+     *
      * @return 在售商品数量
      */
     public int getGoodsCount() {
