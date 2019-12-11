@@ -10,10 +10,10 @@
         select * from goods
         where
         <if test="goodsSn != null">
-            goods_sn like #{goodsSn} and
+            goods_sn like concat('%', #{goodsSn}, '%') and
         </if>
         <if test="name != null">
-            name like #{name} and
+            name like concat('%', #{name}, '%') and
         </if>
         is_deleted = 0
     </select>
@@ -24,71 +24,72 @@
         and is_deleted = 0
     </select>
 
-    <insert id="addGoods" parameterType="goods" useGeneratedKeys="true" keyProperty="id">
+    <insert id="addGoods" parameterType="Goods" useGeneratedKeys="true" keyProperty="id">
         insert into goods(
-                    gmt_create,
-                    gmt_modified,
-                    name,
-                    goods_sn,
-                    short_name,
-                    description,
-                    brief,
-                    pic_url,
-                    detail,
-                    status,
-                    share_url,
-                    gallery,
-                    goods_category_id,
-                    brand_id,
-                    is_deleted,
-                    weight,
-                    volume,
-                    special_freight_id,
-                    is_spacial,
-                    price)
-        values (    #{gmtCreate},
-                    #{gmtModified},
-                    #{name},
-                    #{goodsSn},
-                    #{shortName},
-                    #(description),
-                    #(brief),
-                    #(picUrl),
-                    #(detail)
-                    #(status),
-                    #(shareUrl),
-                    #(gallery),
-                    #(goodsCategoryId),
-                    #(brandId),
-                    #(beDeleted),
-                    #(weight),
-                    #(volume),
-                    #(specialFreightId),
-                    #(isSpecial),
-                    #(price))
+            gmt_create,
+            gmt_modified,
+            name,
+            goods_sn,
+            short_name,
+            description,
+            brief,
+            pic_url,
+            detail,
+            status,
+            share_url,
+            gallery,
+            goods_category_id,
+            brand_id,
+            is_deleted,
+            weight,
+            volume,
+            special_freight_id,
+            is_special,
+            price)
+        values (
+            #{gmtCreate},
+            #{gmtModified},
+            #{name},
+            #{goodsSn},
+            #{shortName},
+            #{description},
+            #{brief},
+            #{picUrl},
+            #{detail},
+            #{statusCode},
+            #{shareUrl},
+            #{gallery}
+            #{goodsCategoryId},
+            #{brandId},
+            #{beDeleted},
+            #{weight},
+            #{volume},
+            #{specialFreightId},
+            #{beSpecial},
+            #{price})
     </insert>
 
     <update id="updateGoods" parameterType="goods">
         update goods
-        set gmt_create = #{gmt_create},
-            gmt_modified = #{gmt_modified},
+        set gmt_create = #{gmtCreate},
+            gmt_modified = #{gmtModified},
             name = #{name},
-            goods_sn = #{goods_sn},
-            short_name = #{short_name},
+            goods_sn = #{goodsSn},
+            short_name = #{shortName},
             description = #{description},
             brief = #{brief},
-            pic_url = #{pic_url},
+            pic_url = #{picUrl},
             detail = #{detail},
-            status = #{status},
-            share_url = #{share_url},
+            status = #{statusCode},
+            share_url = #{shareUrl},
             gallery = #{gallery},
-            goods_category_id = #{goods_category_id},
-            brand_id = #{brand_id},
-            is_deleted = #{is_deleted},
+            goods_category_id = #{goodsCategoryId},
+            brand_id = #{brandId},
+            is_deleted = #{beDeleted},
             weight = #{weight},
             volume = #{volume},
-            special_freight_id = #{special_freight_id},
-            is_spacial = #{is_spacial}
+            special_freight_id = #{specialFreightId},
+            is_special = #{beSpecial},
             price = #{price}
         where id = #{id}
     </update>

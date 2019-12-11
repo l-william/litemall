@@ -20,6 +20,8 @@ public interface GoodsMapper {
     Goods findGoodsById(Integer id);
 
     /**
+     * 管理员通过商品流水号或者名称搜索商品
+     *
      * @param goodsSn
      * @param name
      * @return 关键词的模糊查询结果
