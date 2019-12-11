@@ -6,7 +6,6 @@
     <modules>
         <module>ad-module</module>
         <module>address-module</module>
-        <module>test</module>
         <module>freight-module</module>
         <module>goods-module</module>
     </modules>

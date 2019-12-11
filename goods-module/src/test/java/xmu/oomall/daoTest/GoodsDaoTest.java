@@ -27,8 +27,8 @@ public class GoodsDaoTest {
     @Test
     public void findGoodsListByGoodSnAndName()
     {
-        String goodsSn = "sa";
-        String name = null;
+        String goodsSn = "we";
+        String name = "劳力";
         List<Goods> goodsList = goodsDao.findGoodsListByGoodSnAndName(goodsSn, name);
 
         for(Goods goods : goodsList) {
@@ -49,7 +49,10 @@ public class GoodsDaoTest {
     public void addGoods()
     {
         Goods goods = new Goods();
+        goods.setId(10006);
         goods.setName("水杯");
+
+        System.out.println(goods);
 
         if(goodsDao.addGoods(goods) == 1) {
             System.out.println("Add successfully!");
