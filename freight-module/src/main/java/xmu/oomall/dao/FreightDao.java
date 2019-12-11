@@ -65,6 +65,10 @@ public class FreightDao {
      * @return 操作状态码
      */
     public int updateDefaultFreight(DefaultFreight defaultFreight) {
+        if(freightMapper.findDefaultFreightById(defaultFreight.getId())!=null)
+        {
+            defaultFreight.setGmtCreate(freightMapper.findDefaultFreightById(defaultFreight.getId()).getGmtCreate());
+        }
         defaultFreight.setGmtModified(LocalDateTime.now());
         return freightMapper.updateDefaultFreight(defaultFreight);
     }
@@ -80,6 +84,7 @@ public class FreightDao {
         if(defaultFreight!=null)
         {
             defaultFreight.setGmtModified(LocalDateTime.now());
+            freightMapper.updateDefaultFreight(defaultFreight);
         }
         return freightMapper.deleteDefaultFreightById(id);
     }
@@ -124,6 +129,10 @@ public class FreightDao {
      * @return 操作状态码
      */
     public int updateDefaultPieceFreight(DefaultPieceFreight defaultPieceFreight) {
+        if(freightMapper.findDefaultPieceFreightById(defaultPieceFreight.getId())!=null)
+        {
+            defaultPieceFreight.setGmtCreate(freightMapper.findDefaultPieceFreightById(defaultPieceFreight.getId()).getGmtCreate());
+        }
         defaultPieceFreight.setGmtModified(LocalDateTime.now());
         return freightMapper.updateDefaultPieceFreight(defaultPieceFreight);
     }
@@ -139,6 +148,7 @@ public class FreightDao {
         if(defaultPieceFreight!=null)
         {
             defaultPieceFreight.setGmtModified(LocalDateTime.now());
+            freightMapper.updateDefaultPieceFreight(defaultPieceFreight);
         }
         return freightMapper.deleteDefaultPieceFreightById(id);
     }

@@ -18,7 +18,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("/ads")
+@RequestMapping("")
 public class AdController {
     @Autowired
     private AdService adService;

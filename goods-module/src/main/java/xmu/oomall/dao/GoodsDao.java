@@ -17,6 +17,8 @@ import java.util.List;
 /**
  * @author lianh
  * @date 2019/12/07
+ * 商品dao层
+ *
  */
 @Repository
 public class GoodsDao {
@@ -36,6 +38,8 @@ public class GoodsDao {
     }
 
     /**
+     * 通过id查找商品
+     *
      * @param id
      * @return 商品的详细信息
      */
@@ -81,36 +85,56 @@ public class GoodsDao {
     }
 
     /**
+     * 添加商品
+     *
      * @param goods
      * @return 操作状态码
      */
     public int addGoods(Goods goods)
     {
         goods.setGmtCreate(LocalDateTime.now());
+        goods.setGmtModified(LocalDateTime.now());
         goods.setBeDeleted(false);
 
         return goodsMapper.addGoods(goods);
     }
 
     /**
+     * 更新商品信息
+     *
      * @param goods
      * @return 操作状态码
      */
     public int updateGoods(Goods goods)
     {
+        if(goodsMapper.findGoodsById(goods.getId())!=null)
+        {
+            goods.setGmtCreate(goodsMapper.findGoodsById(goods.getId()).getGmtCreate());
+        }
+        goods.setGmtModified(LocalDateTime.now());
         return goodsMapper.updateGoods(goods);
     }
 
     /**
+     * 通过id删除商品
+     *
      * @param id
      * @return 操作状态码
      */
     public int deleteGoodsById(Integer id)
     {
+        Goods goods=goodsMapper.findGoodsById(id);
+        if(goods!=null)
+        {
+            goods.setGmtModified(LocalDateTime.now());
+            goodsMapper.updateGoods(goods);
+        }
         return goodsMapper.deleteGoodsById(id);
     }
 
     /**
+     * 获取商品在售的总数
+     *
      * @return 在售商品数量
      */
     public int getGoodsCount() {
