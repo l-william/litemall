@@ -31,6 +31,7 @@ public class AddressDao {
 
     public int addAddress(Address address){
         address.setGmtCreate(LocalDateTime.now());
+        address.setGmtModified(LocalDateTime.now());
         address.setBeDeleted(false);
         return addressMapper.addAddress(address);
     }
@@ -41,6 +42,10 @@ public class AddressDao {
     }
 
     public int deleteAddressById(Integer id){
+        Address address=addressMapper.findAddressById(id);
+        if(address!=null) {
+            address.setGmtModified(LocalDateTime.now());
+        }
         return addressMapper.deleteAddressById(id);
     }
 }
