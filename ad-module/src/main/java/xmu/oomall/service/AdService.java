@@ -13,9 +13,10 @@ import java.util.List;
 @Service
 public interface AdService {
     /**
+     * 通过id寻找广告
+     *
      * @param id
      * @return Ad
-     * 通过id寻找广告
      */
     Ad findAdById(Integer id);
 
