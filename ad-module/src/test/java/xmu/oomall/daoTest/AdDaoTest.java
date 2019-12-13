@@ -17,6 +17,7 @@ import java.util.List;
 public class AdDaoTest {
     @Autowired
     private AdDao adDao;
+
     @Test
     void findAdById()
     {
