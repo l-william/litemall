@@ -14,7 +14,7 @@ import lombok.ToString;
 @Setter
 @ToString
 @EqualsAndHashCode(callSuper = true)
-public class FootprintItem extends xmu.oomall.domain.FootprintItemPo {
+public class FootprintItem extends FootprintItemPo {
 
-    private xmu.oomall.domain.GoodsPo goodsPo;
+    private GoodsPo goodsPo;
 }
