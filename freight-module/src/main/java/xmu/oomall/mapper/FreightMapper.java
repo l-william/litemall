@@ -8,6 +8,7 @@ package xmu.oomall.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import xmu.oomall.domain.DefaultFreight;
 import xmu.oomall.domain.DefaultPieceFreight;
+import xmu.oomall.domain.OrderItem;
 
 import java.util.List;
 
@@ -96,4 +97,22 @@ public interface FreightMapper {
      * @return 操作状态码
      */
     int deleteDefaultPieceFreightById(Integer id);
+
+    /**
+     * 【测试】
+     * 通过订单ID查找所对应的订单物品列表
+     *
+     * @param orderId 订单ID
+     * @return
+     */
+    List<OrderItem> findOrderItemListByOrderId(Integer orderId);
+
+    /**
+     * 通过地址返回对应的运费模板
+     *
+     * @param place
+     * @return 默认运费模板
+     */
+    DefaultFreight findDefaultFreightBy(String place);
+
 }
