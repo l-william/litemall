@@ -16,20 +16,12 @@ import java.time.LocalDateTime;
 import java.util.Iterator;
 import java.util.List;
 
-/**
- * @author xyt
- * @date 2019/12/11
- */
 @Service
 public class AdServiceImpl implements AdService {
 
     @Autowired
     private AdDao adDao;
 
-    /**
-     * @param id
-     * @return
-     */
     @Override
     public Ad findAdById(Integer id) {
         return adDao.findAdById(id);

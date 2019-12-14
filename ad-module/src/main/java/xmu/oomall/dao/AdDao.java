@@ -15,8 +15,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 /**
- * @author xyt
- * @date 2019/12/11
+ * @author linlianhui
+ * @date 2019/12/12
  */
 @Repository
 public class AdDao {
@@ -25,10 +25,10 @@ public class AdDao {
     private AdMapper adMapper;
 
     /**
-     * 通过Id查找
+     * 通过id查看广告的详细信息
      *
      * @param id
-     * @return Ad
+     * @return 广告
      */
     public Ad findAdById(Integer id)
     {
@@ -36,70 +36,58 @@ public class AdDao {
     }
 
     /**
-     * 查找Ad
+     * 管理员查看当前所有广告
      *
-     * 无参数
-     * @return List<Ad>
+     * @return 广告列表
      */
     public List<Ad> findAdList(){
         return adMapper.findAdList();
     }
 
     /**
-     * 通过名字和内容查找
+     * 管理员通过名字或内容搜索广告
      *
      * @param name
      * @param content
-     * @return List<Ad>
+     * @return 包含关键词的广告列表
      */
     public List<Ad> findAdListByNameAndContent(String name, String content){
         return adMapper.findAdListByNameAndContent(name, content);
     }
 
     /**
-     * 添加广告
+     * 管理员添加广告
      *
      * @param ad
-     * @return 是否成功
+     * @return 状态操作码
      */
     public int addAd(Ad ad)
     {
         ad.setGmtCreate(LocalDateTime.now());
-        ad.setGmtModified(LocalDateTime.now());
         ad.setBeDeleted(false);
         return adMapper.addAd(ad);
     }
 
     /**
-     * 更新广告
+     * 管理员更新广告
      *
      * @param ad
-     * @return 是否更新成功
+     * @return 状态操作码
      */
     public int updateAd(Ad ad)
     {
-        if(adMapper.findAdById(ad.getId())!=null)
-        {
-            ad.setGmtCreate(adMapper.findAdById(ad.getId()).getGmtCreate());
-        }
         ad.setGmtModified(LocalDateTime.now());
         return adMapper.updateAd(ad);
     }
 
     /**
-     * 通过Id删除广告
+     * 管理员删除广告
      *
      * @param id
-     * @return 是否删除成功
+     * @return 状态操作码
      */
     public int deleteAdById(Integer id)
     {
-        Ad ad=adMapper.findAdById(id);
-        if(ad!=null)
-        {
-            ad.setGmtModified(LocalDateTime.now());
-            adMapper.updateAd(ad);
-        }
         return adMapper.deleteAdById(id);
     }
 }

@@ -18,7 +18,7 @@ import java.util.List;
 
 
 @RestController
-@RequestMapping("")
+@RequestMapping("/ads")
 public class AdController {
     @Autowired
     private AdService adService;
@@ -80,7 +80,7 @@ public class AdController {
 
     @DeleteMapping("/ads/{id}")
     @ApiOperation(value="删除一条广告 /delete")
-    public Object adminDeleteAd(@PathVariable Integer id,@RequestBody Ad ad)
+    public Object adminDeleteAd(@PathVariable Integer id)
     {
         int ret=adService.deleteAd(id);
         if(ret==0){
