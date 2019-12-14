@@ -2,36 +2,36 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="xmu.oomall.mapper.GoodsCategoryMapper">
     <select id="findGoodsCategoryById" resultType="goodsCategory" parameterType="Integer">
-        select * from goods_category
+        select * from oomall_goods_category
         where id = #{id} and is_deleted = 0
     </select>
     <select id="findGoodsCategoryList" resultType="goodsCategory" >
-        select * from goods_category
+        select * from oomall_goods_category
         where is_deleted = 0
     </select>
 
     <select id="findOneLevelGoodsCategoryList" resultType="goodsCategory" >
-        select * from goods_category
+        select * from oomall_goods_category
         where pid is null and is_deleted = 0
     </select>
 
     <select id="findSecondLevelGoodsCategoryList" resultType="goodsCategory" >
-        select * from goods_category
+        select * from oomall_goods_category
         where pid is not null and is_deleted = 0
     </select>
 
     <select id="findGoodsCategoryListByPid" resultType="goodsCategory" parameterType="Integer">
-        select * from goods_category
+        select * from oomall_goods_category
         where pid = #{pid} and is_deleted = 0
     </select>
 
     <insert id="addGoodsCategory" parameterType="goodsCategory" useGeneratedKeys="true" keyProperty="id">
-        insert into goods_category(name, pid, gmt_create, gmt_modified, is_deleted)
+        insert into oomall_goods_category(name, pid, gmt_create, gmt_modified, is_deleted)
         values (#{name}, #{pid}, #{gmtCreate}, #{gmtModified}, #{beDeleted})
     </insert>
 
     <update id="updateGoodsCategory" parameterType="goodsCategory">
-        update goods_category
+        update oomall_goods_category
         set name = #{name},
             pid = #{pid},
             gmt_create = #{gmtCreate},
@@ -41,7 +41,7 @@
     </update>
 
     <update id="deleteGoodsCategoryById" parameterType="Integer">
-        update goods_category
+        update oomall_goods_category
         set is_deleted = 1
         where id = #{id}
     </update>

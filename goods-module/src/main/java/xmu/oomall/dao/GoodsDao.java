@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import xmu.oomall.domain.Goods;
 import xmu.oomall.mapper.GoodsMapper;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -95,7 +94,6 @@ public class GoodsDao {
         goods.setGmtCreate(LocalDateTime.now());
         goods.setGmtModified(LocalDateTime.now());
         goods.setBeDeleted(false);
-
         return goodsMapper.addGoods(goods);
     }
 

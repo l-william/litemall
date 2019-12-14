@@ -3,28 +3,25 @@
 <mapper namespace="xmu.oomall.mapper.ProductMapper">
 
     <select id="findProductById" resultType="product" parameterType="Integer">
-        select * from product where id = #{id}
+        select * from oomall_product where id = #{id}
     </select>
 
     <select id="findProductList" resultType="product" >
-        select * from product
-        where product_ids like #{productIds}
-        and goods_id like #{goodsId}
+        select * from oomall_product
+        where goods_id like #{goodsId}
     </select>
 
     <insert id="addProduct" parameterType="product" useGeneratedKeys="true" keyProperty="id">
-        insert into product(product_ids, pic_Url, specifications, goods_id, price, safety_stock, gmt_create, gmt_modified, is_deleted)
-        values (#{productIds}, #{picUrl}, #{specifications}, #{goodsId}, #{price}, #{saftyStock}, #{gmtCreate}, #{gmtModified}, #{beDeleted})
+        insert into oomall_product(pic_Url, specifications, goods_id, price, gmt_create, gmt_modified, is_deleted)
+        values ( #{picUrl}, #{specifications}, #{goodsId}, #{price}, #{gmtCreate}, #{gmtModified}, #{beDeleted})
     </insert>
 
     <update id="updateProduct" parameterType="product">
-        update product
-        set product_ids = #{productIds},
-            pic_url = #{picUrl},
+        update oomall_product
+        set pic_url = #{picUrl},
             specifications = #{specifications},
             goods_id = #{goodsId},
             price = #{price},
-            safety_stock = #{saftyStock},
             gmt_create = #{gmtCreate},
             gmt_modified = #{gmtModified},
             is_deleted = #{beDeleted}
@@ -32,7 +29,7 @@
     </update>
 
     <delete id="deleteProductById" parameterType="Integer">
-        delete from product
+        delete from oomall_product
         where id = #{id}
     </delete>
 </mapper>

@@ -2,12 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="xmu.oomall.mapper.GoodsMapper">
     <select id="findGoodsById" resultType="goods" parameterType="Integer">
-        select * from goods
+        select * from oomall_goods
         where id = #{id} and is_deleted = 0
     </select>
 
     <select id="findGoodsListByGoodsSnAndName" resultType="goods" parameterType="String">
-        select * from goods
+        select * from oomall_goods
         where
         <if test="goodsSn != null">
             goods_sn like concat('%', #{goodsSn}, '%') and
@@ -19,13 +19,13 @@
     </select>
 
     <select id="getGoodsCount" resultType="Integer">
-        select count(id) from goods
+        select count(id) from oomall_goods
         where status = 1
         and is_deleted = 0
     </select>
 
     <insert id="addGoods" parameterType="Goods" useGeneratedKeys="true" keyProperty="id">
-        insert into goods(
+        insert into oomall_goods(
             gmt_create,
             gmt_modified,
             name,
@@ -70,7 +70,7 @@
     </insert>
 
     <update id="updateGoods" parameterType="goods">
-        update goods
+        update oomall_goods
         set gmt_create = #{gmtCreate},
             gmt_modified = #{gmtModified},
             name = #{name},
@@ -95,7 +95,7 @@
     </update>
 
     <update id="deleteGoodsById" parameterType="Integer">
-        update goods
+        update oomall_goods
         set is_deleted = 1
         where id = #{id}
     </update>
