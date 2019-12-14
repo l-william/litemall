@@ -45,7 +45,7 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public int setDefaultAddress(Address address) {
-        String userId=address.getUserId();
+        Integer userId=address.getUserId();
         List<Address> userAddressList=addressDao.findAddressListByUserId(Integer.valueOf(userId));
         for (Address userAddress:userAddressList) {
             if(userAddress.isBeDefault()){

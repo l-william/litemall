@@ -18,6 +18,8 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode(callSuper = true)
 public class Goods extends xmu.oomall.domain.GoodsPo {
+    @Setter
+    @Getter
     private BrandPo brandPo;
     private xmu.oomall.domain.GoodsCategoryPo goodsCategoryPo;
     private List<ProductPo> productPoList;

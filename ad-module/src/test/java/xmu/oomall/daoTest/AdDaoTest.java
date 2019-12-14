@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import xmu.oomall.dao.AdDao;
 import xmu.oomall.domain.Ad;
+
 import java.util.List;
 
 @SpringBootTest

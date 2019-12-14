@@ -41,12 +41,12 @@
             <version>2.1.1</version>
         </dependency>
 
-        <!--单元测试，使用标准组的测试用例进行测试-->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
+<!--        &lt;!&ndash;单元测试，使用标准组的测试用例进行测试&ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>junit</groupId>-->
+<!--            <artifactId>junit</artifactId>-->
+<!--            <scope>test</scope>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
