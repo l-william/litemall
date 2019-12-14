@@ -58,7 +58,7 @@ public class AdControllerTest {
     void deleteAd(){
         Ad ad = new Ad();
         ad.setName("cfh:uselessObj");
-        adController.adminDeleteAd(12345,ad);
+        adController.adminDeleteAd(12345);
     }
 
     @Test

@@ -1,5 +1,10 @@
-package xmu.oomall.mapper;
+/**
+ * @author linlianhui
+ * @date 2019/12/6 14:55
+ * @version 1.0
+ */
 
+package xmu.oomall.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import xmu.oomall.domain.Ad;
@@ -8,6 +13,7 @@ import java.util.List;
 
 /**
  * @author lianh
+ * @date 2019/12/12
  */
 @Mapper
 public interface AdMapper {
