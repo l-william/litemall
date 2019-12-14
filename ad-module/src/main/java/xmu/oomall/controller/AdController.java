@@ -8,6 +8,7 @@ package xmu.oomall.controller;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import xmu.oomall.domain.Ad;
 import xmu.oomall.service.AdService;
@@ -22,6 +23,25 @@ import java.util.List;
 public class AdController {
     @Autowired
     private AdService adService;
+
+    /**
+     * 参数验证函数
+     *
+     * @param newAd
+     * @return object
+     */
+    private Object validate(Ad newAd) {
+        String name=newAd.getName();
+        if(StringUtils.isEmpty(name))
+        {
+            return ResponseUtil.badArgument();
+        }
+        String content = newAd.getContent();
+        if (StringUtils.isEmpty(content)) {
+            return ResponseUtil.badArgument();
+        }
+        return null;
+    }
 
     @GetMapping("/admins/ads")
     @ApiOperation(value="管理员查看所有的广告  /list")
@@ -39,8 +59,16 @@ public class AdController {
     @PostMapping("/ads")
     @ApiOperation(value="新建一条广告 /create")
     public Object adminCreateAd(@RequestBody Ad ad) {
-        adService.createAd(ad);
-        return ResponseUtil.ok();
+        Object re=validate(ad);
+        if(re!=null)
+        {
+            return re;
+        }
+        else
+        {
+            adService.createAd(ad);
+            return ResponseUtil.ok();
+        }
     }
 
     @GetMapping("/ads/{id}")
@@ -55,7 +83,7 @@ public class AdController {
         }
         else
         {
-            Object object = ResponseUtil.fail();
+            Object object = ResponseUtil.badArgumentValue();
             return object;
         }
     };
@@ -72,7 +100,7 @@ public class AdController {
         }
         else
         {
-            Object object=ResponseUtil.fail();
+            Object object=ResponseUtil.badArgumentValue();
             return object;
         }
     };
@@ -84,7 +112,7 @@ public class AdController {
     {
         int ret=adService.deleteAd(id);
         if(ret==0){
-            return ResponseUtil.fail();
+            return ResponseUtil.badArgumentValue();
         }
         return ResponseUtil.ok();
     };
