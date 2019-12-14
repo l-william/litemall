@@ -10,7 +10,6 @@ import java.util.List;
  * @date 2019/12/9 00:14
  * @version 1.0
  */
-@Service
 public interface AddressService {
     /**
      * 根据地址ID查找地址
@@ -26,7 +25,7 @@ public interface AddressService {
      * @param userId 用户ID
      * @return 该用户的地址列表
      */
-    List<Address> findAddressListByUserId(Integer userId);
+    List<Address> findAddressListByUserId(String userId);
 
     /**
      * 添加地址
@@ -53,10 +52,18 @@ public interface AddressService {
     int deleteAddressById(Integer id);
 
     /**
-     * 设置为默认地址
+     * 清除默认地址
      *
-     * @param address 待设置的地址
-     * @return 是否操作成功
+     * @param userId 用户ID
      */
-    int setDefaultAddress(Address address);
+    void clearDefaultAddress(Integer userId);
+
+    /**
+     * 检查地址是否合法
+     *
+     * @param address 地址
+     * @return 是否合法
+     */
+    int validate(Address address);
 }
+

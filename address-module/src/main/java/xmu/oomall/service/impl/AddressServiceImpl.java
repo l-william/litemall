@@ -13,7 +13,6 @@ import java.util.List;
  * @date 2019/12/9 00:17
  * @version 1.0
  */
-@Service
 public class AddressServiceImpl implements AddressService {
     @Autowired
     AddressDao addressDao;
@@ -24,7 +23,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public List<Address> findAddressListByUserId(Integer userId) {
+    public List<Address> findAddressListByUserId(String userId) {
         return addressDao.findAddressListByUserId(userId);
     }
 
@@ -40,21 +39,28 @@ public class AddressServiceImpl implements AddressService {
 
     @Override
     public int deleteAddressById(Integer id) {
-        return deleteAddressById(id);
+        return addressDao.deleteAddressById(id);
     }
 
     @Override
-    public int setDefaultAddress(Address address) {
-        String userId=address.getUserId();
-        List<Address> userAddressList=addressDao.findAddressListByUserId(Integer.valueOf(userId));
-        for (Address userAddress:userAddressList) {
-            if(userAddress.isBeDefault()){
-                userAddress.setBeDefault(false);
-                addressDao.updateAddress(userAddress);
-                break;
+    public void clearDefaultAddress(Integer userId) {
+        List<Address> addressList=addressDao.findAddressListByUserId(userId.toString());
+        for (Address address:addressList) {
+            if(address.isBeDefault()==true){
+                address.setBeDefault(false);
+                addressDao.updateAddress(address);
             }
         }
-        address.setBeDefault(true);
-        return addressDao.updateAddress(address);
+    }
+
+    @Override
+    public int validate(Address address) {
+        boolean valid=address.getCityId()!=null
+                &&address.getCountyId()!=null
+                &&address.getProvinceId()!=null;
+        if(valid){
+            return 1;
+        }
+        return 0;
     }
 }

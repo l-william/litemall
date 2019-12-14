@@ -69,4 +69,9 @@
         where id = #{id}
     </update>
 
+    <select id="findOrderItemListByOrderId" parameterType="Integer" resultType="OrderItem">
+        select * from order_item
+        where order_id = #{OrderId} and is_deleted = 0
+    </select>
+
 </mapper>
