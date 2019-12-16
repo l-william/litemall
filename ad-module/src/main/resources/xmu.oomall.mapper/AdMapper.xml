@@ -13,6 +13,14 @@
 
     <select id="findAdListByNameAndContent" resultType="Ad" parameterType="String">
         select * from oomall_ad
+        <where>
+            <if test="name !=null">
+                `name` like CONCAT('%',#{name},'%')
+            </if>
+            <if test="content !=null">
+                and `content` like CONCAT('%',#{content},'%')
+            </if>
+        </where>
         where name like concat('%', #{name}, '%')
         and content like concat('%', #{content}, '%')
         and is_deleted = 0
