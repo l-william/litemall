@@ -11,6 +11,16 @@
         where is_deleted = 0
     </select>
 
+    <select id="findDefaultFreightByPlace" parameterType="String" resultType="DefaultFreight">
+        select * from oomall_default_freight
+        where contains(destination,#{place})
+    </select>
+
+    <select id="findOrderItemListByOrderId" parameterType="Integer" resultType="OrderItem">
+	select * from oomall_order_item
+	where order_id = #{OrderId} and is_deleted = 0
+    </select>
+
     <insert id="addDefaultFreight" parameterType="DefaultFreight" useGeneratedKeys="true" keyProperty="id">
         insert into oomall_default_freight(destination, first_heavy_price, continue_heavy_price, over10_price, over50_price, over100_price, over300_price, require_days, gmt_create, gmt_modified)
         values (#{destination}, #{firstHeavyPrice}, #{continueHeavyPrice}, #{over10Price}, #{over50Price}, #{over100Price}, #{over300Price},

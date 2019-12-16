@@ -8,6 +8,7 @@ package xmu.oomall.service;
 import org.springframework.stereotype.Service;
 import xmu.oomall.domain.DefaultFreight;
 import xmu.oomall.domain.DefaultPieceFreight;
+import xmu.oomall.domain.Order;
 
 import java.util.List;
 
@@ -82,10 +83,10 @@ public interface FreightService {
     /**
      * 计算所需运费
      *
-     * @param OrderId
+     * @param order
      * @return 操作成功与否
      */
-    public double getFreight(Integer OrderId);
+    public double getFreight(Order order);
 
     /**
      * 通过id寻找默认运费模板

@@ -106,4 +106,13 @@ public interface FreightMapper {
      * @return
      */
     List<OrderItem> findOrderItemListByOrderId(Integer orderId);
+
+    /**
+     * 通过地址返回对应的运费模板
+     *
+     * @param place
+     * @return 默认运费模板
+     */
+    DefaultFreight findDefaultFreightBy(String place);
+
 }

@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import xmu.oomall.domain.DefaultFreight;
 import xmu.oomall.domain.DefaultPieceFreight;
+import xmu.oomall.domain.Order;
+import xmu.oomall.domain.OrderItem;
 import xmu.oomall.mapper.FreightMapper;
 
 import java.time.LocalDateTime;
@@ -152,4 +154,9 @@ public class FreightDao {
         }
         return freightMapper.deleteDefaultPieceFreightById(id);
     }
+    public List<OrderItem> findItemsInAOrder(Order order)
+    {
+        return freightMapper.findOrderItemListByOrderId(order.getId());
+    }
+
 }
