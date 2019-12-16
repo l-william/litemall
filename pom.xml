@@ -9,7 +9,7 @@
         <module>freight-module</module>
         <module>goods-module</module>
         <module>ad-module</module>
-        <module>server-module</module>
+        <module>eureka-server-module</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
