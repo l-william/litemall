@@ -8,19 +8,21 @@
         <module>address-module</module>
         <module>freight-module</module>
         <module>goods-module</module>
-        <module>eureka-server-module</module>
+        <module>server-module</module>
     </modules>
+
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.2.1.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
     <groupId>xmu</groupId>
     <artifactId>oomall</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>oomall</name>
-    <description>1-8DAOO</description>
+    <description>1-8-DAOO</description>
 
     <properties>
         <java.version>1.8</java.version>
@@ -33,13 +35,13 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>2.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -53,7 +55,6 @@
             <version>2.2.1.RELEASE</version>
             <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>io.swagger</groupId>
             <artifactId>swagger-annotations</artifactId>
@@ -64,12 +65,6 @@
             <artifactId>junit-jupiter-api</artifactId>
             <version>5.5.2</version>
             <scope>test</scope>
-        </dependency>
-
-        <!--Eureka 客户端-->
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
         </dependency>
     </dependencies>
 
