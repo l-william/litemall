@@ -14,6 +14,7 @@ import xmu.oomall.domain.Ad;
 import xmu.oomall.service.AdService;
 import xmu.oomall.util.ResponseUtil;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -45,13 +46,13 @@ public class AdController {
 
     @GetMapping("/admins/ads")
     @ApiOperation(value="管理员查看所有的广告  /list")
-    public Object adminFindAdList(String name, String content
-//                                  @RequestParam(defaultValue = "1") Integer page,
-//                                  @RequestParam(defaultValue = "10") Integer limit
-//                       @Sort @RequestParam(defaultValue = "add_time") String sort,
-//                       @Order @RequestParam(defaultValue = "desc") String order
+    public Object adminFindAdList(HttpServletRequest request,
+                                  @RequestParam(defaultValue = "1") Integer page,
+                                  @RequestParam(defaultValue = "10") Integer limit,
+                                  @RequestParam String adTitle,
+                                  @RequestParam String adContent
     ) {
-        List<Ad> adList = adService.adminFindAdList(name, content);
+        List<Ad> adList = adService.adminFindAdList(adTitle, adContent);
         return ResponseUtil.ok(adList);
     }
 

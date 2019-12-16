@@ -9,6 +9,7 @@
         <module>freight-module</module>
         <module>goods-module</module>
         <module>ad-module</module>
+        <module>server-module</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -24,6 +25,7 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <spring-cloud.version>Finchley.RELEASE</spring-cloud.version>
     </properties>
 
     <dependencies>
