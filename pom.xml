@@ -8,7 +8,6 @@
         <module>address-module</module>
         <module>freight-module</module>
         <module>goods-module</module>
-        <module>ad-module</module>
         <module>eureka-server-module</module>
     </modules>
     <parent>
