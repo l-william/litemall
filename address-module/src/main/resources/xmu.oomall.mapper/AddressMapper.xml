@@ -6,9 +6,19 @@
         where id = #{id} and is_deleted = 0
     </select>
 
+    <select id="findAddressList" resultType="Address">
+        select * from oomall_address
+        where is_deleted = 0
+    </select>
+
     <select id="findAddressListByUserId" resultType="Address" parameterType="Integer">
         select * from oomall_address
         where user_id = #{userId} and is_deleted = 0
+    </select>
+
+    <select id="findAddressListByUserIdAndConsignee" resultType="Address" parameterType="Integer,String">
+        select * from oomal_address
+        where user_id= #{userId} and consignee= #{Consignee} and is_deleted=0
     </select>
 
     <insert id="addAddress" parameterType="Address" useGeneratedKeys="true" keyProperty="id">

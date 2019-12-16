@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import xmu.oomall.domain.Address;
+import xmu.oomall.domain.AddressPo;
 import xmu.oomall.service.AddressService;
 import xmu.oomall.util.ResponseUtil;
 
@@ -23,22 +24,23 @@ public class AddressController {
 
     @Autowired
     AddressService addressService;
+
     /**
-     * 用户收货地址列表
+     * 获取所有地址列表（意义不明）
      *
-     * @param userId 用户ID
+     * @param
      * @return 收货地址列表
      */
     @GetMapping("/addresses")
-    public Object getAddressListByUserId(Integer userId) {
-        List<Address> addressList=addressService.findAddressListByUserId(userId.toString());
+    public Object getAddressList(Integer page,Integer limit) {
+        List<Address> addressList=addressService.findAddressList(page,limit);
         return ResponseUtil.ok(addressList);
     }
 
     /**
      * 收货地址详情
      *
-     * @param id     收货地址ID
+     * @param id 收货地址ID
      * @return 收货地址详情
      */
     @GetMapping("/addresses/{id}")
@@ -61,14 +63,14 @@ public class AddressController {
     /**
      * API设计者：添加收货地址
      *
-     * @param userId  用户ID
-     * @param address 用户收货地址
+     * @param addressPo 用户收货地址
      * @return 新添加的地址
      */
     @PostMapping("/addresses")
-    public Object save(Integer userId,@RequestBody Address address) {
-        address.setUserId(userId);
-        if(address.isBeDefault()==true){
+    public Object addAddress(@RequestBody AddressPo addressPo) {
+        Address address=new Address();
+        Integer userId=addressPo.getUserId();
+        if(addressPo.isBeDefault()){
             addressService.clearDefaultAddress(userId);
         }
         int ret=addressService.addAddress(address);
@@ -85,7 +87,7 @@ public class AddressController {
      * @return 删除操作结果
      */
     @DeleteMapping("/addresses/{id}")
-    public Object delete(@PathVariable Integer id) {
+    public Object deleteAddress(@PathVariable Integer id) {
         int ret= addressService.deleteAddressById(id);
         if(ret==1){
             return ResponseUtil.ok();

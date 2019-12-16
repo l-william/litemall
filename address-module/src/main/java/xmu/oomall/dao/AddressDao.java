@@ -20,13 +20,20 @@ public class AddressDao {
     @Autowired(required = false)
     AddressMapper addressMapper;
 
+    public List<Address> findAddressList(){
+        return addressMapper.findAddressList();
+    }
+
     public Address findAddressById(Integer id){
         return addressMapper.findAddressById(id);
     }
 
     public List<Address> findAddressListByUserId(Integer userId){
-
         return addressMapper.findAddressListByUserId(userId);
+    }
+
+    public List<Address> findAddressListByUserIdAndConsignee(Integer userId,String consignee){
+        return addressMapper.findAddressListByUserIdAndConsignee(userId,consignee);
     }
 
     public int addAddress(Address address){

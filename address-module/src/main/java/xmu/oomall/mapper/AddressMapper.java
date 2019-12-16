@@ -12,6 +12,14 @@ import java.util.List;
  */
 @Mapper
 public interface AddressMapper {
+
+    /**
+     * 查询所有地址（意义不明）
+     *
+     * @return 所有地址列表
+     */
+    List<Address> findAddressList();
+
     /**
      * 根据地址ID查找地址
      *
@@ -27,6 +35,15 @@ public interface AddressMapper {
      * @return 该用户的地址列表
      */
     List<Address> findAddressListByUserId(Integer userId);
+
+    /**
+     * 通过用户ID与收货人查找地址
+     *
+     * @param userId 用户ID
+     * @param consignee 收货人姓名
+     * @return 地址列表
+     */
+    List<Address> findAddressListByUserIdAndConsignee(Integer userId,String consignee);
 
     /**
      * 添加地址

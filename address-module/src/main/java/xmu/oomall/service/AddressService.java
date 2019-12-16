@@ -11,6 +11,16 @@ import java.util.List;
  * @version 1.0
  */
 public interface AddressService {
+
+    /**
+     * 查询所有地址（意义不明）
+     *
+     * @param page 分页页号
+     * @param limit 分页大小
+     * @return 所有地址列表
+     */
+    List<Address> findAddressList(Integer page,Integer limit);
+
     /**
      * 根据地址ID查找地址
      *
@@ -25,7 +35,18 @@ public interface AddressService {
      * @param userId 用户ID
      * @return 该用户的地址列表
      */
-    List<Address> findAddressListByUserId(String userId);
+    List<Address> findAddressListByUserId(Integer userId);
+
+    /**
+     * 通过用户ID与收货人查找地址
+     *
+     * @param userId 用户ID
+     * @param consignee 收货人姓名
+     * @param page 分页页号
+     * @param limit 分页大小
+     * @return 地址列表
+     */
+    List<Address> findAddressListByUserIdAndConsignee(Integer userId,String consignee,Integer page,Integer limit);
 
     /**
      * 添加地址
