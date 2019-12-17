@@ -116,7 +116,7 @@ public class AddressController {
      * @return 更新成功后的地址
      */
     @PutMapping("/addresses/{id}")
-    public Object updateAddress(@RequestBody AddressPo addressPo) {
+    public Object updateAddress(@PathVariable Integer id,@RequestBody AddressPo addressPo) {
         if(!validate(addressPo)){
             return ResponseUtil.badArgument();
         }
@@ -124,6 +124,7 @@ public class AddressController {
             Integer userId=addressPo.getUserId();
             addressService.clearDefaultAddress(userId);
         }
+        addressPo.setId(id);
         AddressPo retPo=addressService.updateAddress(addressPo);
         if(retPo==null){
             return ResponseUtil.updatedDataFailed();

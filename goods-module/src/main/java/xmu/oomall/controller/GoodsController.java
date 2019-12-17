@@ -84,7 +84,10 @@ public class GoodsController {
 
     @PutMapping("/brands/{id}")
     @ApiOperation(value="修改单个品牌的信息/update")
-    public Object updateBrand(HttpServletRequest request,@RequestBody BrandPo brandPo){
+    public Object updateBrand(HttpServletRequest request,
+                              @PathVariable Integer id,
+                              @RequestBody BrandPo brandPo)
+    {
         Log log=createLog(request, 0, 1, "更新品牌");
         if(log!=null) {
             writeLog(log);
@@ -92,6 +95,7 @@ public class GoodsController {
         else {
             return ResponseUtil.unlogin();
         }
+        brandPo.setId(id);
         BrandPo retPo= brandService.updateBrand(brandPo);
         if(retPo==null){
             return ResponseUtil.updatedDataFailed();
@@ -124,16 +128,7 @@ public class GoodsController {
     public Object listGoodsCategory()
     {
         List<GoodsCategory> goodsCategoryList=goodsCategoryService.findGoodsCategoryList();
-        if(goodsCategoryList.size()!=0)
-        {
-            Object object = ResponseUtil.ok(goodsCategoryList);
-            return object;
-        }
-        else
-        {
-            Object object= ResponseUtil.fail();
-            return object;
-        }
+        return ResponseUtil.ok(goodsCategoryList);
     };
 
 
