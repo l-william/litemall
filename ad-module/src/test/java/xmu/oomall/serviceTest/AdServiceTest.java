@@ -19,13 +19,13 @@ public class AdServiceTest {
     @Test
     void findAdById()
     {
-        if(adService.findAdById(11111)==null)
+        if(adService.findAdById(2)==null)
         {
             System.out.println("no find");
         }
         else
         {
-            System.out.println(adService.findAdById(11111).getId());
+            System.out.println(adService.findAdById(2));
         }
     }
     @Test

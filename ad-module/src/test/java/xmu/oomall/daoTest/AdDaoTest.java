@@ -22,8 +22,8 @@ public class AdDaoTest {
     @Test
     void findAdById()
     {
-        Integer a=10001;
-        Ad ad=adDao.findAdById(a);
+        Integer id = 1;
+        Ad ad=adDao.findAdById(id);
         if(ad==null)
             System.out.println("not find!");
         else
@@ -73,8 +73,8 @@ public class AdDaoTest {
     @Test
     void findAdListBynameAndContent()
     {
-        String name = "mall";
-        String content = "content";
+        String name = "凉被";
+        String content = "看";
         List<Ad> adList = adDao.findAdListByNameAndContent(name ,content);
         if(adList.isEmpty())
         {
@@ -82,7 +82,9 @@ public class AdDaoTest {
         }
         else
         {
-            System.out.println("have "+adList.size());
+            for(Ad ad : adList) {
+                System.out.println(ad);
+            }
         }
     }
 }
