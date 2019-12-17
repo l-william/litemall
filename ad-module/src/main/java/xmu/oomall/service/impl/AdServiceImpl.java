@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import xmu.oomall.dao.AdDao;
 import xmu.oomall.domain.Ad;
 import xmu.oomall.service.AdService;
+import com.github.pagehelper.PageHelper;
 
 import java.time.LocalDateTime;
 import java.util.Iterator;
@@ -39,7 +40,10 @@ public class AdServiceImpl implements AdService {
 
 
     @Override
-    public List<Ad> adminFindAdList(String name, String content) {
+    public List<Ad> adminFindAdList(Integer page,Integer limit,String name, String content) {
+        PageHelper.startPage(page,limit);
+//        List <Ad> list=adDao.findAdListByNameAndContent(name, content);
+//        PageInfo<Ad> page = new PageInfo<Ad>(list);
         return adDao.findAdListByNameAndContent(name, content);
     }
 
