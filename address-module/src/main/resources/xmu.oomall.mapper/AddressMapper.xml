@@ -11,12 +11,17 @@
         where user_id = #{userId} and is_deleted = 0
     </select>
 
-    <insert id="addAddress" parameterType="Address" useGeneratedKeys="true" keyProperty="id">
+    <select id="findAddressListByUserIdAndConsignee" resultType="Address" parameterType="Integer,String">
+        select * from oomal_address
+        where user_id= #{userId} and consignee= #{Consignee} and is_deleted=0
+    </select>
+
+    <insert id="addAddress" parameterType="AddressPo" useGeneratedKeys="true" keyProperty="id">
         insert into oomall_address(user_id, city_id, province_id, county_id, address_detail, postal_code, consignee, mobile, is_default, gmt_create, gmt_modified, is_deleted)
         values (#{userId}, #{cityId}, #{provinceId}, #{countyId}, #{addressDetail}, #{postalCode}, #{consignee}, #{mobile}, #{beDefault}, #{gmtCreate}, #{gmtModified}, #{beDeleted})
     </insert>
 
-    <update id="updateAddress" parameterType="Address">
+    <update id="updateAddress" parameterType="AddressPo">
         update oomall_address
         set user_id = #{userId},
         city_id = #{cityId},

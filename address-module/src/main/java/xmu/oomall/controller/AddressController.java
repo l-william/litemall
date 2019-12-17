@@ -1,12 +1,21 @@
 package xmu.oomall.controller;
 
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
+import org.springframework.core.annotation.Order;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import xmu.oomall.domain.Address;
+import xmu.oomall.domain.AddressPo;
+import xmu.oomall.domain.Log;
 import xmu.oomall.service.AddressService;
 import xmu.oomall.util.ResponseUtil;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
@@ -14,6 +23,7 @@ import java.util.List;
  * @author CFH
  * @date 2019/12/9 23:58
  * @version 1.0
+ *
  */
 @RestController
 @RequestMapping("")
@@ -22,89 +32,102 @@ public class AddressController {
 
     @Autowired
     AddressService addressService;
+    @Autowired
+    private LoadBalancerClient loadBalancerClient;
+
     /**
-     * 用户收货地址列表
+     * 用户获取自己所有的地址列表
      *
-     * @param userId 用户ID
-     * @return 收货地址列表
+     * @param request 网页请求
+     * @param page 分页页号
+     * @param limit 分页大小
+     * @return 用户所有的收货地址列表
      */
     @GetMapping("/addresses")
-    public Object list(Integer userId) {
-        List<Address> addressList=addressService.findAddressListByUserId(userId);
+    public Object getUserAddressList(HttpServletRequest request,
+                                     @RequestParam(defaultValue = "1") Integer page,
+                                     @RequestParam(defaultValue = "10") Integer limit) {
+        Integer userId= request.getIntHeader("userId");
+        if(userId==0){
+            return ResponseUtil.unlogin();
+        }
+        List<Address> addressList=addressService.findAddressListByUserId(userId,page,limit);
         return ResponseUtil.ok(addressList);
     }
 
     /**
-     * 收货地址详情
+     * 查看收货地址详情
      *
-     * @param userId 用户ID
-     * @param id     收货地址ID
+     * @param id 收货地址ID
      * @return 收货地址详情
      */
     @GetMapping("/addresses/{id}")
-    public Object detail(Integer userId, Integer id) {
+    public Object getAddressById(@PathVariable Integer id) {
         Address address=addressService.findAddressById(id);
-        boolean found=address!=null&& address.getUserId().equals(userId);
-        if(found){
-            return ResponseUtil.ok(address);
+        if(address==null){
+            return ResponseUtil.badArgumentValue();
         }
-        return ResponseUtil.fail();
+        return ResponseUtil.ok(address);
     }
 
     /**
-     * 测试地址是否合法，比如是否有country/province等
-     * 用int作为返回值表示成功与否
-     */
-    private int validate(Address address) {
-        return 1;
-    }
-
-    /**
-     * 添加或更新收货地址
+     * 用户添加收货地址
      *
-     * @param userId  用户ID
-     * @param address 用户收货地址
-     * @return 添加或更新操作结果
+     * @param addressPo 用户收货地址
+     * @return 新添加的地址
      */
     @PostMapping("/addresses")
-    public Object save(Integer userId,  Address address) {
-        //CFH: 新增？？？
-        address.setUserId(userId);
-        int ret=addressService.addAddress(address);
-        if(ret==1){
-            return ResponseUtil.ok(address);
+    public Object addAddress(@RequestBody AddressPo addressPo) {
+        if(!validate(addressPo)){
+            return ResponseUtil.badArgument();
         }
-        return ResponseUtil.fail();
+        if(addressPo.isBeDefault()){
+            Integer userId=addressPo.getUserId();
+            addressService.clearDefaultAddress(userId);
+        }
+        AddressPo retPo=addressService.addAddress(addressPo);
+        if(retPo==null){
+            return ResponseUtil.updatedDataFailed();
+        }
+        return ResponseUtil.ok(addressPo);
     }
 
     /**
-     * 删除收货地址
+     * 用户删除收货地址
      *
-     * @param userId  用户ID
-     * @param address 用户收货地址，{ id: xxx }
+     * @param id 地址ID
      * @return 删除操作结果
      */
-    @DeleteMapping("/address/{id}")
-    //这里用int表示删除操作成功与否
-    public Object delete(Integer userId, Address address, Integer id) {
-        //CFH:userId与address如何应用？？
+    @DeleteMapping("/addresses/{id}")
+    public Object deleteAddress(@PathVariable Integer id) {
         int ret= addressService.deleteAddressById(id);
-        if(ret==1){
-            return ResponseUtil.ok();
+        if(ret==0){
+            return ResponseUtil.updatedDataFailed();
         }
-        return  ResponseUtil.fail();
+        return  ResponseUtil.ok();
     }
 
 
+    /**
+     * 用户更新地址
+     *
+     * @param addressPo 地址信息
+     * @return 更新成功后的地址
+     */
     @PutMapping("/addresses/{id}")
-    public Object update(Integer userId,  Address address, Integer id) {
-        address.setId(id);
-        address.setUserId(userId);
-        int ret=addressService.updateAddress(address);
-        if(ret==1){
-            return ResponseUtil.ok(address);
+    public Object updateAddress(@RequestBody AddressPo addressPo) {
+        if(!validate(addressPo)){
+            return ResponseUtil.badArgument();
         }
-        return ResponseUtil.fail();
+        if(addressPo.isBeDefault()){
+            Integer userId=addressPo.getUserId();
+            addressService.clearDefaultAddress(userId);
+        }
+        AddressPo retPo=addressService.updateAddress(addressPo);
+        if(retPo==null){
+            return ResponseUtil.updatedDataFailed();
+        }
+        return ResponseUtil.ok(addressPo);
     }
 
     /**
@@ -114,10 +137,69 @@ public class AddressController {
      * @param name 用户名
      * @return 用户的地址列表
      */
-
-    @GetMapping("/addresses")
-    public Object addressList(Integer userId,  String name)
+    @GetMapping("admin/addresses")
+    public Object getAddressList(HttpServletRequest request,
+                              @RequestParam Integer userId,
+                              @RequestParam String name,
+                              @RequestParam(defaultValue = "1") Integer page,
+                              @RequestParam(defaultValue = "10") Integer limit)
     {
-        return null;
+        Log log=createLog(request, 0, 1, "查询地址列表");
+        if(log!=null) {
+            writeLog(log);
+        }
+        else {
+            return ResponseUtil.unlogin();
+        }
+        List<Address> addressList=addressService.findAddressListByUserIdAndConsignee(userId,name,page,limit);
+        return ResponseUtil.ok(addressList);
+    }
+
+    /**
+     * 验证传入的地址是否合法
+     *
+     * @param addressPo 地址信息
+     * @return 是否合法
+     */
+    private boolean validate(AddressPo addressPo){
+        return true;
+    }
+
+    /**
+     * 日志记录函数
+     *
+     * @param log 日志
+     */
+    private void writeLog(Log log) {
+        RestTemplate restTemplate = new RestTemplate();
+        ServiceInstance instance = loadBalancerClient.choose("Log");
+        System.out.println(instance.getHost());
+        System.out.println(instance.getPort());
+        String reqURL = String.format("http://%s:%s", instance.getHost(), instance.getPort() + "/logs");
+        restTemplate.postForObject(reqURL,log,Log.class);
+    }
+
+    /**
+     * 生成日志函数
+     *
+     * @param request
+     * @param type
+     * @param status
+     * @param action
+     * @return 返回生成的日志或者空值，空值则进行未登录错误处理
+     */
+    private Log createLog(HttpServletRequest request,Integer type,Integer status,String action)
+    {
+        String adminId= request.getHeader("id");
+        if (adminId==null){
+            return null;
+        }
+        Log log=new Log();
+        log.setAdminId(Integer.valueOf(adminId));
+        log.setIp(request.getRemoteAddr());
+        log.setType(type);
+        log.setActions(action);
+        log.setStatusCode(status);
+        return log;
     }
 }

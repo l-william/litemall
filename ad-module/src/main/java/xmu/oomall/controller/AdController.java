@@ -9,6 +9,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
+import org.springframework.core.annotation.Order;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -18,15 +19,15 @@ import xmu.oomall.service.AdService;
 import xmu.oomall.util.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 
 @RestController
-@RequestMapping("")
+@RequestMapping("/ads")
 public class AdController {
     @Autowired
     private AdService adService;
-
     @Autowired
     private LoadBalancerClient loadBalancerClient;
     /**
@@ -49,15 +50,41 @@ public class AdController {
     }
 
     /**
-     * 日志记录
+     * 日志记录函数
      *
      * @param log
      */
     private void writeLog(Log log) {
         RestTemplate restTemplate = new RestTemplate();
         ServiceInstance instance = loadBalancerClient.choose("Log");
+        System.out.println(instance.getHost());
+        System.out.println(instance.getPort());
         String reqURL = String.format("http://%s:%s", instance.getHost(), instance.getPort() + "/logs");
-        restTemplate.getForObject(reqURL, Log.class);
+        restTemplate.postForObject(reqURL,log,Log.class);
+    }
+
+    /**
+     * 生成日志函数
+     *
+     * @param request
+     * @param type
+     * @param status
+     * @param action
+     * @return 返回生成的日志或者空值，空值则进行未登录错误处理
+     */
+    private Log createLog(HttpServletRequest request,Integer type,Integer status,String action)
+    {
+        String adminId= request.getHeader("id");
+        if (adminId==null){
+            return null;
+        }
+        Log log=new Log();
+        log.setAdminId(Integer.valueOf(adminId));
+        log.setIp(request.getRemoteAddr());
+        log.setType(type);
+        log.setActions(action);
+        log.setStatusCode(status);
+        return log;
     }
 
     /**
@@ -78,18 +105,15 @@ public class AdController {
                                   @RequestParam String name,
                                   @RequestParam String content
     ) {
-        String id= request.getHeader("id");
-        if (id==null){
+        Log log=createLog(request, 0, 1, "查询广告列表");
+        if(log!=null) {
+            writeLog(log);
+        }
+        else
+        {
             return ResponseUtil.unlogin();
         }
-        Log log=new Log();
-        log.setAdminId(Integer.valueOf(id));
-        log.setIp(request.getRemoteAddr());
-        log.setType(0);
-        log.setStatusCode(1);
-        log.setActions("查询广告列表");
-        writeLog(log);
-        List<Ad> adList = adService.adminFindAdList(name, content);
+        List<Ad> adList = adService.adminFindAdList(page,limit,name, content);
         return ResponseUtil.ok(adList);
     }
 
@@ -103,27 +127,29 @@ public class AdController {
     @PostMapping("/ads")
     @ApiOperation(value="新建一条广告 /create")
     public Object adminCreateAd(HttpServletRequest request,@RequestBody Ad ad) {
-        String adminId= request.getHeader("id");
-        if (adminId==null){
-            return ResponseUtil.unlogin();
-        }
-        Log log=new Log();
-        log.setAdminId(Integer.valueOf(adminId));
-        log.setIp(request.getRemoteAddr());
-        log.setType(0);
-        log.setActions("新建广告");
-
         Object re=validate(ad);
         if(re!=null)
         {
-            log.setStatusCode(0);
-            writeLog(log);
+            Log log=createLog(request, 0, 0, "新建广告");
+            if(log!=null) {
+                writeLog(log);
+            }
+            else
+            {
+                return ResponseUtil.unlogin();
+            }
             return re;
         }
         else
         {
-            log.setStatusCode(1);
-            writeLog(log);
+            Log log=createLog(request, 0, 1, "新建广告");
+            if(log!=null) {
+                writeLog(log);
+            }
+            else
+            {
+                return ResponseUtil.unlogin();
+            }
             adService.createAd(ad);
             return ResponseUtil.ok();
         }
@@ -139,28 +165,31 @@ public class AdController {
     @ApiOperation(value="查看单条广告 /read")
     public Object adminFindAd(HttpServletRequest request,@PathVariable Integer id)
     {
-        String adminId= request.getHeader("id");
-        if (adminId==null){
-            return ResponseUtil.unlogin();
-        }
-        Log log=new Log();
-        log.setAdminId(Integer.valueOf(adminId));
-        log.setIp(request.getRemoteAddr());
-        log.setType(0);
-        log.setActions("查询广告详情");
 
         Ad ad=adService.findAdById(id);
         if(ad!=null)
         {
-            log.setStatusCode(1);
-            writeLog(log);
+            Log log=createLog(request, 0, 1, "查看单条广告");
+            if(log!=null) {
+                writeLog(log);
+            }
+            else
+            {
+                return ResponseUtil.unlogin();
+            }
             Object object = ResponseUtil.ok(ad);
             return object;
         }
         else
         {
-            log.setStatusCode(0);
-            writeLog(log);
+            Log log=createLog(request, 0, 0, "查看单条广告");
+            if(log!=null) {
+                writeLog(log);
+            }
+            else
+            {
+                return ResponseUtil.unlogin();
+            }
             Object object = ResponseUtil.badArgumentValue();
             return object;
         }
@@ -178,28 +207,30 @@ public class AdController {
     public Object adminUpdateAd(HttpServletRequest request,@PathVariable Integer id,@RequestBody Ad ad)
     {
 
-        String adminId= request.getHeader("id");
-        if (adminId==null){
-            return ResponseUtil.unlogin();
-        }
-        Log log=new Log();
-        log.setAdminId(Integer.valueOf(adminId));
-        log.setIp(request.getRemoteAddr());
-        log.setType(0);
-        log.setActions("修改广告信息");
-
         ad.setId(id);
         if(adService.updateAd(ad))
         {
-            log.setStatusCode(1);
-            writeLog(log);
+            Log log=createLog(request, 0, 1, "修改广告信息");
+            if(log!=null) {
+                writeLog(log);
+            }
+            else
+            {
+                return ResponseUtil.unlogin();
+            }
             Object object = ResponseUtil.ok(ad);
             return object;
         }
         else
         {
-            log.setStatusCode(0);
-            writeLog(log);
+            Log log=createLog(request, 0, 0, "修改广告信息");
+            if(log!=null) {
+                writeLog(log);
+            }
+            else
+            {
+                return ResponseUtil.unlogin();
+            }
             Object object=ResponseUtil.badArgumentValue();
             return object;
         }
@@ -216,24 +247,26 @@ public class AdController {
     @ApiOperation(value="删除一条广告 /delete")
     public Object adminDeleteAd(HttpServletRequest request,@PathVariable Integer id)
     {
-        String adminId= request.getHeader("id");
-        if (adminId==null){
-            return ResponseUtil.unlogin();
-        }
-        Log log=new Log();
-        log.setAdminId(Integer.valueOf(adminId));
-        log.setIp(request.getRemoteAddr());
-        log.setType(0);
-        log.setActions("删除广告");
-
         int ret=adService.deleteAd(id);
         if(ret==0){
-            log.setStatusCode(0);
-            writeLog(log);
+            Log log=createLog(request, 0, 0, "删除广告");
+            if(log!=null) {
+                writeLog(log);
+            }
+            else
+            {
+                return ResponseUtil.unlogin();
+            }
             return ResponseUtil.badArgumentValue();
         }
-        log.setStatusCode(1);
-        writeLog(log);
+        Log log=createLog(request, 0, 1, "删除广告");
+        if(log!=null) {
+            writeLog(log);
+        }
+        else
+        {
+            return ResponseUtil.unlogin();
+        }
         return ResponseUtil.ok();
     };
 

@@ -2,6 +2,7 @@ package xmu.oomall.service;
 
 import org.springframework.stereotype.Service;
 import xmu.oomall.domain.Address;
+import xmu.oomall.domain.AddressPo;
 
 import java.util.List;
 
@@ -10,8 +11,18 @@ import java.util.List;
  * @date 2019/12/9 00:14
  * @version 1.0
  */
-@Service
 public interface AddressService {
+
+    /**
+     * 查询用户所有地址
+     *
+     * @param userId 用户ID
+     * @param page 分页页号
+     * @param limit 分页大小
+     * @return 该用户的所有地址列表
+     */
+    List<Address> findAddressListByUserId(Integer userId,Integer page,Integer limit);
+
     /**
      * 根据地址ID查找地址
      *
@@ -21,28 +32,31 @@ public interface AddressService {
     Address findAddressById(Integer id);
 
     /**
-     * 根据用户ID查找地址
+     * 通过用户ID与收货人查找地址
      *
      * @param userId 用户ID
-     * @return 该用户的地址列表
+     * @param consignee 收货人姓名
+     * @param page 分页页号
+     * @param limit 分页大小
+     * @return 地址列表
      */
-    List<Address> findAddressListByUserId(Integer userId);
+    List<Address> findAddressListByUserIdAndConsignee(Integer userId,String consignee,Integer page,Integer limit);
 
     /**
      * 添加地址
      *
-     * @param address
-     * @return 是否操作成功
+     * @param addressPo
+     * @return 新增的地址
      */
-    int addAddress(Address address);
+    AddressPo addAddress(AddressPo addressPo);
 
     /**
      * 更新地址
      *
-     * @param address
-     * @return 是否操作成功
+     * @param addressPo
+     * @return 更新后的地址
      */
-    int updateAddress(Address address);
+    AddressPo updateAddress(AddressPo addressPo);
 
     /**
      * 删除地址
@@ -53,10 +67,10 @@ public interface AddressService {
     int deleteAddressById(Integer id);
 
     /**
-     * 设置为默认地址
+     * 清除默认地址
      *
-     * @param address 待设置的地址
-     * @return 是否操作成功
+     * @param userId 用户ID
      */
-    int setDefaultAddress(Address address);
+    void clearDefaultAddress(Integer userId);
 }
+
