@@ -20,10 +20,8 @@
             <if test="content !=null">
                 and `content` like CONCAT('%',#{content},'%')
             </if>
+            and is_deleted = 0
         </where>
-        where name like concat('%', #{name}, '%')
-        and content like concat('%', #{content}, '%')
-        and is_deleted = 0
     </select>
 
     <insert id="addAd" parameterType="Ad" useGeneratedKeys="true" keyProperty="id">
