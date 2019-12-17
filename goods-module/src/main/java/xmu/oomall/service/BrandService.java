@@ -7,6 +7,7 @@ package xmu.oomall.service;
 
 import org.springframework.stereotype.Service;
 import xmu.oomall.domain.Brand;
+import xmu.oomall.domain.BrandPo;
 
 import java.util.List;
 
@@ -21,40 +22,7 @@ public interface BrandService {
      * @param limit 分页大小
      * @return 品牌列表
      */
-    public List<Brand> findBrandListByIdAndName(String id, String name,Integer page,Integer limit);
-
-    /**
-     * 创建一个品牌
-     *
-     * @param brand 品牌信息
-     * @return 是否操作成功
-     */
-    public int addBrand(Brand brand);
-
-    /**
-     * 查看单个品牌信息
-     *
-     * @param id 品牌ID
-     * @return 品牌信息
-     */
-    public Brand findBrandById(Integer id);
-
-    /**
-     * 更新品牌
-     *
-     * @param id 品牌ID
-     * @param brand 品牌
-     * @return 是否操作成功
-     */
-    public int updateBrandById(Integer id,Brand brand);
-
-    /**
-     * 删除品牌
-     *
-     * @param id 品牌ID
-     * @return 是否操作成功
-     */
-    public int deleteBrandById(Integer id);
+    List<Brand> findBrandListByIdAndName(String id, String name,Integer page,Integer limit);
 
     /**
      * 查看品牌列表
@@ -63,5 +31,38 @@ public interface BrandService {
      * @param limit 分页大小
      * @return 品牌列表
      */
-    public List<Brand> findBrandList(Integer page,Integer limit);
+    List<Brand> findBrandList(Integer page,Integer limit);
+
+    /**
+     * 查看单个品牌信息
+     *
+     * @param id 品牌ID
+     * @return 品牌信息
+     */
+    Brand findBrandById(Integer id);
+
+    /**
+     * 创建一个品牌
+     *
+     * @param brandPo 品牌信息
+     * @return 是否操作成功
+     */
+    BrandPo addBrand(BrandPo brandPo);
+
+    /**
+     * 更新品牌
+     *
+     * @param brandPo 品牌信息
+     * @return 是否操作成功
+     */
+    BrandPo updateBrand(BrandPo brandPo);
+
+    /**
+     * 删除品牌
+     *
+     * @param id 品牌ID
+     * @return 是否操作成功
+     */
+    int deleteBrand(Integer id);
+
 }

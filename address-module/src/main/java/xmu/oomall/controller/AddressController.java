@@ -90,7 +90,7 @@ public class AddressController {
         if(retPo==null){
             return ResponseUtil.updatedDataFailed();
         }
-        return ResponseUtil.ok(addressPo);
+        return ResponseUtil.ok(retPo);
     }
 
     /**
@@ -101,7 +101,7 @@ public class AddressController {
      */
     @DeleteMapping("/addresses/{id}")
     public Object deleteAddress(@PathVariable Integer id) {
-        int ret= addressService.deleteAddressById(id);
+        int ret= addressService.deleteAddress(id);
         if(ret==0){
             return ResponseUtil.updatedDataFailed();
         }
@@ -128,7 +128,7 @@ public class AddressController {
         if(retPo==null){
             return ResponseUtil.updatedDataFailed();
         }
-        return ResponseUtil.ok(addressPo);
+        return ResponseUtil.ok(retPo);
     }
 
     /**

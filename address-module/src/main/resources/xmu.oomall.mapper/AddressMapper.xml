@@ -38,9 +38,10 @@
         where id = #{id}
     </update>
 
-    <update id="deleteAddressById" parameterType="Integer">
+    <update id="deleteAddress" parameterType="Integer,LocalDateTime">
         update oomall_address
-        set is_deleted = 1
+        set is_deleted = 1,
+        gmt_modified = {#deleteTime}
         where id = #{id}
     </update>
 </mapper>

@@ -10,12 +10,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xmu.oomall.dao.BrandDao;
 import xmu.oomall.domain.Brand;
+import xmu.oomall.domain.BrandPo;
 import xmu.oomall.service.BrandService;
 
 import java.util.List;
 
 /**
- * 商标的service实现类
+ * @author CFH
  */
 @Service
 public class BrandServiceImpl implements BrandService {
@@ -35,26 +36,20 @@ public class BrandServiceImpl implements BrandService {
     @Override
     public List<Brand> findBrandListByIdAndName(String id, String name, Integer page, Integer limit) {
         List<Brand> brandList= brandDao.findBrandListByIdAndName(id,name);
-        int maxPages=(brandList.size()-1)/limit+1;
-        if(page<maxPages){
-            return brandList.subList((page-1)*limit,page*limit);
-        }
-        if(page==maxPages){
-            return brandList.subList((page-1)*limit,brandList.size());
-        }
-        //page>maxPage的情况有待修改
-        return null;
+        return divideByPage(brandList,page,limit);
     }
 
     /**
-     * 添加商标
+     * 查看商标列表
      *
-     * @param brand 品牌信息
-     * @return 操作成功与否
+     * @param page  分页页号
+     * @param limit 分页大小
+     * @return 商标列表
      */
     @Override
-    public int addBrand(Brand brand) {
-        return brandDao.addBrand(brand);
+    public List<Brand> findBrandList(Integer page, Integer limit) {
+        List<Brand> brandList= brandDao.findBrandList();
+        return divideByPage(brandList,page,limit);
     }
 
     /**
@@ -69,16 +64,25 @@ public class BrandServiceImpl implements BrandService {
     }
 
     /**
-     * 通过id更新商标
+     * 添加商标
      *
-     * @param id    品牌ID
-     * @param brand 品牌
-     * @return 操作成功与否
+     * @param brandPo 品牌信息
+     * @return 新增的品牌
      */
     @Override
-    public int updateBrandById(Integer id,Brand brand) {
-        brand.setId(id);
-        return brandDao.updateBrand(brand);
+    public BrandPo addBrand(BrandPo brandPo) {
+        return brandDao.addBrand(brandPo);
+    }
+
+    /**
+     * 通过id更新商标
+     *
+     * @param brandPo 品牌
+     * @return 更新后的品牌
+     */
+    @Override
+    public BrandPo updateBrand(BrandPo brandPo) {
+        return brandDao.updateBrand(brandPo);
     }
 
     /**
@@ -88,28 +92,28 @@ public class BrandServiceImpl implements BrandService {
      * @return 操作成功与否
      */
     @Override
-    public int deleteBrandById(Integer id) {
-        return brandDao.deleteBrandById(id);
+    public int deleteBrand(Integer id) {
+        return brandDao.deleteBrand(id);
     }
 
     /**
-     * 查看商标列表
+     * 分页功能
      *
-     * @param page  分页页号
+     * @param list 父列表
+     * @param page 分页页数
      * @param limit 分页大小
-     * @return 商标列表
+     * @param <T> 列表元素类型
+     * @return 子列表
      */
-    @Override
-    public List<Brand> findBrandList(Integer page, Integer limit) {
-        List<Brand> brandList= brandDao.findBrandList();
-        int maxPages=(brandList.size()-1)/limit+1;
+    private <T> List<T> divideByPage(List<T> list,Integer page,Integer limit){
+        int maxPages=(list.size()-1)/limit+1;
         if(page<maxPages){
-            return brandList.subList((page-1)*limit,page*limit);
+            return list.subList((page-1)*limit,page*limit);
         }
         if(page==maxPages){
-            return brandList.subList((page-1)*limit,brandList.size());
+            return list.subList((page-1)*limit,list.size());
         }
-        //page>maxPage的情况有待修改
+        //page>maxPages
         return null;
     }
 }

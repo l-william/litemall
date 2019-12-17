@@ -6,9 +6,10 @@
 package xmu.oomall.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
 import xmu.oomall.domain.Brand;
+import xmu.oomall.domain.BrandPo;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper
@@ -40,26 +41,27 @@ public interface BrandMapper {
     /**
      * 添加品牌
      *
-     * @param brand 品牌
+     * @param brandPo 品牌
      * @return 是否操作成功
      */
-    int addBrand(Brand brand);
+    BrandPo addBrand(BrandPo brandPo);
 
     /**
      * 更新品牌
      *
-     * @param brand 品牌信息
+     * @param brandPo 品牌信息
      * @return 是否操作成功
      */
-     int updateBrand(Brand brand);
+    BrandPo updateBrand(BrandPo brandPo);
 
     /**
      * 删除品牌
      *
      * @param id 品牌ID
+     * @param deleteTime 删除时间
      * @return 是否操作成功
      */
-    int deleteBrandById(Integer id);
+    int deleteBrand(Integer id, LocalDateTime deleteTime);
 }
 
 
