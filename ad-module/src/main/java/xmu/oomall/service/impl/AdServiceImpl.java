@@ -57,14 +57,29 @@ public class AdServiceImpl implements AdService {
     public List<Ad> userFindAd() {
         LocalDateTime now=LocalDateTime.now();
         List<Ad> adList=adDao.findAdList();
+        List<Ad> adList1=adDao.findAdList();
         Iterator<Ad> iterator = adList.iterator();
+        Iterator<Ad> iterator1 =adList1.iterator();
         while (iterator.hasNext()) {
             Ad ad = iterator.next();
-            boolean visible=!ad.getBeDeleted()&&ad.getBeEnabled()&&ad.getStartTime().isBefore(now)&&ad.getEndTime().isAfter(now);
+            boolean visible=!ad.getBeDefault()&&!ad.getBeDeleted()&&ad.getBeEnabled()&&ad.getStartTime().isBefore(now)&&ad.getEndTime().isAfter(now);
             if (!visible) {
                 iterator.remove();
             }
         }
-        return adList;
+        if(adList.isEmpty())
+        {
+            while (iterator1.hasNext()){
+                Ad ad = iterator.next();
+                if(!ad.getBeDefault())
+                {
+                    iterator1.remove();
+                }
+            }
+        return adList1;
+    }
+        else {
+            return adList;
+        }
     }
 }
