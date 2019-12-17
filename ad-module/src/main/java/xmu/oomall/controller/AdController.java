@@ -56,12 +56,12 @@ public class AdController {
      * @param log
      */
     private void writeLog(Log log) {
-        RestTemplate restTemplate = new RestTemplate();
-        ServiceInstance instance = loadBalancerClient.choose("Log");
-        System.out.println(instance.getHost());
-        System.out.println(instance.getPort());
-        String reqURL = String.format("http://%s:%s", instance.getHost(), instance.getPort() + "/logs");
-        restTemplate.postForObject(reqURL,log,Log.class);
+//        RestTemplate restTemplate = new RestTemplate();
+//        ServiceInstance instance = loadBalancerClient.choose("Log");
+//        System.out.println(instance.getHost());
+//        System.out.println(instance.getPort());
+//        String reqURL = String.format("http://%s:%s", instance.getHost(), instance.getPort() + "/logs");
+//        restTemplate.postForObject(reqURL,log,Log.class);
     }
 
     /**
@@ -75,12 +75,12 @@ public class AdController {
      */
     private Log createLog(HttpServletRequest request,Integer type,Integer status,String action)
     {
-        String adminId= request.getHeader("id");
-        if (adminId==null){
-            return null;
-        }
+//        String adminId= request.getHeader("id");
+//        if (adminId==null){
+//            return null;
+//        }
         Log log=new Log();
-        log.setAdminId(Integer.valueOf(adminId));
+//      log.setAdminId(Integer.valueOf(adminId));
         log.setIp(request.getRemoteAddr());
         log.setType(type);
         log.setActions(action);
@@ -168,13 +168,15 @@ public class AdController {
             Log log=createLog(request, 0, 1, "新建广告");
             if(log!=null) {
                 writeLog(log);
+                System.out.println("here1");
             }
             else
             {
                 return ResponseUtil.unlogin();
             }
             adService.createAd(ad);
-            return ResponseUtil.ok();
+            System.out.println("here2");
+            return ResponseUtil.ok(ad);
         }
     }
 

@@ -6,6 +6,7 @@
 
 package xmu.oomall.service.impl;
 
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.filter.OrderedRequestContextFilter;
 import org.springframework.stereotype.Service;
@@ -32,17 +33,18 @@ public class FreightServiceImpl implements FreightService {
      * @return 默认运费模板列表
      */
     @Override
-    public List<DefaultFreight> findDefaultFreightsList() {
+    public List<DefaultFreight> findDefaultFreightsList(Integer page,Integer limit) {
+        PageHelper.startPage(page,limit);
         return freightDao.findDefaultFreightList();
     }
 
     /**
-     * 查找特殊运费
+     * 查找默认运费比率表
      *
-     * @return 特殊运费模板列表
+     * @return 默认运费比率表
      */
     @Override
-    public List<DefaultPieceFreight> findgetSpecialFreightList() {
+    public List<DefaultPieceFreight> findDefaultPieceFreightList() {
         return freightDao.findDefaultPieceFreightList();
     }
 
@@ -58,13 +60,13 @@ public class FreightServiceImpl implements FreightService {
     }
 
     /**
-     * 添加特殊运费模板
+     * 添加默认运费比率
      *
      * @param defaultPieceFreight
-     * @return  操作成功与否
+     * @return 操作码
      */
     @Override
-    public int addSpecialFreight(DefaultPieceFreight defaultPieceFreight) {
+    public int addDefaultPieceFreights(DefaultPieceFreight defaultPieceFreight) {
         return freightDao.addDefaultPieceFreight(defaultPieceFreight);
     }
 
@@ -81,27 +83,28 @@ public class FreightServiceImpl implements FreightService {
     }
 
     /**
-     * 删除特殊运费模板
+     * 删除默认运费比率
      *
      * @param id
-     * @return 操作成功与否
+     * @return 操作码
      */
     @Override
-    public int deleteSpecialFreight(String id) {
+    public int deleteDefaultPieceFreight(String id) {
         Integer defaultPieceFreightid=Integer.valueOf(id);
         return freightDao.deleteDefaultPieceFreightById(defaultPieceFreightid);
     }
 
     /**
-     * 更新特殊运费模板
+     * 更新默认运费比率
      *
      * @param defaultPieceFreight
-     * @return 操作成功与否
+     * @return 操作码
      */
     @Override
-    public int updateSpecialFreight(DefaultPieceFreight defaultPieceFreight) {
+    public int updateDefaultPieceFreight(DefaultPieceFreight defaultPieceFreight) {
         return freightDao.updateDefaultPieceFreight(defaultPieceFreight);
     }
+
 
     /**
      * 更新默认运费模板
@@ -179,14 +182,14 @@ public class FreightServiceImpl implements FreightService {
     }
 
     /**
-     * 通过id查找特殊运费模板
+     * 通过id查找默认运费比率
      *
      * @param id
-     * @return 特殊默认运费模板
+     * @return 默认运费比率
      */
     @Override
-    public DefaultPieceFreight findSpecialFreightById(Integer id) {
-
+    public DefaultPieceFreight findDefaultPieceFreightById(Integer id) {
         return freightDao.findDefaultPieceFreightById(id);
     }
+
 }

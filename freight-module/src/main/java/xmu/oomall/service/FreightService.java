@@ -9,7 +9,9 @@ import org.springframework.stereotype.Service;
 import xmu.oomall.domain.DefaultFreight;
 import xmu.oomall.domain.DefaultPieceFreight;
 import xmu.oomall.domain.Order;
+import xmu.oomall.domain.SpecialFreight;
 
+import java.awt.peer.ScrollbarPeer;
 import java.util.List;
 
 /**
@@ -22,14 +24,14 @@ public interface FreightService {
      *
      * @return 默认运费模板
      */
-    public List<DefaultFreight> findDefaultFreightsList();
+    public List<DefaultFreight> findDefaultFreightsList(Integer page,Integer limit);
 
     /**
-     * 查找特殊运费模板
+     * 查找默认运费比率表
      *
-     * @return 返回特殊运费模板
+     * @return 返回默认运费比率表
      */
-    public List<DefaultPieceFreight> findgetSpecialFreightList();
+    public List<DefaultPieceFreight> findDefaultPieceFreightList();
 
     /**
      * 添加默认运费模板
@@ -40,12 +42,12 @@ public interface FreightService {
     public int addDefaultFreights(DefaultFreight defaultFreight);
 
     /**
-     * 添加特殊运费模板
+     * 添加默认运费比率
      *
      * @param defaultPieceFreight
      * @return 操作成功与否
      */
-    public int addSpecialFreight(DefaultPieceFreight defaultPieceFreight);
+    public int addDefaultPieceFreights(DefaultPieceFreight defaultPieceFreight);
 
     /**
      * 删除默认运费模板
@@ -56,21 +58,21 @@ public interface FreightService {
     public int deleteDefaultFreight(String id);
 
     /**
-     * 删除特殊运费模板
+     * 删除默认运费比率
      *
      * @param id
      * @return 操作成功与否
      */
-    public int deleteSpecialFreight(String id);
+    public int deleteDefaultPieceFreight(String id);
 
 
     /**
-     * 更新特殊运费模板
+     * 更新默认运费比率
      *
      * @param defaultPieceFreight
      * @return 操作成功与否
      */
-    public int updateSpecialFreight(DefaultPieceFreight defaultPieceFreight);
+    public int updateDefaultPieceFreight(DefaultPieceFreight defaultPieceFreight);
 
     /**
      * 更新模型运费模板
@@ -97,12 +99,20 @@ public interface FreightService {
     public DefaultFreight findDefaultFreightsById(Integer id);
 
     /**
-     * 通过id寻找特殊运费模板
+     * 通过id寻找默认运费比率
      *
      * @param id
-     * @return 特定的特殊运费模板
+     * @return 特定默认运费比率
      */
-    public DefaultPieceFreight findSpecialFreightById(Integer id);
+    public DefaultPieceFreight findDefaultPieceFreightById(Integer id);
+
+    public List<SpecialFreight> findSpecialFreightList();
+
+    public int addSpecialFreight(SpecialFreight specialFreight);
+
+    public int deleteSpecialFreight(Integer id);
+
+    public int updateSpecialFreight(SpecialFreight specialFreight);
 
 
 }
