@@ -29,7 +29,7 @@ public interface AdService {
     public int createAd(Ad ad);
 
     /**
-     * 管理员查询广告列表
+     * 管理员更新广告
      *
      * @param ad 广告
      * @return 更新是否成功
@@ -42,7 +42,7 @@ public interface AdService {
      * @param content 广告内容
      * @return 包含相应关键信息的广告列表
      */
-    public List<Ad> adminFindAdList(String name, String content);
+    public List<Ad> adminFindAdList(Integer page,Integer limit,String name, String content);
 
     /**
      * 管理员删除广告
