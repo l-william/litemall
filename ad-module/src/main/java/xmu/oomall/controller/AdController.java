@@ -72,7 +72,7 @@ public class AdController {
      * @param action
      * @return 返回生成的日志或者空值，空值则进行未登录错误处理
      */
-    private Log creatLog(HttpServletRequest request,Integer type,Integer status,String action)
+    private Log createLog(HttpServletRequest request,Integer type,Integer status,String action)
     {
         String adminId= request.getHeader("id");
         if (adminId==null){
@@ -105,7 +105,7 @@ public class AdController {
                                   @RequestParam String name,
                                   @RequestParam String content
     ) {
-        Log log=creatLog(request, 0, 1, "查询广告列表");
+        Log log=createLog(request, 0, 1, "查询广告列表");
         if(log!=null) {
             writeLog(log);
         }
@@ -130,7 +130,7 @@ public class AdController {
         Object re=validate(ad);
         if(re!=null)
         {
-            Log log=creatLog(request, 0, 0, "新建广告");
+            Log log=createLog(request, 0, 0, "新建广告");
             if(log!=null) {
                 writeLog(log);
             }
@@ -142,7 +142,7 @@ public class AdController {
         }
         else
         {
-            Log log=creatLog(request, 0, 1, "新建广告");
+            Log log=createLog(request, 0, 1, "新建广告");
             if(log!=null) {
                 writeLog(log);
             }
@@ -169,7 +169,7 @@ public class AdController {
         Ad ad=adService.findAdById(id);
         if(ad!=null)
         {
-            Log log=creatLog(request, 0, 1, "查看单条广告");
+            Log log=createLog(request, 0, 1, "查看单条广告");
             if(log!=null) {
                 writeLog(log);
             }
@@ -182,7 +182,7 @@ public class AdController {
         }
         else
         {
-            Log log=creatLog(request, 0, 0, "查看单条广告");
+            Log log=createLog(request, 0, 0, "查看单条广告");
             if(log!=null) {
                 writeLog(log);
             }
@@ -210,7 +210,7 @@ public class AdController {
         ad.setId(id);
         if(adService.updateAd(ad))
         {
-            Log log=creatLog(request, 0, 1, "修改广告信息");
+            Log log=createLog(request, 0, 1, "修改广告信息");
             if(log!=null) {
                 writeLog(log);
             }
@@ -223,7 +223,7 @@ public class AdController {
         }
         else
         {
-            Log log=creatLog(request, 0, 0, "修改广告信息");
+            Log log=createLog(request, 0, 0, "修改广告信息");
             if(log!=null) {
                 writeLog(log);
             }
@@ -249,7 +249,7 @@ public class AdController {
     {
         int ret=adService.deleteAd(id);
         if(ret==0){
-            Log log=creatLog(request, 0, 0, "删除广告");
+            Log log=createLog(request, 0, 0, "删除广告");
             if(log!=null) {
                 writeLog(log);
             }
@@ -259,7 +259,7 @@ public class AdController {
             }
             return ResponseUtil.badArgumentValue();
         }
-        Log log=creatLog(request, 0, 1, "删除广告");
+        Log log=createLog(request, 0, 1, "删除广告");
         if(log!=null) {
             writeLog(log);
         }

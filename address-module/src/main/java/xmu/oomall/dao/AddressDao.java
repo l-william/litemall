@@ -3,6 +3,7 @@ package xmu.oomall.dao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import xmu.oomall.domain.Address;
+import xmu.oomall.domain.AddressPo;
 import xmu.oomall.mapper.AddressMapper;
 
 import java.time.LocalDateTime;
@@ -25,24 +26,31 @@ public class AddressDao {
     }
 
     public List<Address> findAddressListByUserId(Integer userId){
-
         return addressMapper.findAddressListByUserId(userId);
     }
 
-    public int addAddress(Address address){
-        address.setGmtCreate(LocalDateTime.now());
-        address.setGmtModified(LocalDateTime.now());
-        address.setBeDeleted(false);
-        return addressMapper.addAddress(address);
+    public List<Address> findAddressListByUserIdAndConsignee(Integer userId,String consignee){
+        return addressMapper.findAddressListByUserIdAndConsignee(userId,consignee);
     }
 
-    public int updateAddress(Address address){
-        if(addressMapper.findAddressById(address.getId())!=null)
-        {
-            address.setGmtCreate(addressMapper.findAddressById(address.getId()).getGmtCreate());
+    public AddressPo addAddress(AddressPo addressPo){
+        addressPo.setGmtCreate(LocalDateTime.now());
+        addressPo.setGmtModified(LocalDateTime.now());
+        addressPo.setBeDeleted(false);
+        int ret=addressMapper.addAddress(addressPo);
+        if(ret==0){
+            return null;
         }
-        address.setGmtModified(LocalDateTime.now());
-        return addressMapper.updateAddress(address);
+        return addressPo;
+    }
+
+    public AddressPo updateAddress(AddressPo addressPo) {
+        addressPo.setGmtModified(LocalDateTime.now());
+        int ret=addressMapper.updateAddress(addressPo);
+        if(ret==0){
+            return null;
+        }
+        return addressPo;
     }
 
     public int deleteAddressById(Integer id){

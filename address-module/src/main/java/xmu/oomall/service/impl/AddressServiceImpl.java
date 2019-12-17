@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xmu.oomall.dao.AddressDao;
 import xmu.oomall.domain.Address;
+import xmu.oomall.domain.AddressPo;
 import xmu.oomall.service.AddressService;
 
 import java.util.List;
@@ -13,10 +14,15 @@ import java.util.List;
  * @date 2019/12/9 00:17
  * @version 1.0
  */
-@Service
 public class AddressServiceImpl implements AddressService {
     @Autowired
     AddressDao addressDao;
+
+    @Override
+    public List<Address> findAddressListByUserId(Integer userId,Integer page,Integer limit) {
+        List<Address> addressList=addressDao.findAddressListByUserId(userId);
+        return divideByPage(addressList,page,limit);
+    }
 
     @Override
     public Address findAddressById(Integer id) {
@@ -24,37 +30,56 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public List<Address> findAddressListByUserId(Integer userId) {
-        return addressDao.findAddressListByUserId(userId);
+    public List<Address> findAddressListByUserIdAndConsignee(Integer userId, String consignee, Integer page, Integer limit) {
+        List<Address> addressList=addressDao.findAddressListByUserIdAndConsignee(userId,consignee);
+        return divideByPage(addressList,page,limit);
     }
 
     @Override
-    public int addAddress(Address address) {
-        return addressDao.addAddress(address);
+    public AddressPo addAddress(AddressPo addressPo) {
+        return addressDao.addAddress(addressPo);
     }
 
     @Override
-    public int updateAddress(Address address) {
-        return addressDao.updateAddress(address);
+    public AddressPo updateAddress(AddressPo addressPo) {
+        return addressDao.updateAddress(addressPo);
     }
 
     @Override
     public int deleteAddressById(Integer id) {
-        return deleteAddressById(id);
+        return addressDao.deleteAddressById(id);
     }
 
     @Override
-    public int setDefaultAddress(Address address) {
-        Integer userId=address.getUserId();
-        List<Address> userAddressList=addressDao.findAddressListByUserId(Integer.valueOf(userId));
-        for (Address userAddress:userAddressList) {
-            if(userAddress.isBeDefault()){
-                userAddress.setBeDefault(false);
-                addressDao.updateAddress(userAddress);
-                break;
+    public void clearDefaultAddress(Integer userId) {
+        List<Address> addressList=addressDao.findAddressListByUserId(userId);
+        for (Address address:addressList) {
+            if(address.isBeDefault()){
+                address.setBeDefault(false);
+                addressDao.updateAddress(address);
             }
         }
-        address.setBeDefault(true);
-        return addressDao.updateAddress(address);
+    }
+
+
+    /**
+     * 分页功能
+     *
+     * @param list 父列表
+     * @param page 分页页数
+     * @param limit 分页大小
+     * @param <T> 列表元素类型
+     * @return 子列表
+     */
+    private <T> List<T> divideByPage(List<T> list,Integer page,Integer limit){
+        int maxPages=(list.size()-1)/limit+1;
+        if(page<maxPages){
+            return list.subList((page-1)*limit,page*limit);
+        }
+        if(page==maxPages){
+            return list.subList((page-1)*limit,list.size());
+        }
+        //page>maxPages
+        return null;
     }
 }
