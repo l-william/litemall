@@ -32,7 +32,7 @@ import java.util.List;
 public class AddressController {
 
     @Autowired
-    AddressService addressService;
+    private AddressService addressService;
     @Autowired
     private LoadBalancerClient loadBalancerClient;
 
