@@ -53,12 +53,8 @@ public class AddressDao {
         return addressPo;
     }
 
-    public int deleteAddressById(Integer id){
-        Address address=addressMapper.findAddressById(id);
-        if(address!=null) {
-            address.setGmtModified(LocalDateTime.now());
-            addressMapper.updateAddress(address);
-        }
-        return addressMapper.deleteAddressById(id);
+    public int deleteAddress(Integer id){
+        LocalDateTime deleteTime=LocalDateTime.now();
+        return addressMapper.deleteAddress(id,deleteTime);
     }
 }

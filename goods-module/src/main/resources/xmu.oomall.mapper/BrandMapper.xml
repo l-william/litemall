@@ -18,12 +18,12 @@
         and is_deleted = 0
     </select>
 
-    <insert id="addBrand" parameterType="Brand" useGeneratedKeys="true" keyProperty="id">
+    <insert id="addBrand" parameterType="BrandPo" useGeneratedKeys="true" keyProperty="id">
         insert into oomall_brand(name, description, pic_url, gmt_create, gmt_modified, is_deleted)
         values (#{name}, #{description}, #{picUrl}, #{gmtCreate}, #{gmtModified}, #{beDeleted})
     </insert>
 
-    <update id="updateBrand" parameterType="Brand">
+    <update id="updateBrand" parameterType="BrandPo">
         update oomall_brand
         set name = #{name},
             description = #{description},
@@ -34,9 +34,10 @@
         where id = #{id}
     </update>
 
-    <update id="deleteBrandById" parameterType="Integer">
+    <update id="deleteBrandById" parameterType="Integer,LocalDateTime">
         update oomall_brand
-        set is_deleted = 1
+        set is_deleted = 1,
+        gmt_modified = #{deleteTime}
         where id = #{id}
     </update>
 

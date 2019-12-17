@@ -16,7 +16,7 @@ import java.util.List;
 @Setter
 @ToString
 @EqualsAndHashCode(callSuper = true)
-public class Brand extends xmu.oomall.domain.BrandPo {
+public class Brand extends BrandPo {
 
     private List<GoodsPo> goodsPoList;
 

@@ -46,8 +46,8 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public int deleteAddressById(Integer id) {
-        return addressDao.deleteAddressById(id);
+    public int deleteAddress(Integer id) {
+        return addressDao.deleteAddress(id);
     }
 
     @Override

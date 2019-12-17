@@ -8,19 +8,22 @@ package xmu.oomall.controller;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.web.bind.annotation.*;
-import xmu.oomall.domain.Brand;
-import xmu.oomall.domain.Goods;
-import xmu.oomall.domain.GoodsCategory;
+import org.springframework.web.client.RestTemplate;
+import xmu.oomall.domain.*;
 import xmu.oomall.service.BrandService;
 import xmu.oomall.service.GoodsCategoryService;
 import xmu.oomall.service.GoodsService;
 import xmu.oomall.util.ResponseUtil;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @RestController
-@RequestMapping("/")
+@RequestMapping("")
 public class GoodsController {
 
     @Autowired
@@ -29,59 +32,89 @@ public class GoodsController {
     private GoodsService goodsService;
     @Autowired
     private BrandService brandService;
+    @Autowired
+    private LoadBalancerClient loadBalancerClient;
+
     @GetMapping("/admins/brands")
     @ApiOperation(value="根据条件搜索品牌/list")
-    public Object listBrandByCodition(String id, String name,
-                                      @RequestParam(defaultValue = "1") Integer page,
-                                      @RequestParam(defaultValue = "10") Integer limit
-//                                      @Sort @RequestParam(defaultValue = "add_time") String sort,
-//                                      @Order @RequestParam(defaultValue = "desc") String order
-    ) {
+    public Object findBrandList(HttpServletRequest request,
+                                @RequestParam("BrandId") String id,
+                                @RequestParam("BrandName") String name,
+                                @RequestParam(defaultValue = "1") Integer page,
+                                @RequestParam(defaultValue = "10") Integer limit)
+    {
+        Log log=createLog(request, 0, 1, "查询品牌列表");
+        if(log!=null) {
+            writeLog(log);
+        }
+        else {
+            return ResponseUtil.unlogin();
+        }
         List<Brand> brandList= brandService.findBrandListByIdAndName(id,name,page,limit);
         return ResponseUtil.ok(brandList);
     };
 
     @PostMapping("/brands")
     @ApiOperation(value = "创建一个品牌/create")
-    public Object addBrand(@RequestBody Brand brand){
-        int ret=brandService.addBrand(brand);
-        if(ret==1) {
-            return ResponseUtil.ok();
+    public Object addBrand(HttpServletRequest request,@RequestBody BrandPo brandPo){
+        Log log=createLog(request, 0, 1, "添加品牌");
+        if(log!=null) {
+            writeLog(log);
         }
-        return ResponseUtil.fail();
+        else {
+            return ResponseUtil.unlogin();
+        }
+        BrandPo retPo=brandService.addBrand(brandPo);
+        if(retPo==null) {
+            return ResponseUtil.updatedDataFailed();
+        }
+        return ResponseUtil.ok(retPo);
     };
 
     @GetMapping("/brands/{id}")
     @ApiOperation(value="查看单个品牌信息/read")
-    public Object getBrandById(@PathVariable Integer id){
+    public Object findBrandById(@PathVariable Integer id){
         Brand brand= brandService.findBrandById(id);
-        if(brand!=null){
-            return ResponseUtil.ok(brand);
+        if(brand==null){
+            return ResponseUtil.badArgumentValue();
         }
-        return  ResponseUtil.fail();
+        return  ResponseUtil.ok(brand);
     };
 
 
     @PutMapping("/brands/{id}")
     @ApiOperation(value="修改单个品牌的信息/update")
-    public Object updateBrandById(@PathVariable Integer id,@RequestBody Brand brand){
-        int ret= brandService.updateBrandById(id,brand);
-        if(ret==0){
-            return ResponseUtil.fail();
+    public Object updateBrand(HttpServletRequest request,@RequestBody BrandPo brandPo){
+        Log log=createLog(request, 0, 1, "更新品牌");
+        if(log!=null) {
+            writeLog(log);
         }
-        return ResponseUtil.ok();
+        else {
+            return ResponseUtil.unlogin();
+        }
+        BrandPo retPo= brandService.updateBrand(brandPo);
+        if(retPo==null){
+            return ResponseUtil.updatedDataFailed();
+        }
+        return ResponseUtil.ok(retPo);
     };
 
 
     @DeleteMapping("/brands/{id}")
     @ApiOperation(value = "删除一个品牌/delete")
-    public Object deleteBrandById(@RequestBody Brand brand){
-        int id=brand.getId();
-        int ret= brandService.deleteBrandById(id);
-        if(ret==1){
-            return ResponseUtil.ok();
+    public Object deleteBrand(HttpServletRequest request,@PathVariable Integer id){
+        Log log=createLog(request, 0, 1, "删除品牌");
+        if(log!=null) {
+            writeLog(log);
         }
-        return ResponseUtil.fail();
+        else {
+            return ResponseUtil.unlogin();
+        }
+        int ret= brandService.deleteBrand(id);
+        if(ret==0){
+            return ResponseUtil.updatedDataFailed();
+        }
+        return ResponseUtil.ok();
     };
 
 
@@ -208,8 +241,6 @@ public class GoodsController {
     public Object listGoods(String goodsSn, String name
 //                            @RequestParam(defaultValue = "1") Integer page,
 //                            @RequestParam(defaultValue = "10") Integer limit,
-//                            @Sort @RequestParam(defaultValue = "add_time") String sort,
-//                            @Order @RequestParam(defaultValue = "desc") String order
     )
     {
         List<Goods> goods=goodsService.findGoodsList(goodsSn, name);
@@ -328,10 +359,8 @@ public class GoodsController {
      */
     @GetMapping("/brands")
     @ApiOperation(value="查看所有品牌 /list")
-    public Object listBrand(@RequestParam(defaultValue = "1") Integer page,
-                            @RequestParam(defaultValue = "10") Integer limit
-//                            @Sort @RequestParam(defaultValue = "add_time") String sort,
-//                            @Order @RequestParam(defaultValue = "desc") String order
+    public Object findBrandList(@RequestParam(defaultValue = "1") Integer page,
+                                @RequestParam(defaultValue = "10") Integer limit
     )
     {
         List<Brand> brandList= brandService.findBrandList(page,limit);
@@ -421,8 +450,6 @@ public class GoodsController {
     //     * @param userId     用户ID
     //     * @param page       分页页数
     //     * @param limit       分页大小
-    //     * @param sort       排序方式，支持"add_time", "retail_price"或"name"
-    //     * @param order      排序类型，顺序或者降序
      * @return 根据条件搜素的商品详情
      */
     @GetMapping("/goods/searchinformation")
@@ -436,8 +463,6 @@ public class GoodsController {
 //            @LoginUser Integer userId,
 //            @RequestParam(defaultValue = "1") Integer page,
 //            @RequestParam(defaultValue = "10") Integer limit,
-//            @Sort(accepts = {"add_time", "retail_price", "name"}) @RequestParam(defaultValue = "add_time") String sort,
-//            @Order @RequestParam(defaultValue = "desc") String order
     )
     {
         List<Goods> goods=goodsService.findGoodsListBySearchInfo(goodsCategoryId, brandId,keyword,isNew,isHot);
@@ -491,5 +516,43 @@ public class GoodsController {
         Object object = ResponseUtil.ok(count);
         return object;
     };
+
+    /**
+     * 日志记录函数
+     *
+     * @param log 日志
+     */
+    private void writeLog(Log log) {
+        RestTemplate restTemplate = new RestTemplate();
+        ServiceInstance instance = loadBalancerClient.choose("Log");
+        System.out.println(instance.getHost());
+        System.out.println(instance.getPort());
+        String reqURL = String.format("http://%s:%s", instance.getHost(), instance.getPort() + "/logs");
+        restTemplate.postForObject(reqURL,log,Log.class);
+    }
+
+    /**
+     * 生成日志函数
+     *
+     * @param request
+     * @param type
+     * @param status
+     * @param action
+     * @return 返回生成的日志或者空值，空值则进行未登录错误处理
+     */
+    private Log createLog(HttpServletRequest request, Integer type, Integer status, String action)
+    {
+        String adminId= request.getHeader("id");
+        if (adminId==null){
+            return null;
+        }
+        Log log=new Log();
+        log.setAdminId(Integer.valueOf(adminId));
+        log.setIp(request.getRemoteAddr());
+        log.setType(type);
+        log.setActions(action);
+        log.setStatusCode(status);
+        return log;
+    }
 
 }

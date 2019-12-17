@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.Mapper;
 import xmu.oomall.domain.Address;
 import xmu.oomall.domain.AddressPo;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -59,7 +60,8 @@ public interface AddressMapper {
      * 删除地址
      *
      * @param id 地址ID
+     * @param deleteTime 删除时间
      * @return 是否操作成功
      */
-    int deleteAddressById(Integer id);
+    int deleteAddress(Integer id, LocalDateTime deleteTime);
 }

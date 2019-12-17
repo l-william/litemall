@@ -64,7 +64,7 @@ public interface AddressService {
      * @param id 地址ID
      * @return 是否操作成功
      */
-    int deleteAddressById(Integer id);
+    int deleteAddress(Integer id);
 
     /**
      * 清除默认地址
