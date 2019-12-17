@@ -9,6 +9,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+
 import xmu.oomall.domain.Address;
 import xmu.oomall.domain.AddressPo;
 import xmu.oomall.domain.Log;
@@ -162,7 +163,14 @@ public class AddressController {
      * @return 是否合法
      */
     private boolean validate(AddressPo addressPo){
-        return true;
+        boolean notValidate=addressPo.getCityId()==0
+                ||addressPo.getCountyId()==0
+                ||addressPo.getProvinceId()==0
+                ||StringUtils.isEmpty(addressPo.getAddressDetail())
+                ||StringUtils.isEmpty(addressPo.getPostalCode())
+                ||StringUtils.isEmpty(addressPo.getConsignee())
+                ||StringUtils.isEmpty(addressPo.getMobile());
+        return !notValidate;
     }
 
     /**
