@@ -2,6 +2,7 @@ package xmu.oomall.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import xmu.oomall.domain.Address;
+import xmu.oomall.domain.AddressPo;
 
 import java.util.List;
 
@@ -12,13 +13,6 @@ import java.util.List;
  */
 @Mapper
 public interface AddressMapper {
-
-    /**
-     * 查询所有地址（意义不明）
-     *
-     * @return 所有地址列表
-     */
-    List<Address> findAddressList();
 
     /**
      * 根据地址ID查找地址
@@ -48,18 +42,18 @@ public interface AddressMapper {
     /**
      * 添加地址
      *
-     * @param address
+     * @param addressPo
      * @return 是否操作成功
      */
-    int addAddress(Address address);
+    int addAddress(AddressPo addressPo);
 
     /**
      * 更新地址
      *
-     * @param address
+     * @param addressPo
      * @return 是否操作成功
      */
-    int updateAddress(Address address);
+    int updateAddress(AddressPo addressPo);
 
     /**
      * 删除地址

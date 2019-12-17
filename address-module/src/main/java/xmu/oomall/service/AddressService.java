@@ -2,6 +2,7 @@ package xmu.oomall.service;
 
 import org.springframework.stereotype.Service;
 import xmu.oomall.domain.Address;
+import xmu.oomall.domain.AddressPo;
 
 import java.util.List;
 
@@ -13,13 +14,14 @@ import java.util.List;
 public interface AddressService {
 
     /**
-     * 查询所有地址（意义不明）
+     * 查询用户所有地址
      *
+     * @param userId 用户ID
      * @param page 分页页号
      * @param limit 分页大小
-     * @return 所有地址列表
+     * @return 该用户的所有地址列表
      */
-    List<Address> findAddressList(Integer page,Integer limit);
+    List<Address> findAddressListByUserId(Integer userId,Integer page,Integer limit);
 
     /**
      * 根据地址ID查找地址
@@ -28,14 +30,6 @@ public interface AddressService {
      * @return 地址信息
      */
     Address findAddressById(Integer id);
-
-    /**
-     * 根据用户ID查找地址
-     *
-     * @param userId 用户ID
-     * @return 该用户的地址列表
-     */
-    List<Address> findAddressListByUserId(Integer userId);
 
     /**
      * 通过用户ID与收货人查找地址
@@ -51,18 +45,18 @@ public interface AddressService {
     /**
      * 添加地址
      *
-     * @param address
-     * @return 是否操作成功
+     * @param addressPo
+     * @return 新增的地址
      */
-    int addAddress(Address address);
+    AddressPo addAddress(AddressPo addressPo);
 
     /**
      * 更新地址
      *
-     * @param address
-     * @return 是否操作成功
+     * @param addressPo
+     * @return 更新后的地址
      */
-    int updateAddress(Address address);
+    AddressPo updateAddress(AddressPo addressPo);
 
     /**
      * 删除地址
@@ -78,13 +72,5 @@ public interface AddressService {
      * @param userId 用户ID
      */
     void clearDefaultAddress(Integer userId);
-
-    /**
-     * 检查地址是否合法
-     *
-     * @param address 地址
-     * @return 是否合法
-     */
-    int validate(Address address);
 }
 

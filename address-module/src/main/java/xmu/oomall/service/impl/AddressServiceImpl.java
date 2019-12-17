@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xmu.oomall.dao.AddressDao;
 import xmu.oomall.domain.Address;
+import xmu.oomall.domain.AddressPo;
 import xmu.oomall.service.AddressService;
 
 import java.util.List;
@@ -18,8 +19,8 @@ public class AddressServiceImpl implements AddressService {
     AddressDao addressDao;
 
     @Override
-    public List<Address> findAddressList(Integer page,Integer limit) {
-        List<Address> addressList=addressDao.findAddressList();
+    public List<Address> findAddressListByUserId(Integer userId,Integer page,Integer limit) {
+        List<Address> addressList=addressDao.findAddressListByUserId(userId);
         return divideByPage(addressList,page,limit);
     }
 
@@ -29,24 +30,19 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public List<Address> findAddressListByUserId(Integer userId) {
-        return addressDao.findAddressListByUserId(userId);
-    }
-
-    @Override
     public List<Address> findAddressListByUserIdAndConsignee(Integer userId, String consignee, Integer page, Integer limit) {
         List<Address> addressList=addressDao.findAddressListByUserIdAndConsignee(userId,consignee);
         return divideByPage(addressList,page,limit);
     }
 
     @Override
-    public int addAddress(Address address) {
-        return addressDao.addAddress(address);
+    public AddressPo addAddress(AddressPo addressPo) {
+        return addressDao.addAddress(addressPo);
     }
 
     @Override
-    public int updateAddress(Address address) {
-        return addressDao.updateAddress(address);
+    public AddressPo updateAddress(AddressPo addressPo) {
+        return addressDao.updateAddress(addressPo);
     }
 
     @Override
@@ -58,24 +54,23 @@ public class AddressServiceImpl implements AddressService {
     public void clearDefaultAddress(Integer userId) {
         List<Address> addressList=addressDao.findAddressListByUserId(userId);
         for (Address address:addressList) {
-            if(address.isBeDefault()==true){
+            if(address.isBeDefault()){
                 address.setBeDefault(false);
                 addressDao.updateAddress(address);
             }
         }
     }
 
-    @Override
-    public int validate(Address address) {
-        boolean valid=address.getCityId()!=null
-                &&address.getCountyId()!=null
-                &&address.getProvinceId()!=null;
-        if(valid){
-            return 1;
-        }
-        return 0;
-    }
 
+    /**
+     * 分页功能
+     *
+     * @param list 父列表
+     * @param page 分页页数
+     * @param limit 分页大小
+     * @param <T> 列表元素类型
+     * @return 子列表
+     */
     private <T> List<T> divideByPage(List<T> list,Integer page,Integer limit){
         int maxPages=(list.size()-1)/limit+1;
         if(page<maxPages){
