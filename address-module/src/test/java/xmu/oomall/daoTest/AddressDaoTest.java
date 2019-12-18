@@ -19,36 +19,44 @@ public class AddressDaoTest {
     private AddressDao addressDao;
     @Test
     void findAddressById(){
-        Integer id=10001;
+        Integer id=1;
         Address address=addressDao.findAddressById(id);
-        if(address==null)
+        if(address==null) {
             System.out.println("not found");
-        else
+        }
+        else {
+            System.out.println("收货人："+address.getConsignee());
+            System.out.println("默认地址："+address.isBeDefault());
             System.out.println(address.toString());
+        }
     }
     @Test
     void findAddressListByUserId(){
-        Integer userId=100002;
+        Integer userId=11;
         List<Address> addressList=addressDao.findAddressListByUserId(userId);
         if(addressList.size()==0) {
             System.out.println("not found");
         }
         else {
             for (Address address :addressList) {
+                System.out.println("收货人："+address.getConsignee());
+                System.out.println("默认地址："+address.isBeDefault());
                 System.out.println(address.toString());
             }
         }
     }
     @Test
     void findAddressListByUserIdAndConsignee(){
-        Integer userId=1001;
-        String name="";
+        Integer userId=0;
+        String name="陈";
         List<Address> addressList=addressDao.findAddressListByUserIdAndConsignee(userId,name);
         if(addressList.size()==0) {
             System.out.println("not found");
         }
         else {
             for (Address address :addressList) {
+                System.out.println("收货人："+address.getConsignee());
+                System.out.println("默认地址："+address.isBeDefault());
                 System.out.println(address.toString());
             }
         }
@@ -57,7 +65,8 @@ public class AddressDaoTest {
     void addAddress(){
         AddressPo addressPo=new AddressPo();
         addressPo.setBeDefault(false);
-        addressPo.setAddressDetail("厦门");
+        addressPo.setUserId(15);
+        addressPo.setConsignee("陈12");
         AddressPo retPo=addressDao.addAddress(addressPo);
         if(retPo!=null)
         {
@@ -71,7 +80,7 @@ public class AddressDaoTest {
     }
     @Test
     void updateAddress(){
-        Integer id=10001;
+        Integer id=4;
         AddressPo addressPo=new AddressPo();
         addressPo.setId(id);
         addressPo.setBeDefault(true);
@@ -89,7 +98,7 @@ public class AddressDaoTest {
     }
     @Test
     void deleteAddress(){
-        Integer id=1;
+        Integer id=3;
         int ret=addressDao.deleteAddress(id);
         if(ret!=0)
         {

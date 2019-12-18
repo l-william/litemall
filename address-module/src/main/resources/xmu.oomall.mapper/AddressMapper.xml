@@ -12,9 +12,17 @@
         where user_id = #{userId} and is_deleted = 0
     </select>
 
-    <select id="findAddressListByUserIdAndConsignee" resultMap="AddressResult" parameterType="Integer,String">
-        select * from oomal_address
-        where user_id= #{userId} and consignee= #{Consignee} and is_deleted=0
+    <select id="findAddressListByUserIdAndConsignee" resultMap="AddressResult">
+        select * from oomall_address
+        <where>
+            <if test="userId !=0">
+                `user_id`=#{userId} and
+            </if>
+            <if test="consignee !=null">
+                `consignee` like CONCAT('%',#{consignee},'%') and
+            </if>
+            is_deleted=0
+        </where>
     </select>
 
     <insert id="addAddress" parameterType="AddressPo" useGeneratedKeys="true" keyProperty="id">
@@ -39,10 +47,10 @@
         where id = #{id}
     </update>
 
-    <update id="deleteAddress" parameterType="Integer,LocalDateTime">
+    <update id="deleteAddress">
         update oomall_address
         set is_deleted = 1,
-        gmt_modified = {#deleteTime}
+        gmt_modified = #{deleteTime}
         where id = #{id}
     </update>
 
