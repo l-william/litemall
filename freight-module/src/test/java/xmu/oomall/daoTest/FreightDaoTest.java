@@ -5,7 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import xmu.oomall.dao.FreightDao;
 import xmu.oomall.domain.DefaultFreight;
+import xmu.oomall.domain.DefaultFreightPo;
 import xmu.oomall.domain.DefaultPieceFreight;
+import xmu.oomall.domain.DefaultPieceFreightPo;
+
+
+import java.util.List;
 
 @SpringBootTest
 public class FreightDaoTest {
@@ -14,12 +19,21 @@ public class FreightDaoTest {
 
     @Test
     void findDefaultFreightById(){
-        Integer a=10001;
+        Integer a=10080;
         DefaultFreight defaultFreight=freightDao.findDefaultFreightById(a);
         if(defaultFreight==null)
             System.out.println("not find!");
         else
             System.out.println(defaultFreight.getId());
+    }
+
+    @Test
+    void findDefaultFreightList(){
+        List<DefaultFreightPo> defaultFreight = freightDao.findDefaultFreightList();
+        if(defaultFreight==null)
+            System.out.println("not find!");
+        else
+            System.out.println(defaultFreight.size());
     }
 
     @Test
@@ -39,7 +53,7 @@ public class FreightDaoTest {
     @Test
     void deleteDefaultFreightById()
     {
-        if(freightDao.deleteDefaultFreightById(10007)==1)
+        if(freightDao.deleteDefaultFreightById(11085)==1)
         {
             System.out.println("del success");
         }
@@ -51,7 +65,7 @@ public class FreightDaoTest {
     @Test
     void updateDefaultFreight(){
         DefaultFreight defaultFreight=new DefaultFreight();
-        defaultFreight.setId(10001);
+        defaultFreight.setId(10085);
         defaultFreight.setDestination("北京");
         if(freightDao.updateDefaultFreight(defaultFreight)==1)
         {
@@ -62,15 +76,24 @@ public class FreightDaoTest {
             System.out.println("failed");
         }
     }
-
+    //
     @Test
     void findDefaultPieceFreightById(){
-        Integer a=10001;
-        DefaultPieceFreight DefaultPieceFreight=freightDao.findDefaultPieceFreightById(a);
-        if(DefaultPieceFreight==null)
+        Integer a=11080;
+        DefaultPieceFreightPo defaultPieceFreight = freightDao.findDefaultPieceFreightById(a);
+        if(defaultPieceFreight==null)
             System.out.println("not find!");
         else
-            System.out.println(DefaultPieceFreight.getId());
+            System.out.println(defaultPieceFreight.getId());
+    }
+
+    @Test
+    void findDefaultPieceFreightList(){
+        List<DefaultPieceFreightPo> defaultPieceFreight = freightDao.findDefaultPieceFreightList();
+        if(defaultPieceFreight==null)
+            System.out.println("not find!");
+        else
+            System.out.println(defaultPieceFreight.size());
     }
 
     @Test
@@ -90,7 +113,7 @@ public class FreightDaoTest {
     @Test
     void deleteDefaultPieceFreightById()
     {
-        if(freightDao.deleteDefaultPieceFreightById(10007)==1)
+        if(freightDao.deleteDefaultPieceFreightById(11085)==1)
         {
             System.out.println("del success");
         }
@@ -101,10 +124,10 @@ public class FreightDaoTest {
     }
     @Test
     void updateDefaultPieceFreight(){
-        DefaultPieceFreight DefaultPieceFreight=new DefaultPieceFreight();
-        DefaultPieceFreight.setId(10001);
-        DefaultPieceFreight.setDestination("北京");
-        if(freightDao.updateDefaultPieceFreight(DefaultPieceFreight)==1)
+        DefaultPieceFreight defaultPieceFreight=new DefaultPieceFreight();
+        defaultPieceFreight.setId(11085);
+        defaultPieceFreight.setDestination("北京");
+        if(freightDao.updateDefaultPieceFreight(defaultPieceFreight)==1)
         {
             System.out.println("update success");
         }
