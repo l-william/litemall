@@ -182,8 +182,14 @@ public class AdController {
             {
                 return ResponseUtil.unlogin();
             }
-            adService.createAd(ad);
-            return ResponseUtil.ok(ad);
+            int res=adService.createAd(ad);
+            if(res==1) {
+                return ResponseUtil.ok(ad);
+            }
+            else
+            {
+                return ResponseUtil.fail(681, "创建广告失败");
+            }
         }
     }
 
@@ -222,7 +228,7 @@ public class AdController {
             {
                 return ResponseUtil.unlogin();
             }
-            Object object = ResponseUtil.badArgumentValue();
+            Object object = ResponseUtil.fail(680, "获取广告失败");
             return object;
         }
     };
@@ -262,7 +268,7 @@ public class AdController {
             {
                 return ResponseUtil.unlogin();
             }
-            Object object=ResponseUtil.badArgumentValue();
+            Object object=ResponseUtil.fail(682, "修改广告失败");
             return object;
         }
     };
@@ -288,7 +294,7 @@ public class AdController {
             {
                 return ResponseUtil.unlogin();
             }
-            return ResponseUtil.badArgumentValue();
+            return ResponseUtil.fail(683, "删除广告失败");
         }
         Log log=createLog(request, 0, 1, "删除广告");
         if(log!=null) {
