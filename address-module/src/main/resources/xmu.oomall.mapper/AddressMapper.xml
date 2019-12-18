@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="xmu.oomall.mapper.AddressMapper">
-    <select id="findAddressById" resultType="Address" parameterType="Integer">
+
+    <select id="findAddressById" resultMap="AddressResult" parameterType="Integer">
         select * from oomall_address
         where id = #{id} and is_deleted = 0
     </select>
 
-    <select id="findAddressListByUserId" resultType="Address" parameterType="Integer">
+    <select id="findAddressListByUserId" resultMap="AddressResult" parameterType="Integer">
         select * from oomall_address
         where user_id = #{userId} and is_deleted = 0
     </select>
 
-    <select id="findAddressListByUserIdAndConsignee" resultType="Address" parameterType="Integer,String">
+    <select id="findAddressListByUserIdAndConsignee" resultMap="AddressResult" parameterType="Integer,String">
         select * from oomal_address
         where user_id= #{userId} and consignee= #{Consignee} and is_deleted=0
     </select>
@@ -44,4 +45,21 @@
         gmt_modified = {#deleteTime}
         where id = #{id}
     </update>
+
+    <resultMap id="AddressResult" type="Address">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="city_id" property="cityId"/>
+        <result column="province_id" property="provinceId"/>
+        <result column="county_id" property="countyId"/>
+        <result column="address_detail" property="addressDetail"/>
+        <result column="postal_code" property="postalCode"/>
+        <result column="consignee" property="consignee"/>
+        <result column="mobile" property="mobile"/>
+        <result column="is_default" property="beDefault"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="is_deleted" property="beDeleted"/>
+    </resultMap>
+
 </mapper>
