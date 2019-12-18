@@ -107,7 +107,8 @@ public class AdController {
                                   @RequestParam String content
     ) {
         Log log=createLog(request, 0, 1, "查询广告列表");
-        System.out.println(page + " " + limit);
+        System.out.println(name);
+        System.out.println(content);
         if(log!=null) {
             writeLog(log);
         }
