@@ -6,9 +6,8 @@
 package xmu.oomall.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import xmu.oomall.domain.DefaultFreight;
-import xmu.oomall.domain.DefaultPieceFreight;
-import xmu.oomall.domain.OrderItem;
+import org.apache.ibatis.annotations.SelectProvider;
+import xmu.oomall.domain.*;
 
 import java.util.List;
 
@@ -33,23 +32,23 @@ public interface FreightMapper {
      *
      * @return 重量模板列表
      */
-    List<DefaultFreight> findDefaultFreightList();
+    List<DefaultFreightPo> findDefaultFreightList();
 
     /**
      * 添加默认重量运费模板
      *
-     * @param defaultFreight
+     * @param defaultFreightPo
      * @return 操作状态码
      */
-    int addDefaultFreight(DefaultFreight defaultFreight);
+    int addDefaultFreight(DefaultFreightPo defaultFreightPo);
 
     /**
      * 更新默认重量运费模板
      *
-     * @param defaultFreight
+     * @param defaultFreightPo
      * @return 操作状态码
      */
-    int updateDefaultFreight(DefaultFreight defaultFreight);
+    int updateDefaultFreight(DefaultFreightPo defaultFreightPo);
 
     /**
      * 删除默认重量运费模板
@@ -65,30 +64,30 @@ public interface FreightMapper {
      * @param id
      * @return 基于件数的默认运费模板
      */
-    DefaultPieceFreight findDefaultPieceFreightById(Integer id);
+    DefaultPieceFreightPo findDefaultPieceFreightById(Integer id);
 
     /**
      * 管理员查看当前定义的所有默认件数运费模板
      *
      * @return 基于重量的默认运费模板
      */
-    List<DefaultPieceFreight> findDefaultPieceFreightList();
+    List<DefaultPieceFreightPo> findDefaultPieceFreightList();
 
     /**
      * 添加默认件数运费模板
      *
-     * @param defaultFreight
+     * @param defaultFreightPo
      * @return 操作状态码
      */
-    int addDefaultPieceFreight(DefaultPieceFreight defaultFreight);
+    int addDefaultPieceFreight(DefaultPieceFreightPo defaultFreightPo);
 
     /**
      * 更新默认件数运费模板
      *
-     * @param defaultFreight
+     * @param defaultFreightPo
      * @return 操作状态码
      */
-    int updateDefaultPieceFreight(DefaultPieceFreight defaultFreight);
+    int updateDefaultPieceFreight(DefaultPieceFreightPo defaultFreightPo);
 
     /**
      * 删除默认件数运费模板
@@ -113,6 +112,44 @@ public interface FreightMapper {
      * @param place
      * @return 默认运费模板
      */
-    DefaultFreight findDefaultFreightBy(String place);
+    DefaultFreight findDefaultFreightByPlace(String place);
 
+    /**
+     * 查看特殊运费模板
+     *
+     * @return 特殊运费模板列表
+     */
+    List<SpecialFreight> findSpecialFreightList();
+
+    /**
+     * 通过id查找特殊运费模板
+     *
+     * @param id
+     * @return 特殊运费模板
+     */
+    SpecialFreight findSpecialFreightById(Integer id);
+
+    /**
+     * 添加特殊运费模板
+     *
+     * @param specialFreight
+     * @return 操作码
+     */
+    int addSpecialFreight(SpecialFreight specialFreight);
+
+    /**
+     * 更新特殊运费模板
+     *
+     * @param specialFreight
+     * @return 操作码
+     */
+    int updateSpecialFreight(SpecialFreight specialFreight);
+
+    /**
+     * 删除特殊运费模板
+     *
+     * @param id
+     * @return 操作码
+     */
+    int deleteSpecialFreight(Integer id);
 }
