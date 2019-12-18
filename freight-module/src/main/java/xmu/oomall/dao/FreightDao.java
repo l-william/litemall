@@ -68,6 +68,7 @@ public class FreightDao {
         if(freightMapper.findDefaultFreightById(defaultFreightPo.getId())!=null)
         {
             defaultFreightPo.setGmtCreate(freightMapper.findDefaultFreightById(defaultFreightPo.getId()).getGmtCreate());
+            defaultFreightPo.setBeDeleted(freightMapper.findDefaultFreightById(defaultFreightPo.getId()).getBeDeleted());
         }
         defaultFreightPo.setGmtModified(LocalDateTime.now());
         return freightMapper.updateDefaultFreight(defaultFreightPo);
@@ -132,6 +133,7 @@ public class FreightDao {
         if(freightMapper.findDefaultPieceFreightById(defaultPieceFreightPo.getId())!=null)
         {
             defaultPieceFreightPo.setGmtCreate(freightMapper.findDefaultPieceFreightById(defaultPieceFreightPo.getId()).getGmtCreate());
+            defaultPieceFreightPo.setBeDeleted(freightMapper.findDefaultPieceFreightById(defaultPieceFreightPo.getId()).getBeDeleted());
         }
         defaultPieceFreightPo.setGmtModified(LocalDateTime.now());
         return freightMapper.updateDefaultPieceFreight(defaultPieceFreightPo);
@@ -226,6 +228,7 @@ public class FreightDao {
         if(freightMapper.findSpecialFreightById(specialFreight.getId())!=null)
         {
             specialFreight.setGmtCreate(freightMapper.findSpecialFreightById(specialFreight.getId()).getGmtCreate());
+            specialFreight.setBeDeleted(freightMapper.findSpecialFreightById(specialFreight.getId()).getBeDeleted());
         }
         specialFreight.setGmtModified(LocalDateTime.now());
         return freightMapper.updateSpecialFreight(specialFreight);
