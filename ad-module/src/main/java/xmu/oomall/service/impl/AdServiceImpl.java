@@ -42,8 +42,6 @@ public class AdServiceImpl implements AdService {
     @Override
     public List<Ad> adminFindAdList(Integer page,Integer limit,String name, String content) {
         PageHelper.startPage(page,limit);
-//        List <Ad> list=adDao.findAdListByNameAndContent(name, content);
-//        PageInfo<Ad> page = new PageInfo<Ad>(list);
         return adDao.findAdListByNameAndContent(name, content);
     }
 
@@ -81,5 +79,26 @@ public class AdServiceImpl implements AdService {
         else {
             return adList;
         }
+    }
+
+    /**
+     * 分页功能
+     *
+     * @param list 父列表
+     * @param page 分页页数
+     * @param limit 分页大小
+     * @param <T> 列表元素类型
+     * @return 子列表
+     */
+    private <T> List<T> divideByPage(List<T> list,Integer page,Integer limit){
+        int maxPages=(list.size()-1)/limit+1;
+        if(page<maxPages){
+            return list.subList((page-1)*limit,page*limit);
+        }
+        if(page==maxPages){
+            return list.subList((page-1)*limit,list.size());
+        }
+        //page>maxPages
+        return null;
     }
 }
