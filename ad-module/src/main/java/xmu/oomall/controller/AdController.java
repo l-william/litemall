@@ -106,6 +106,14 @@ public class AdController {
                                   @RequestParam String name,
                                   @RequestParam String content
     ) {
+        if(name.equals(""))
+        {
+            name=null;
+        }
+        if(content.equals(""))
+        {
+            content=null;
+        }
         Log log=createLog(request, 0, 1, "查询广告列表");
         System.out.println(page + " " + limit);
         if(log!=null) {
