@@ -107,6 +107,7 @@ public class AdController {
                                   @RequestParam String content
     ) {
         Log log=createLog(request, 0, 1, "查询广告列表");
+        System.out.println(page + " " + limit);
         if(log!=null) {
             writeLog(log);
         }
@@ -168,14 +169,12 @@ public class AdController {
             Log log=createLog(request, 0, 1, "新建广告");
             if(log!=null) {
                 writeLog(log);
-                System.out.println("here1");
             }
             else
             {
                 return ResponseUtil.unlogin();
             }
             adService.createAd(ad);
-            System.out.println("here2");
             return ResponseUtil.ok(ad);
         }
     }
@@ -231,7 +230,6 @@ public class AdController {
     @ApiOperation(value="修改广告信息 /update")
     public Object adminUpdateAd(HttpServletRequest request,@PathVariable Integer id,@RequestBody Ad ad)
     {
-
         ad.setId(id);
         if(adService.updateAd(ad))
         {
