@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="xmu.oomall.mapper.AdMapper">
-    <select id="findAdById" resultType="Ad" parameterType="Integer">
+    <select id="findAdById" resultMap="Ad" parameterType="Integer">
         select * from oomall_ad
         where id = #{id} and is_deleted = 0
     </select>
 
-    <select id="findAdList" resultType="Ad" parameterType="String">
+    <select id="findAdList" resultMap="Ad" parameterType="String">
         select * from oomall_ad
         where is_deleted = 0
     </select>
 
-    <select id="findAdListByNameAndContent" resultType="Ad" parameterType="String">
+    <select id="findAdListByNameAndContent" resultMap="Ad" parameterType="String">
         select * from oomall_ad
         <where>
             <if test="name !=null">
@@ -50,5 +50,20 @@
         set is_deleted = 1
         where id = #{id}
     </update>
+
+    <resultMap id="Ad" type="Ad">
+        <id column="id" property="id"/>
+        <result column="link" property="link"/>
+        <result column="name" property="name"/>
+        <result column="content" property="content"/>
+        <result column="pic_url" property="picUrl"/>
+        <result column="is_default" property="beDefault"/>
+        <result column="is_enabled" property="beEnabled"/>
+        <result column="start_time" property="startTime"/>
+        <result column="end_time" property="endTime"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="is_deleted" property="beDeleted"/>
+    </resultMap>
 
 </mapper>
