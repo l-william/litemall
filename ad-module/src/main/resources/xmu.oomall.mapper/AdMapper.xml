@@ -15,12 +15,12 @@
         select * from oomall_ad
         <where>
             <if test="name !=null">
-                `name` like CONCAT('%',#{name},'%')
+                `name` like CONCAT('%',#{name},'%') and
             </if>
             <if test="content !=null">
-                and `content` like CONCAT('%',#{content},'%')
+                `content` like CONCAT('%',#{content},'%') and
             </if>
-            and is_deleted = 0
+            is_deleted = 0
         </where>
     </select>
 
