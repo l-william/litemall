@@ -44,12 +44,8 @@ public class GoodsController {
                                 @RequestParam(defaultValue = "10") Integer limit)
     {
         Log log=createLog(request, 0, 1, "查询品牌列表");
-        if(log!=null) {
-            writeLog(log);
-        }
-        else {
-            return ResponseUtil.unlogin();
-        }
+        if(log!=null) { writeLog(log); }
+        else { return ResponseUtil.unlogin(); }
         List<Brand> brandList= brandService.findBrandListByIdAndName(id,name,page,limit);
         return ResponseUtil.ok(brandList);
     };
@@ -58,12 +54,8 @@ public class GoodsController {
     @ApiOperation(value = "创建一个品牌/create")
     public Object addBrand(HttpServletRequest request,@RequestBody BrandPo brandPo){
         Log log=createLog(request, 0, 1, "添加品牌");
-        if(log!=null) {
-            writeLog(log);
-        }
-        else {
-            return ResponseUtil.unlogin();
-        }
+        if(log!=null) { writeLog(log); }
+        else { return ResponseUtil.unlogin(); }
         BrandPo retPo=brandService.addBrand(brandPo);
         if(retPo==null) {
             return ResponseUtil.updatedDataFailed();
@@ -89,12 +81,8 @@ public class GoodsController {
                               @RequestBody BrandPo brandPo)
     {
         Log log=createLog(request, 0, 1, "更新品牌");
-        if(log!=null) {
-            writeLog(log);
-        }
-        else {
-            return ResponseUtil.unlogin();
-        }
+        if(log!=null) { writeLog(log); }
+        else { return ResponseUtil.unlogin(); }
         brandPo.setId(id);
         BrandPo retPo= brandService.updateBrand(brandPo);
         if(retPo==null){
@@ -108,12 +96,8 @@ public class GoodsController {
     @ApiOperation(value = "删除一个品牌/delete")
     public Object deleteBrand(HttpServletRequest request,@PathVariable Integer id){
         Log log=createLog(request, 0, 1, "删除品牌");
-        if(log!=null) {
-            writeLog(log);
-        }
-        else {
-            return ResponseUtil.unlogin();
-        }
+        if(log!=null) { writeLog(log); }
+        else { return ResponseUtil.unlogin(); }
         int ret= brandService.deleteBrand(id);
         if(ret==0){
             return ResponseUtil.updatedDataFailed();
@@ -125,33 +109,32 @@ public class GoodsController {
 
     @GetMapping("/categories")
     @ApiOperation("查看所有的分类/list")
-    public Object listGoodsCategory()
+    public Object findGoodsCategoryList(HttpServletRequest request,
+                                        @RequestParam(defaultValue = "1") Integer page,
+                                        @RequestParam(defaultValue = "10") Integer limit)
     {
-        List<GoodsCategory> goodsCategoryList=goodsCategoryService.findGoodsCategoryList();
+        Log log=createLog(request, 0, 1, "查看所有商品分类");
+        if(log!=null) { writeLog(log); }
+        else { return ResponseUtil.unlogin(); }
+        List<GoodsCategory> goodsCategoryList=goodsCategoryService.findGoodsCategoryList(page,limit);
         return ResponseUtil.ok(goodsCategoryList);
     };
 
-
-
     @PostMapping("/categories")
     @ApiOperation(value="新建一个分类/create")
-    public Object addGoodsCategory(@RequestBody GoodsCategory goodsCategory)
+    public Object addGoodsCategory(@RequestBody GoodsCategoryPo goodsCategoryPo)
     {
-        if(goodsCategoryService.CreateGoodsCategory(goodsCategory)==1)
+        GoodsCategoryPo retPo=goodsCategoryService.CreateGoodsCategory(goodsCategoryPo);
+        if(retPo==null)
         {
-            Object object = ResponseUtil.ok(goodsCategory);
-            return object;
+            return ResponseUtil.updatedDataFailed();
         }
-        else
-        {
-            Object object= ResponseUtil.fail();
-            return object;
-        }
+        return ResponseUtil.ok(retPo);
     };
 
     @GetMapping("/categories/{id}")
     @ApiOperation(value="查看单个分类信息/read")
-    public Object getGoodsCategoryById(@NotNull Integer id)
+    public Object getGoodsCategoryById(@PathVariable Integer id)
     {
         GoodsCategory goodsCategory=goodsCategoryService.findGoodsCategoryById(id);
         if(goodsCategory!=null)
