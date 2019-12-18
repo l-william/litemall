@@ -50,7 +50,8 @@
         set is_deleted = 1
         where id = #{id}
     </update>
-    <resultMap id="adResult" type="Ad">
+
+    <resultMap id="Ad" type="Ad">
         <id column="id" property="id"/>
         <result column="link" property="link"/>
         <result column="name" property="name"/>
