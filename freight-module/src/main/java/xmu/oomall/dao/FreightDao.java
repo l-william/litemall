@@ -6,12 +6,10 @@
 
 package xmu.oomall.dao;
 
+import com.mysql.cj.x.protobuf.MysqlxResultset;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import xmu.oomall.domain.DefaultFreight;
-import xmu.oomall.domain.DefaultPieceFreight;
-import xmu.oomall.domain.Order;
-import xmu.oomall.domain.OrderItem;
+import xmu.oomall.domain.*;
 import xmu.oomall.mapper.FreightMapper;
 
 import java.time.LocalDateTime;
@@ -42,37 +40,37 @@ public class FreightDao {
      *
      * @return 重量模板列表
      */
-    public List<DefaultFreight> findDefaultFreightList() {
+    public List<DefaultFreightPo> findDefaultFreightList() {
         return freightMapper.findDefaultFreightList();
     }
 
     /**
      * 添加默认重量运费模板
      *
-     * @param defaultFreight
+     * @param defaultFreightPo
      * @return 操作状态码
      */
-    public int addDefaultFreight(DefaultFreight defaultFreight) {
-        defaultFreight.setGmtCreate(LocalDateTime.now());
-        defaultFreight.setGmtModified(LocalDateTime.now());
-        defaultFreight.setBeDeleted(false);
+    public int addDefaultFreight(DefaultFreightPo defaultFreightPo) {
+        defaultFreightPo.setGmtCreate(LocalDateTime.now());
+        defaultFreightPo.setGmtModified(LocalDateTime.now());
+        defaultFreightPo.setBeDeleted(false);
 
-        return freightMapper.addDefaultFreight(defaultFreight);
+        return freightMapper.addDefaultFreight(defaultFreightPo);
     }
 
     /**
      * 更新默认重量运费模板
      *
-     * @param defaultFreight
+     * @param defaultFreightPo
      * @return 操作状态码
      */
-    public int updateDefaultFreight(DefaultFreight defaultFreight) {
-        if(freightMapper.findDefaultFreightById(defaultFreight.getId())!=null)
+    public int updateDefaultFreight(DefaultFreightPo defaultFreightPo) {
+        if(freightMapper.findDefaultFreightById(defaultFreightPo.getId())!=null)
         {
-            defaultFreight.setGmtCreate(freightMapper.findDefaultFreightById(defaultFreight.getId()).getGmtCreate());
+            defaultFreightPo.setGmtCreate(freightMapper.findDefaultFreightById(defaultFreightPo.getId()).getGmtCreate());
         }
-        defaultFreight.setGmtModified(LocalDateTime.now());
-        return freightMapper.updateDefaultFreight(defaultFreight);
+        defaultFreightPo.setGmtModified(LocalDateTime.now());
+        return freightMapper.updateDefaultFreight(defaultFreightPo);
     }
 
     /**
@@ -97,7 +95,7 @@ public class FreightDao {
      * @param id
      * @return 基于件数的默认运费模板
      */
-    public DefaultPieceFreight findDefaultPieceFreightById(Integer id) {
+    public DefaultPieceFreightPo findDefaultPieceFreightById(Integer id) {
         return freightMapper.findDefaultPieceFreightById(id);
     }
 
@@ -106,37 +104,37 @@ public class FreightDao {
      *
      * @return 基于重量的默认运费模板
      */
-    public  List<DefaultPieceFreight> findDefaultPieceFreightList() {
+    public  List<DefaultPieceFreightPo> findDefaultPieceFreightList() {
         return  freightMapper.findDefaultPieceFreightList();
     }
 
     /**
      * 添加默认件数运费模板
      *
-     * @param defaultPieceFreight
+     * @param defaultPieceFreightPo
      * @return 操作状态码
      */
-    public int addDefaultPieceFreight(DefaultPieceFreight defaultPieceFreight) {
-        defaultPieceFreight.setGmtCreate(LocalDateTime.now());
-        defaultPieceFreight.setGmtModified(LocalDateTime.now());
-        defaultPieceFreight.setBeDeleted(false);
+    public int addDefaultPieceFreight(DefaultPieceFreightPo defaultPieceFreightPo) {
+        defaultPieceFreightPo.setGmtCreate(LocalDateTime.now());
+        defaultPieceFreightPo.setGmtModified(LocalDateTime.now());
+        defaultPieceFreightPo.setBeDeleted(false);
 
-        return freightMapper.addDefaultPieceFreight(defaultPieceFreight);
+        return freightMapper.addDefaultPieceFreight(defaultPieceFreightPo);
     }
 
     /**
      * 更新默认件数运费模板
      *
-     * @param defaultPieceFreight
+     * @param defaultPieceFreightPo
      * @return 操作状态码
      */
-    public int updateDefaultPieceFreight(DefaultPieceFreight defaultPieceFreight) {
-        if(freightMapper.findDefaultPieceFreightById(defaultPieceFreight.getId())!=null)
+    public int updateDefaultPieceFreight(DefaultPieceFreightPo defaultPieceFreightPo) {
+        if(freightMapper.findDefaultPieceFreightById(defaultPieceFreightPo.getId())!=null)
         {
-            defaultPieceFreight.setGmtCreate(freightMapper.findDefaultPieceFreightById(defaultPieceFreight.getId()).getGmtCreate());
+            defaultPieceFreightPo.setGmtCreate(freightMapper.findDefaultPieceFreightById(defaultPieceFreightPo.getId()).getGmtCreate());
         }
-        defaultPieceFreight.setGmtModified(LocalDateTime.now());
-        return freightMapper.updateDefaultPieceFreight(defaultPieceFreight);
+        defaultPieceFreightPo.setGmtModified(LocalDateTime.now());
+        return freightMapper.updateDefaultPieceFreight(defaultPieceFreightPo);
     }
 
     /**
@@ -146,17 +144,90 @@ public class FreightDao {
      * @return 操作状态码
      */
     public int deleteDefaultPieceFreightById(Integer id) {
-        DefaultPieceFreight defaultPieceFreight=freightMapper.findDefaultPieceFreightById(id);
-        if(defaultPieceFreight!=null)
+        DefaultPieceFreightPo defaultPieceFreightPo=freightMapper.findDefaultPieceFreightById(id);
+        if(defaultPieceFreightPo!=null)
         {
-            defaultPieceFreight.setGmtModified(LocalDateTime.now());
-            freightMapper.updateDefaultPieceFreight(defaultPieceFreight);
+            defaultPieceFreightPo.setGmtModified(LocalDateTime.now());
+            freightMapper.updateDefaultPieceFreight(defaultPieceFreightPo);
         }
         return freightMapper.deleteDefaultPieceFreightById(id);
     }
+
+    /**
+     * 查看特殊运费列表
+     *
+     * @return 特殊运费模板列表
+     */
+    public List<SpecialFreight> findSpecialFreightList()
+    {
+        return freightMapper.findSpecialFreightList();
+    }
+
+    /**
+     * 通过id查看特殊运费模板
+     *
+     * @param id
+     * @return 特殊运费模板
+     */
+    public SpecialFreight findSpecialFreightById(Integer id)
+    {
+        return freightMapper.findSpecialFreightById(id);
+    }
+
+    /**
+     * 增加特殊运费模板
+     *
+     * @param specialFreight
+     * @return 操作码
+     */
+    public int addSpecialFreight(SpecialFreight specialFreight)
+    {
+        specialFreight.setBeDeleted(false);
+        specialFreight.setGmtCreate(LocalDateTime.now());
+        specialFreight.setGmtModified(LocalDateTime.now());
+        return freightMapper.addSpecialFreight(specialFreight);
+    }
+
+
+    /**
+     * 查找一个订单中的所有orderItem
+     *
+     * @param order
+     * @return OrderItem list
+     */
     public List<OrderItem> findItemsInAOrder(Order order)
     {
         return freightMapper.findOrderItemListByOrderId(order.getId());
     }
 
+    /**
+     * 删除特殊运费模板
+     *
+     * @param id
+     * @return 操作码
+     */
+    public int deleteSpecialFreight(Integer id) {
+        SpecialFreight specialFreight=freightMapper.findSpecialFreightById(id);
+        if(specialFreight!=null)
+        {
+            specialFreight.setGmtModified(LocalDateTime.now());
+            freightMapper.updateSpecialFreight(specialFreight);
+        }
+        return freightMapper.deleteSpecialFreight(id);
+    }
+
+    /**
+     * 更新特殊运费模板
+     *
+     * @param specialFreight
+     * @return 操作码
+     */
+    public int updateSpecialFreight(SpecialFreight specialFreight) {
+        if(freightMapper.findSpecialFreightById(specialFreight.getId())!=null)
+        {
+            specialFreight.setGmtCreate(freightMapper.findSpecialFreightById(specialFreight.getId()).getGmtCreate());
+        }
+        specialFreight.setGmtModified(LocalDateTime.now());
+        return freightMapper.updateSpecialFreight(specialFreight);
+    }
 }

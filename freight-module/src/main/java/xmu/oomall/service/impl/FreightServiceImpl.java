@@ -33,7 +33,7 @@ public class FreightServiceImpl implements FreightService {
      * @return 默认运费模板列表
      */
     @Override
-    public List<DefaultFreight> findDefaultFreightsList(Integer page,Integer limit) {
+    public List<DefaultFreightPo> findDefaultFreightsList(Integer page,Integer limit) {
         PageHelper.startPage(page,limit);
         return freightDao.findDefaultFreightList();
     }
@@ -44,30 +44,31 @@ public class FreightServiceImpl implements FreightService {
      * @return 默认运费比率表
      */
     @Override
-    public List<DefaultPieceFreight> findDefaultPieceFreightList() {
+    public List<DefaultPieceFreightPo> findDefaultPieceFreightList(Integer page,Integer limit) {
+        PageHelper.startPage(page,limit);
         return freightDao.findDefaultPieceFreightList();
     }
 
     /**
      * 添加默认运费模板
      *
-     * @param defaultFreight
+     * @param defaultFreightPo
      * @return 操作成功与否
      */
     @Override
-    public int addDefaultFreights(DefaultFreight defaultFreight) {
-        return freightDao.addDefaultFreight(defaultFreight);
+    public int addDefaultFreights(DefaultFreightPo defaultFreightPo) {
+        return freightDao.addDefaultFreight(defaultFreightPo);
     }
 
     /**
      * 添加默认运费比率
      *
-     * @param defaultPieceFreight
+     * @param defaultPieceFreightPo
      * @return 操作码
      */
     @Override
-    public int addDefaultPieceFreights(DefaultPieceFreight defaultPieceFreight) {
-        return freightDao.addDefaultPieceFreight(defaultPieceFreight);
+    public int addDefaultPieceFreights(DefaultPieceFreightPo defaultPieceFreightPo) {
+        return freightDao.addDefaultPieceFreight(defaultPieceFreightPo);
     }
 
     /**
@@ -77,9 +78,8 @@ public class FreightServiceImpl implements FreightService {
      * @return 操作成功与否
      */
     @Override
-    public int deleteDefaultFreight(String id) {
-        Integer defaultFreightid=Integer.valueOf(id);
-        return freightDao.deleteDefaultFreightById(defaultFreightid);
+    public int deleteDefaultFreight(Integer id) {
+        return freightDao.deleteDefaultFreightById(id);
     }
 
     /**
@@ -89,32 +89,31 @@ public class FreightServiceImpl implements FreightService {
      * @return 操作码
      */
     @Override
-    public int deleteDefaultPieceFreight(String id) {
-        Integer defaultPieceFreightid=Integer.valueOf(id);
-        return freightDao.deleteDefaultPieceFreightById(defaultPieceFreightid);
+    public int deleteDefaultPieceFreight(Integer id) {
+        return freightDao.deleteDefaultPieceFreightById(id);
     }
 
     /**
      * 更新默认运费比率
      *
-     * @param defaultPieceFreight
+     * @param defaultPieceFreightPo
      * @return 操作码
      */
     @Override
-    public int updateDefaultPieceFreight(DefaultPieceFreight defaultPieceFreight) {
-        return freightDao.updateDefaultPieceFreight(defaultPieceFreight);
+    public int updateDefaultPieceFreight(DefaultPieceFreightPo defaultPieceFreightPo) {
+        return freightDao.updateDefaultPieceFreight(defaultPieceFreightPo);
     }
 
 
     /**
      * 更新默认运费模板
      *
-     * @param defaultFreight
+     * @param defaultFreightPo
      * @return 操作成功与否
      */
     @Override
-    public int updateDefaultFreight(DefaultFreight defaultFreight) {
-        return freightDao.updateDefaultFreight(defaultFreight);
+    public int updateDefaultFreight(DefaultFreightPo defaultFreightPo) {
+        return freightDao.updateDefaultFreight(defaultFreightPo);
     }
 
     /**
@@ -157,7 +156,7 @@ public class FreightServiceImpl implements FreightService {
             weight.add(goods.getWeight().doubleValue()*orderItem.getNumber());
             nums.add(orderItem.getNumber());
         }
-        double freeFreightPrice =998;
+        double freeFreightPrice =88;
         //包邮的阀值价格
         if(order.getGoodsPrice().doubleValue()>=freeFreightPrice) {
             return 0;
@@ -188,8 +187,66 @@ public class FreightServiceImpl implements FreightService {
      * @return 默认运费比率
      */
     @Override
-    public DefaultPieceFreight findDefaultPieceFreightById(Integer id) {
+    public DefaultPieceFreightPo findDefaultPieceFreightById(Integer id) {
         return freightDao.findDefaultPieceFreightById(id);
     }
+
+    /**
+     * 查看所有特殊运费
+     *
+     * @param page
+     * @param limit
+     * @return 特殊运费模板列表
+     */
+    @Override
+    public List<SpecialFreight> findSpecialFreightList(Integer page, Integer limit) {
+        PageHelper.startPage(page,limit);
+        return freightDao.findSpecialFreightList();
+    }
+
+    /**
+     * 通过id查找特殊运费模板
+     *
+     * @param id
+     * @return 特殊运费模板
+     */
+    @Override
+    public SpecialFreight findSpecialFreightById(Integer id) {
+        return freightDao.findSpecialFreightById(id);
+    }
+
+    /**
+     * 新增特殊运费模板
+     *
+     * @param specialFreight
+     * @return 操作码
+     */
+    @Override
+    public int addSpecialFreight(SpecialFreight specialFreight) {
+        return freightDao.addSpecialFreight(specialFreight);
+    }
+
+    /**
+     * 删除特殊运费模板
+     *
+     * @param id
+     * @return 操作码
+     */
+    @Override
+    public int deleteSpecialFreight(Integer id) {
+        return freightDao.deleteSpecialFreight(id);
+    }
+
+    /**
+     * 更新特殊运费模板
+     *
+     * @param specialFreight
+     * @return 操作码
+     */
+    @Override
+    public int updateSpecialFreight(SpecialFreight specialFreight) {
+        return freightDao.updateSpecialFreight(specialFreight);
+    }
+
 
 }

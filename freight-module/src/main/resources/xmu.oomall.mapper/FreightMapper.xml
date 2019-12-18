@@ -6,7 +6,7 @@
         where id = #{id} and is_deleted = 0
     </select>
 
-    <select id="findDefaultFreightList" resultType="DefaultFreight">
+    <select id="findDefaultFreightList" resultType="DefaultFreightPo">
         select * from oomall_default_freight
         where is_deleted = 0
     </select>
@@ -21,13 +21,18 @@
 	where order_id = #{OrderId} and is_deleted = 0
     </select>
 
-    <insert id="addDefaultFreight" parameterType="DefaultFreight" useGeneratedKeys="true" keyProperty="id">
-        insert into oomall_default_freight(destination, first_heavy_price, continue_heavy_price, over10_price, over50_price, over100_price, over300_price, require_days, gmt_create, gmt_modified)
+    <select id="findSpecialFreightById" parameterType="Integer" resultType="SpecialFreight">
+        select * from oomall_special_freight
+        where id=#{id} and is_deleted=0
+    </select>
+
+    <insert id="addDefaultFreight" parameterType="DefaultFreightPo" useGeneratedKeys="true" keyProperty="id">
+        insert into oomall_default_freight(destination, first_heavy_price, continue_heavy_price, over10_price, over50_price, over100_price, over300_price, require_days, gmt_create, gmt_modified,is_deleted)
         values (#{destination}, #{firstHeavyPrice}, #{continueHeavyPrice}, #{over10Price}, #{over50Price}, #{over100Price}, #{over300Price},
-        #{requireDays}, #{gmtCreate}, #{gmtModified})
+        #{requireDays}, #{gmtCreate}, #{gmtModified},#{beDeleted})
     </insert>
 
-    <update id="updateDefaultFreight" parameterType="DefaultFreight">
+    <update id="updateDefaultFreight" parameterType="DefaultFreightPo">
         update oomall_default_freight
         set destination = #{destination},
             first_heavy_price = #{firstHeavyPrice},
@@ -38,7 +43,8 @@
             over300_price = #{over300Price},
             require_days = #{requireDays},
             gmt_create = #{gmtCreate},
-            gmt_modified = #{gmtModified}
+            gmt_modified = #{gmtModified},
+            is_deleted=#{beDeleted}
         where id = #{id}
     </update>
 
@@ -53,28 +59,57 @@
         where id = #{id} and is_deleted = 0
     </select>
 
-    <select id="findDefaultPieceFreightList" resultType="DefaultPieceFreight">
+    <select id="findSpecialFreightList" resultType="SpecialFreight">
+        select * from oomall_special_freight
+        where is_deleted = 0
+    </select>
+
+    <select id="findDefaultPieceFreightList" resultType="DefaultPieceFreightPo">
         select * from oomall_default_piece_freight
         where is_deleted = 0
     </select>
 
-    <insert id="addDefaultPieceFreight" parameterType="DefaultPieceFreight" useGeneratedKeys="true" keyProperty="id">
-        insert into oomall_default_piece_freight(destination, require_days, unit_rate, gmt_create, gmt_modified)
-        values (#{destination}, #{requireDays}, #{unitRate}, #{gmtCreate}, #{gmtModified})
+    <insert id="addDefaultPieceFreight" parameterType="DefaultPieceFreightPo" useGeneratedKeys="true" keyProperty="id">
+        insert into oomall_default_piece_freight(destination, require_days, unit_rate, gmt_create, gmt_modified,is_deleted)
+        values (#{destination}, #{requireDays}, #{unitRate}, #{gmtCreate}, #{gmtModified},#{beDeleted})
     </insert>
 
-    <update id="updateDefaultPieceFreight" parameterType="DefaultPieceFreight">
+    <insert id="addSpecialFreight" parameterType="SpecialFreight" useGeneratedKeys="true" keyProperty="id">
+        insert into oomall_special_freight(first_num_piece,first_num_piece_price,continue_num_piece,continue_num_piece_price,gmt_create, gmt_modified,is_deleted)
+        values (#{firstNumPiece}, #{firstNumPiecePrice}, #{continueNumPiece}, #{continueNumPiecePrice}, #{gmtModified},#{beDeleted})
+    </insert>
+
+    <update id="updateDefaultPieceFreight" parameterType="DefaultPieceFreightPo">
         update oomall_default_piece_freight
         set destination = #{destination},
             require_days = #{requireDays},
             unit_rate = #{unitRate},
             gmt_modified = #{gmtCreate},
-            gmt_create = #{gmtModified}
+            gmt_create = #{gmtModified},
+            is_deleted=#{beDeleted}
+        where id = #{id}
+    </update>
+
+    <update id="updateSpecialFreight" parameterType="SpecialFreight">
+        update oomall_special_freight
+        set first_num_piece=#{firstNumPiece},
+            first_num_piece_price=#{firstNumPiecePrice},
+            continue_num_piece=#{continueNumPiece},
+            continue_num_piece_price=#{continueNumPiecePrice},
+            gmt_modified = #{gmtCreate},
+            gmt_create = #{gmtModified},
+            is_deleted=#{beDeleted}
         where id = #{id}
     </update>
 
     <update id="deleteDefaultPieceFreightById" parameterType="Integer">
         update oomall_default_piece_freight
+        set is_deleted = 1
+        where id = #{id}
+    </update>
+
+    <update id="deleteSpecialFreight" parameterType="Integer">
+        update oomall_special_freight
         set is_deleted = 1
         where id = #{id}
     </update>
