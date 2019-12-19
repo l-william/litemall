@@ -21,6 +21,7 @@ import xmu.oomall.util.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -637,6 +638,26 @@ public class GoodsController {
     @PutMapping("/product/list/deduct")
     @ApiOperation(value = "根据订单物品列表修改库存",notes = "operation：true代表加库存，false代表减库存")
     public boolean operateStock(@RequestBody List<OrderItem> orderItemList,@RequestParam boolean operation){
+        List<Integer> productIdList=new ArrayList<Integer>();
+        List<Integer> numberList=new ArrayList<Integer>();
+        for(OrderItem orderItem:orderItemList){
+            Integer productId=orderItem.getProductId();
+            Integer number=(operation?1:-1)*orderItem.getNumber();
+            ProductPo productPo=productService.findProductById(productId);
+            boolean operable=productPo!=null&&productPo.getSafetyStock()+number>=0;
+            if(!operable){
+                return false;
+            }
+            productIdList.add(productId);
+            numberList.add(number);
+        }
+        Integer size=orderItemList.size();
+        for(int i=0;i<size;i++){
+            int ret=productService.updateStock(productIdList.get(i),numberList.get(i));
+            if(ret==0){
+                return false;
+            }
+        }
         return true;
     }
 
@@ -713,13 +734,17 @@ public class GoodsController {
 
     @GetMapping("/test/goods/{id}")
     public GoodsPo findGoodsByIdF(@PathVariable  Integer id){
+        System.out.println("02020202");
+        System.out.println(id);
         GoodsPo goodsPo=goodsService.adminFindGoodsById(id);
+        System.out.println("03030303");
         if(goodsPo==null)
         {
             return null;
         }
         else
         {
+            System.out.println("03030303");
             return goodsPo;
         }
     }

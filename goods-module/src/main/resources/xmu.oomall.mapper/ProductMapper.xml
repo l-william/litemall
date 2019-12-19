@@ -30,7 +30,15 @@
     </update>
 
     <update id="deleteProduct" parameterType="Integer">
-        delete from oomall_product
+        update oomall_product
+        set is_deleted = 1
+        where id = #{id} and is_deleted = 0
+    </update>
+
+    <update id="updateStock">
+        update oomall_product
+        set safety_stock = safety_stock + #{number},
+            gmt_modified = #{updateTime}
         where id = #{id} and is_deleted = 0
     </update>
 

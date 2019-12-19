@@ -159,5 +159,14 @@ public interface FreightMapper {
      * @param info
      * @return Id
      */
-    Integer findIdFromRegion(String info);
+    List<Integer> findIdFromRegion(String info);
+
+    /**
+     * 寻找对应地址信息的id编号
+     *
+     * @param info
+     * @param id
+     * @return id
+     */
+    Integer findIdFromRegion1(String info,Integer id);
 }

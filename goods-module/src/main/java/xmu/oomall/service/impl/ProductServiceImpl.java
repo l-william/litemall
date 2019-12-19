@@ -74,4 +74,9 @@ public class ProductServiceImpl implements ProductService {
         return productDao.findProductListByGoodsId(goodsId);
     }
 
+    @Override
+    public int updateStock(Integer id, Integer number) {
+        return productDao.updateStock(id,number);
+    }
+
 }
