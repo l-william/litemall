@@ -17,7 +17,7 @@ public interface GoodsCategoryService {
      * @param id
      * @return 返回查找到的分类
      */
-    GoodsCategory findGoodsCategoryById(Integer id);
+    GoodsCategoryPo findGoodsCategoryById(Integer id);
 
     /**
      * @param goodsCategoryPo
