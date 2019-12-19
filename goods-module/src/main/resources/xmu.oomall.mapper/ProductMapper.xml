@@ -2,34 +2,47 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="xmu.oomall.mapper.ProductMapper">
 
-    <select id="findProductById" resultType="product" parameterType="Integer">
+    <select id="findProductById" resultMap="ProductPo" parameterType="Integer">
         select * from oomall_product where id = #{id}
     </select>
 
-    <select id="findProductList" resultType="product" >
+    <select id="findProductListByGoodsId" resultMap="ProductPo">
         select * from oomall_product
         where goods_id like #{goodsId}
     </select>
 
-    <insert id="addProduct" parameterType="product" useGeneratedKeys="true" keyProperty="id">
-        insert into oomall_product(pic_Url, specifications, goods_id, price, gmt_create, gmt_modified, is_deleted)
-        values ( #{picUrl}, #{specifications}, #{goodsId}, #{price}, #{gmtCreate}, #{gmtModified}, #{beDeleted})
+    <insert id="addProduct" parameterType="ProductPo" useGeneratedKeys="true" keyProperty="id">
+        insert into oomall_product(pic_Url, specifications, goods_id, price, safety_stock, gmt_create, gmt_modified, is_deleted)
+        values ( #{picUrl}, #{specifications}, #{goodsId}, #{price}, #{safetyStock}, #{gmtCreate}, #{gmtModified}, #{beDeleted})
     </insert>
 
-    <update id="updateProduct" parameterType="product">
+    <update id="updateProduct" parameterType="ProductPo">
         update oomall_product
         set pic_url = #{picUrl},
             specifications = #{specifications},
             goods_id = #{goodsId},
             price = #{price},
+            safety_stock = #{safetyStock},
             gmt_create = #{gmtCreate},
             gmt_modified = #{gmtModified},
             is_deleted = #{beDeleted}
-        where id = #{id}
+        where id = #{id} and is_deleted = 0
     </update>
 
-    <delete id="deleteProductById" parameterType="Integer">
+    <update id="deleteProduct" parameterType="Integer">
         delete from oomall_product
-        where id = #{id}
-    </delete>
+        where id = #{id} and is_deleted = 0
+    </update>
+
+    <resultMap id="ProductPo" type="ProductPo">
+        <id column="id" property="id"/>
+        <result column="pic_url" property="picUrl"/>
+        <result column="specifications" property="specifications"/>
+        <result column="goods_id" property="goodsId"/>
+        <result column="price" property="price"/>
+        <result column="safety_stock" property="safetyStock"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="is_deleted" property="beDeleted"/>
+    </resultMap>
 </mapper>

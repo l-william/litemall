@@ -3,6 +3,7 @@ package xmu.oomall.dao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import xmu.oomall.domain.Product;
+import xmu.oomall.domain.ProductPo;
 import xmu.oomall.mapper.ProductMapper;
 
 import java.time.LocalDateTime;
@@ -25,62 +26,61 @@ public class ProductDao {
      * @param id
      * @return 产品
      */
-    public Product findProductById(Integer id){
+    public ProductPo findProductById(Integer id){
         return productMapper.findProductById(id);
     }
 
     /**
      * 添加产品
      *
-     * @param product
-     * @return 操作成功与否
+     * @param productPo
+     * @return 新增的产品
      */
-    public int addProduct(Product product){
-        product.setGmtCreate(LocalDateTime.now());
-        product.setGmtModified(LocalDateTime.now());
-        product.setBeDeleted(false);
-        return productMapper.addProduct(product);
+    public ProductPo addProduct(ProductPo productPo){
+        productPo.setGmtCreate(LocalDateTime.now());
+        productPo.setGmtModified(LocalDateTime.now());
+        productPo.setBeDeleted(false);
+        return productMapper.addProduct(productPo);
     }
 
     /**
-     * 通过id删除产品
+     * 删除产品
      *
      * @param id
      * @return 操作成功与否
      */
-    public int deleteProductById(Integer id){
-        Product product=productMapper.findProductById(id);
-        if(product!=null)
+    public int deleteProduct(Integer id){
+        ProductPo productPo=productMapper.findProductById(id);
+        if(productPo!=null)
         {
-            product.setGmtModified(LocalDateTime.now());
-            productMapper.updateProduct(product);
+            productPo.setGmtModified(LocalDateTime.now());
+            productMapper.updateProduct(productPo);
         }
-        return productMapper.deleteProductById(id);
+        return productMapper.deleteProduct(id);
     }
 
     /**
      * 更新产品信息
      *
-     * @param product
-     * @return 操作成功与否
+     * @param productPo
+     * @return 更新后的产品
      */
-    public int updateProduct(Product product){
-        if(productMapper.findProductById(product.getId())!=null)
+    public ProductPo updateProduct(ProductPo productPo){
+        if(productMapper.findProductById(productPo.getId())!=null)
         {
-            product.setGmtModified(productMapper.findProductById(product.getId()).getGmtModified());
+            productPo.setGmtModified(productMapper.findProductById(productPo.getId()).getGmtModified());
         }
-        product.setGmtModified(LocalDateTime.now());
-        return productMapper.updateProduct(product);
+        productPo.setGmtModified(LocalDateTime.now());
+        return productMapper.updateProduct(productPo);
     }
 
     /**
      * 查找产品列表
      *
-     * @param productIds
      * @param goodsId
      * @return 产品列表
      */
-    public List<Product> findProductList(String productIds, Integer goodsId){
-        return productMapper.findProductList(productIds,goodsId);
+    public List<ProductPo> findProductListByGoodsId(Integer goodsId){
+        return productMapper.findProductListByGoodsId(goodsId);
     }
 }
