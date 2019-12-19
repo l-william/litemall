@@ -240,9 +240,26 @@ public class FreightDao {
      * @param info
      * @return id
      */
-    public Integer findIdFromRegion(String info)
+    public List<Integer> findIdFromRegion(String info)
     {
         return freightMapper.findIdFromRegion(info);
     }
 
+    /**
+     * 寻找地址信息对应的id码
+     *
+     * @param info
+     * @param idlist
+     * @return
+     */
+    public Integer findIdFromRegion1(String info,List<Integer> idlist)
+    {
+        for(Integer id:idlist)
+        {
+            if(freightMapper.findIdFromRegion1(info,id)!=null) {
+                return freightMapper.findIdFromRegion1(info,id);
+            }
+        }
+        return null;
+    }
 }

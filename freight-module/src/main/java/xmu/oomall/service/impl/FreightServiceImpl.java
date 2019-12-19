@@ -6,25 +6,16 @@
 
 package xmu.oomall.service.impl;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import com.github.pagehelper.PageHelper;
-import com.netflix.client.http.HttpRequest;
-import com.sun.org.apache.bcel.internal.generic.NEWARRAY;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.filter.OrderedRequestContextFilter;
 import org.springframework.stereotype.Service;
-import sun.awt.image.SurfaceManager;
 import xmu.oomall.controller.GoodsController;
 import xmu.oomall.dao.FreightDao;
-import xmu.oomall.dao.GoodsDao;
 import xmu.oomall.domain.*;
 import xmu.oomall.service.FreightService;
 import xmu.oomall.util.AddressResolutionUtil;
 import xmu.oomall.util.JacksonUtil;
-
-import javax.jws.WebService;
-import javax.servlet.http.HttpServletRequest;
-import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -167,17 +158,19 @@ public class FreightServiceImpl implements FreightService {
         String city=addressInfo.get("city");
         String county=addressInfo.get("county");
         List<Integer> addresscode = new ArrayList<>();
-        if(freightDao.findIdFromRegion(county)!=null)
+        if(freightDao.findIdFromRegion1(county,freightDao.findIdFromRegion(city))!=null)
         {
-            addresscode.add(freightDao.findIdFromRegion(county));
+            addresscode.add(freightDao.findIdFromRegion1(county,freightDao.findIdFromRegion(city)));
         }
-        if(freightDao.findIdFromRegion(city)!=null)
+        System.out.println("99999");
+        if(freightDao.findIdFromRegion1(city,freightDao.findIdFromRegion(province))!=null)
         {
-            addresscode.add(freightDao.findIdFromRegion(city));
+            System.out.println("99999");
+            addresscode.add(freightDao.findIdFromRegion1(city,freightDao.findIdFromRegion(province)));
         }
         if(freightDao.findIdFromRegion(province)!=null)
         {
-            addresscode.add(freightDao.findIdFromRegion(province));
+            addresscode.add(freightDao.findIdFromRegion(province).get(0));
         }
         System.out.println("test!!!!!");
         //订单配送地址
@@ -187,7 +180,9 @@ public class FreightServiceImpl implements FreightService {
             //调用商品服务中的findgoodsbyid查看其运费模板类别
             //暂时不知道怎么调用，先占位模拟逻辑过程
             GoodsPo goodsPo=new GoodsPo();
+            System.out.println("99999");
             goodsPo= controller.findGoodsByIdF(goodsId);
+            System.out.println("99999");
             if(goodsPo.getBeSpecial())
             {
                 SpecialFreightID.add(goodsPo.getSpecialFreightId());

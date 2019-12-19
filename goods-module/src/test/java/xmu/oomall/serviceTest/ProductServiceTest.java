@@ -40,7 +40,7 @@ public class ProductServiceTest {
     }
 
     @Test
-    void deleteAdById()
+    void deleteProduct()
     {
         if(productService.deleteProduct(100008)==1)
         {
@@ -66,7 +66,7 @@ public class ProductServiceTest {
         }
     }
     @Test
-    void findProductList()
+    void findProductListByGoodsId()
     {
         Integer goods_id = 100002;
         List<ProductPo> productList = productService.findProductListByGoodsId(goods_id);

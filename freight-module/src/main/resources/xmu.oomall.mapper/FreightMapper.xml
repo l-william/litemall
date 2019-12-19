@@ -73,6 +73,10 @@
         select id from oomall_region
         where name=#{info}
     </select>
+    <select id="findIdFromRegion1" resultType="java.lang.Integer">
+        select id from oomall_region
+        where name=#{info} and pid=#{id}
+    </select>
 
     <insert id="addDefaultPieceFreight" parameterType="DefaultPieceFreightPo" useGeneratedKeys="true" keyProperty="id">
         insert into oomall_default_piece_freight(destination, unit_rate, gmt_create, gmt_modified,require_days)
