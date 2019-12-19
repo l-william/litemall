@@ -65,6 +65,11 @@ public class GoodsCategoryDao {
         return goodsCategoryMapper.deleteGoodsCategory(id);
     }
 
+    public int deleteGoodsCategoryByPid(Integer pid)
+    {
+        return goodsCategoryMapper.deleteGoodsCategoryByPid(pid);
+    }
+
     /**
      * 更新商品分类
      *

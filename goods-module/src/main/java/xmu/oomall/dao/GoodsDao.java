@@ -9,6 +9,7 @@ package xmu.oomall.dao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import xmu.oomall.domain.Goods;
+import xmu.oomall.domain.GoodsPo;
 import xmu.oomall.mapper.GoodsMapper;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -29,88 +30,75 @@ public class GoodsDao {
      *
      * @param goodsSn
      * @param name
-     * @return 关键词的模糊查找
+     * @return
      */
-    public List<Goods> findGoodsListByGoodSnAndName(String goodsSn, String name)
+    public List<GoodsPo> adminFindGoodsList(String goodsSn, String name)
     {
-        return goodsMapper.findGoodsListByGoodsSnAndName(goodsSn, name);
+        return goodsMapper.adminFindGoodsList(goodsSn, name);
     }
 
     /**
-     * 通过id查找商品
+     * 用户通过商品名称搜索商品
+     *
+     * @param name
+     * @return
+     */
+    public List<GoodsPo> userFindGoodsList(String name)
+    {
+        return goodsMapper.userFindGoodsList(name);
+    }
+
+    /**
+     * 管理员通过id查找商品
      *
      * @param id
      * @return 商品的详细信息
      */
-    public Goods findGoodsById(Integer id)
+    public GoodsPo adminFindGoodsById(Integer id)
     {
-        return goodsMapper.findGoodsById(id);
+        return goodsMapper.adminFindGoodsById(id);
     }
 
-    /**
-     * 尚未写完整
-     *
-     * @param goodsCategoryId
-     * @param brandId
-     * @param keyword
-     * @param isNew
-     * @param isHot
-     * @return
-     */
-    public List<Goods> findGoodsListBySearchInfo(Integer goodsCategoryId, Integer brandId,
-                       String keyword, boolean isNew, boolean isHot) {
-        return null;
-    }
 
     /**
-     * 尚未写完整
-     *
-     * @param userId
-     * @param goodsId
-     * @return
-     */
-    public Goods findGoodsById(Integer userId, Integer goodsId) {
-        return null;
-    }
-
-    /**
-     * 尚未写完整
+     * 用户通过id查找商品
      *
      * @param id
      * @return
      */
-    public Goods findRecommendedGoods(Integer id) {
-        return null;
+    public GoodsPo userFindGoodsById(Integer id) {
+        return goodsMapper.userFindGoodsById(id);
     }
+
 
     /**
      * 添加商品
      *
-     * @param goods
+     * @param goodsPo
      * @return 操作状态码
      */
-    public int addGoods(Goods goods)
+    public GoodsPo addGoods(GoodsPo goodsPo)
     {
-        goods.setGmtCreate(LocalDateTime.now());
-        goods.setGmtModified(LocalDateTime.now());
-        goods.setBeDeleted(false);
-        return goodsMapper.addGoods(goods);
+        goodsPo.setGmtCreate(LocalDateTime.now());
+        goodsPo.setGmtModified(LocalDateTime.now());
+        goodsPo.setBeDeleted(false);
+        return goodsMapper.addGoods(goodsPo);
     }
 
     /**
      * 更新商品信息
      *
-     * @param goods
+     * @param goodsPo
      * @return 操作状态码
      */
-    public int updateGoods(Goods goods)
+    public GoodsPo updateGoods(GoodsPo goodsPo)
     {
-        if(goodsMapper.findGoodsById(goods.getId())!=null)
+        if(goodsMapper.adminFindGoodsById(goodsPo.getId())!=null)
         {
-            goods.setGmtCreate(goodsMapper.findGoodsById(goods.getId()).getGmtCreate());
+            goodsPo.setGmtCreate(goodsMapper.adminFindGoodsById(goodsPo.getId()).getGmtCreate());
         }
-        goods.setGmtModified(LocalDateTime.now());
-        return goodsMapper.updateGoods(goods);
+        goodsPo.setGmtModified(LocalDateTime.now());
+        return goodsMapper.updateGoods(goodsPo);
     }
 
     /**
@@ -119,24 +107,16 @@ public class GoodsDao {
      * @param id
      * @return 操作状态码
      */
-    public int deleteGoodsById(Integer id)
+    public int deleteGoods(Integer id)
     {
-        Goods goods=goodsMapper.findGoodsById(id);
-        if(goods!=null)
+        GoodsPo goodsPo=goodsMapper.adminFindGoodsById(id);
+        if(goodsPo!=null)
         {
-            goods.setGmtModified(LocalDateTime.now());
-            goodsMapper.updateGoods(goods);
+            goodsPo.setGmtModified(LocalDateTime.now());
+            goodsMapper.updateGoods(goodsPo);
         }
-        return goodsMapper.deleteGoodsById(id);
+        return goodsMapper.deleteGoods(id);
     }
 
-    /**
-     * 获取商品在售的总数
-     *
-     * @return 在售商品数量
-     */
-    public int getGoodsCount() {
-        return goodsMapper.getGoodsCount();
-    }
 }
 

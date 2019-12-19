@@ -53,7 +53,11 @@ public class GoodsCategoryServiceImpl implements GoodsCategoryService {
      */
     @Override
     public int deleteGoodsCategory(Integer id) {
-        return goodsCategoryDao.deleteGoodsCategory(id);
+        int ret=goodsCategoryDao.deleteGoodsCategory(id);
+        if(ret!=0){
+            goodsCategoryDao.deleteGoodsCategoryByPid(id);
+        }
+        return ret;
     }
 
     /**
