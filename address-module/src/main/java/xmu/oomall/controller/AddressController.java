@@ -64,7 +64,7 @@ public class AddressController {
     public Object getAddressById(@PathVariable Integer id) {
         Address address=addressService.findAddressById(id);
         if(address==null){
-            return ResponseUtil.badArgumentValue();
+            return ResponseUtil.fail(744, "地址不存在");
         }
         return ResponseUtil.ok(address);
     }
@@ -78,7 +78,7 @@ public class AddressController {
     @PostMapping("/addresses")
     public Object addAddress(@RequestBody AddressPo addressPo) {
         if(!validate(addressPo)){
-            return ResponseUtil.badArgument();
+            return ResponseUtil.fail(751, "地址新增失败");
         }
         if(addressPo.isBeDefault()){
             Integer userId=addressPo.getUserId();
@@ -86,7 +86,7 @@ public class AddressController {
         }
         AddressPo retPo=addressService.addAddress(addressPo);
         if(retPo==null){
-            return ResponseUtil.updatedDataFailed();
+            return ResponseUtil.fail(751, "地址新增失败");
         }
         return ResponseUtil.ok(retPo);
     }
@@ -101,7 +101,7 @@ public class AddressController {
     public Object deleteAddress(@PathVariable Integer id) {
         int ret= addressService.deleteAddress(id);
         if(ret==0){
-            return ResponseUtil.updatedDataFailed();
+            return ResponseUtil.fail(753, "地址删除失败");
         }
         return  ResponseUtil.ok();
     }
@@ -116,7 +116,7 @@ public class AddressController {
     @PutMapping("/addresses/{id}")
     public Object updateAddress(@PathVariable Integer id,@RequestBody AddressPo addressPo) {
         if(!validate(addressPo)){
-            return ResponseUtil.badArgument();
+            return ResponseUtil.fail(752, "地址修改是失败");
         }
         if(addressPo.isBeDefault()){
             Integer userId=addressPo.getUserId();
@@ -125,7 +125,7 @@ public class AddressController {
         addressPo.setId(id);
         AddressPo retPo=addressService.updateAddress(addressPo);
         if(retPo==null){
-            return ResponseUtil.updatedDataFailed();
+            return ResponseUtil.fail(752, "地址修改失败");
         }
         return ResponseUtil.ok(retPo);
     }
@@ -137,7 +137,7 @@ public class AddressController {
      * @param name 用户名
      * @return 用户的地址列表
      */
-    @GetMapping("admin/addresses")
+    @GetMapping("/admin/addresses")
     public Object getAddressList(HttpServletRequest request,
                               @RequestParam Integer userId,
                               @RequestParam String name,
@@ -178,12 +178,12 @@ public class AddressController {
      * @param log 日志
      */
     private void writeLog(Log log) {
-        RestTemplate restTemplate = new RestTemplate();
-        ServiceInstance instance = loadBalancerClient.choose("Log");
-        System.out.println(instance.getHost());
-        System.out.println(instance.getPort());
-        String reqURL = String.format("http://%s:%s", instance.getHost(), instance.getPort() + "/logs");
-        restTemplate.postForObject(reqURL,log,Log.class);
+//        RestTemplate restTemplate = new RestTemplate();
+//        ServiceInstance instance = loadBalancerClient.choose("Log");
+//        System.out.println(instance.getHost());
+//        System.out.println(instance.getPort());
+//        String reqURL = String.format("http://%s:%s", instance.getHost(), instance.getPort() + "/logs");
+//        restTemplate.postForObject(reqURL,log,Log.class);
     }
 
     /**
