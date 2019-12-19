@@ -41,20 +41,20 @@ public class GoodsController {
     @GetMapping("/admins/brands")
     @ApiOperation(value="根据条件搜索品牌/list")
     public Object findBrandList(HttpServletRequest request,
-                                @RequestParam("BrandId") String id,
+                                @RequestParam("BrandId") Integer id,
                                 @RequestParam("BrandName") String name,
                                 @RequestParam(defaultValue = "1") Integer page,
                                 @RequestParam(defaultValue = "10") Integer limit)
     {
         List<BrandPo> brandList= brandService.findBrandListByIdAndName(id,name,page,limit);
         if(brandList.size()==0){
-            Log log=createLog(request, 0, 0, "查询品牌列表");
+            Log log=createLog(request, 0, 0, "查询品牌列表",id);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.fail(795,"获取品牌列表失败");
         }
         else{
-            Log log=createLog(request, 0, 1, "查询品牌列表");
+            Log log=createLog(request, 0, 1, "查询品牌列表",id);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.ok(brandList);
@@ -66,13 +66,13 @@ public class GoodsController {
     public Object addBrand(HttpServletRequest request,@RequestBody BrandPo brandPo){
         BrandPo retPo=brandService.addBrand(brandPo);
         if(retPo==null) {
-            Log log=createLog(request, 0, 0, "添加品牌");
+            Log log=createLog(request, 0, 0, "添加品牌",null);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.fail(791,"品牌新增失败");
         }
         else {
-            Log log = createLog(request, 0, 1, "添加品牌");
+            Log log = createLog(request, 0, 1, "添加品牌",null);
             if (log != null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.ok(retPo);
@@ -84,13 +84,13 @@ public class GoodsController {
     public Object findBrandById(HttpServletRequest request,@PathVariable Integer id){
         BrandPo brandPo= brandService.findBrandById(id);
         if(brandPo==null){
-            Log log = createLog(request, 0, 0, "查看单个品牌");
+            Log log = createLog(request, 0, 0, "查看单个品牌",id);
             if (log != null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.fail(794,"该品牌不存在");
         }
         else {
-            Log log = createLog(request, 0, 1, "查看单个品牌");
+            Log log = createLog(request, 0, 1, "查看单个品牌",id);
             if (log != null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.ok(brandPo);
@@ -107,13 +107,13 @@ public class GoodsController {
         brandPo.setId(id);
         BrandPo retPo= brandService.updateBrand(brandPo);
         if(retPo==null){
-            Log log=createLog(request, 0, 0, "更新品牌");
+            Log log=createLog(request, 0, 0, "更新品牌",id);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.fail(792,"品牌修改失败");
         }
         else{
-            Log log=createLog(request, 0, 1, "更新品牌");
+            Log log=createLog(request, 0, 1, "更新品牌",id);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.ok(retPo);
@@ -126,13 +126,13 @@ public class GoodsController {
     public Object deleteBrand(HttpServletRequest request,@PathVariable Integer id){
         int ret= brandService.deleteBrand(id);
         if(ret==0){
-            Log log=createLog(request, 0, 0, "删除品牌");
+            Log log=createLog(request, 0, 0, "删除品牌",id);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.fail(793,"品牌删除失败");
         }
         else {
-            Log log=createLog(request, 0, 1, "删除品牌");
+            Log log=createLog(request, 0, 1, "删除品牌",id);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.ok();
@@ -148,13 +148,13 @@ public class GoodsController {
     {
         List<GoodsCategoryPo> goodsCategoryList=goodsCategoryService.findGoodsCategoryList(page,limit);
         if(goodsCategoryList.size()==0){
-            Log log=createLog(request, 0, 0, "查看所有商品分类");
+            Log log=createLog(request, 0, 0, "查看所有商品分类",null);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.fail(805,"获取分类列表失败");
         }
         else {
-            Log log=createLog(request, 0, 1, "查看所有商品分类");
+            Log log=createLog(request, 0, 1, "查看所有商品分类",null);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.ok(goodsCategoryList);
@@ -168,13 +168,13 @@ public class GoodsController {
         GoodsCategoryPo retPo=goodsCategoryService.addGoodsCategory(goodsCategoryPo);
         if(retPo==null)
         {
-            Log log=createLog(request, 0, 0, "添加商品分类");
+            Log log=createLog(request, 0, 0, "添加商品分类",null);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.fail(801,"分类新增失败");
         }
         else {
-            Log log=createLog(request, 0, 1, "添加商品分类");
+            Log log=createLog(request, 0, 1, "添加商品分类",null);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.ok(retPo);
@@ -188,14 +188,14 @@ public class GoodsController {
         GoodsCategoryPo goodsCategoryPo=goodsCategoryService.findGoodsCategoryById(id);
         if(goodsCategoryPo==null)
         {
-            Log log=createLog(request, 0, 0, "查看单个商品分类");
+            Log log=createLog(request, 0, 0, "查看单个商品分类",id);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.fail(804,"该分类不存在");
         }
         else
         {
-            Log log=createLog(request, 0, 1, "查看单个商品分类");
+            Log log=createLog(request, 0, 1, "查看单个商品分类",id);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.ok(goodsCategoryPo);
@@ -213,14 +213,14 @@ public class GoodsController {
         GoodsCategoryPo retPo=goodsCategoryService.updateGoodsCategory(goodsCategoryPo);
         if(retPo==null)
         {
-            Log log=createLog(request, 0, 0, "更新商品分类");
+            Log log=createLog(request, 0, 0, "更新商品分类",id);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.fail(802,"分类修改失败");
         }
         else
         {
-            Log log=createLog(request, 0, 1, "更新商品分类");
+            Log log=createLog(request, 0, 1, "更新商品分类",id);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.ok(retPo);
@@ -236,14 +236,14 @@ public class GoodsController {
         int ret=goodsCategoryService.deleteGoodsCategory(id);
         if(ret==0)
         {
-            Log log=createLog(request, 0, 0, "删除商品分类");
+            Log log=createLog(request, 0, 0, "删除商品分类",id);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.fail(803,"分类删除失败​");
         }
         else
         {
-            Log log=createLog(request, 0, 1, "删除商品分类");
+            Log log=createLog(request, 0, 1, "删除商品分类",id);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.ok();
@@ -260,7 +260,7 @@ public class GoodsController {
         //被修改的分类的PID不能为空，修改后的PID不能为空
         boolean editable=destPo!=null&&destPo.getPid()!=null&&goodsCategoryPo.getPid()!=null;
         if(!editable){
-            Log log=createLog(request, 0, 0, "更改子分类在父分类下的位置");
+            Log log=createLog(request, 0, 0, "更改子分类在父分类下的位置",id);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.fail(802,"分类修改失败");
@@ -269,14 +269,14 @@ public class GoodsController {
         GoodsCategoryPo retPo=goodsCategoryService.updateGoodsCategoryPid(goodsCategoryPo);
         if(retPo==null)
         {
-            Log log=createLog(request, 0, 0, "更改子分类在父分类下的位置");
+            Log log=createLog(request, 0, 0, "更改子分类在父分类下的位置",id);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.fail(802,"分类修改失败");
         }
         else
         {
-            Log log=createLog(request, 0, 1, "更改子分类在父分类下的位置");
+            Log log=createLog(request, 0, 1, "更改子分类在父分类下的位置",id);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.ok(retPo);
@@ -293,13 +293,13 @@ public class GoodsController {
     {
         List<GoodsCategoryPo> goodsCategoryList=goodsCategoryService.findFirstLevelGoodsCategoryList();
         if(goodsCategoryList.size()==0){
-            Log log=createLog(request, 0, 0, "查看一级商品分类");
+            Log log=createLog(request, 0, 0, "查看一级商品分类",null);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.fail(805,"获取分类列表失败");
         }
         else {
-            Log log=createLog(request, 0, 1, "查看一级商品分类");
+            Log log=createLog(request, 0, 1, "查看一级商品分类",null);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.ok(goodsCategoryList);
@@ -325,13 +325,13 @@ public class GoodsController {
     {
         List<GoodsPo> goodsList=goodsService.adminFindGoodsList(goodsSn,name,page,limit);
         if(goodsList.size()==0){
-            Log log=createLog(request, 0, 0, "获取商品列表");
+            Log log=createLog(request, 0, 0, "获取商品列表",null);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.fail(776,"获取商品列表失败");
         }
         else {
-            Log log=createLog(request, 0, 1, "获取商品列表");
+            Log log=createLog(request, 0, 1, "获取商品列表",null);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.ok(goodsList);
@@ -355,14 +355,14 @@ public class GoodsController {
         GoodsPo retPo=goodsService.updateGoods(goodsPo);
         if(retPo==null)
         {
-            Log log=createLog(request, 0, 0, "更新商品");
+            Log log=createLog(request, 0, 0, "更新商品",id);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.fail(772,"商品修改失败");
         }
         else
         {
-            Log log=createLog(request, 0, 1, "更新商品");
+            Log log=createLog(request, 0, 1, "更新商品",id);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.ok(retPo);
@@ -382,14 +382,14 @@ public class GoodsController {
         int ret=goodsService.deleteGoods(id);
         if(ret==0)
         {
-            Log log=createLog(request, 0, 0, "删除商品");
+            Log log=createLog(request, 0, 0, "删除商品",id);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.fail(773,"商品删除失败");
         }
         else
         {
-            Log log=createLog(request, 0, 1, "删除商品");
+            Log log=createLog(request, 0, 1, "删除商品",id);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.ok();
@@ -409,14 +409,14 @@ public class GoodsController {
         GoodsPo retPo=goodsService.addGoods(goodsPo);
         if(retPo==null)
         {
-            Log log=createLog(request, 0, 0, "添加商品");
+            Log log=createLog(request, 0, 0, "添加商品",null);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.fail(771,"商品新增失败");
         }
         else
         {
-            Log log=createLog(request, 0, 1, "添加商品");
+            Log log=createLog(request, 0, 1, "添加商品",null);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.ok(retPo);
@@ -436,14 +436,14 @@ public class GoodsController {
         GoodsPo goodsPo=goodsService.adminFindGoodsById(id);
         if(goodsPo==null)
         {
-            Log log=createLog(request, 0, 0, "查看单个商品");
+            Log log=createLog(request, 0, 0, "查看单个商品",id);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.fail(775,"该商品不存在​");
         }
         else
         {
-            Log log=createLog(request, 0, 1, "查看单个商品");
+            Log log=createLog(request, 0, 1, "查看单个商品",id);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.ok(goodsPo);
@@ -457,14 +457,14 @@ public class GoodsController {
         List<ProductPo> productList=productService.findProductListByGoodsId(id);
         if(productList.size()==0)
         {
-            Log log=createLog(request, 0, 0, "查看商品下的产品列表");
+            Log log=createLog(request, 0, 0, "查看商品下的产品列表",id);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.fail(785,"获取产品列表失败");
         }
         else
         {
-            Log log=createLog(request, 0, 1, "查看商品下的产品列表");
+            Log log=createLog(request, 0, 1, "查看商品下的产品列表",id);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.ok(productList);
@@ -481,14 +481,14 @@ public class GoodsController {
         ProductPo retPo=productService.addProduct(productPo);
         if(retPo==null)
         {
-            Log log=createLog(request, 0, 0, "添加产品");
+            Log log=createLog(request, 0, 0, "添加产品",id);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.fail(781,"产品新增失败");
         }
         else
         {
-            Log log=createLog(request, 0, 1, "添加产品");
+            Log log=createLog(request, 0, 1, "添加产品",id);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.ok(retPo);
@@ -505,14 +505,14 @@ public class GoodsController {
         ProductPo retPo=productService.updateProduct(productPo);
         if(retPo==null)
         {
-            Log log=createLog(request, 0, 0, "更新产品");
+            Log log=createLog(request, 0, 0, "更新产品",id);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.fail(782,"产品修改失败");
         }
         else
         {
-            Log log=createLog(request, 0, 1, "更新产品");
+            Log log=createLog(request, 0, 1, "更新产品",id);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.ok(retPo);
@@ -526,14 +526,14 @@ public class GoodsController {
         int ret=productService.deleteProduct(id);
         if(ret==0)
         {
-            Log log=createLog(request, 0, 0, "删除产品");
+            Log log=createLog(request, 0, 0, "删除产品",id);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.fail(783,"产品删除失败");
         }
         else
         {
-            Log log=createLog(request, 0, 1, "删除产品");
+            Log log=createLog(request, 0, 1, "删除产品",id);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.ok();
@@ -689,9 +689,10 @@ public class GoodsController {
      * @param type
      * @param status
      * @param action
+     * @param actionId
      * @return 返回生成的日志或者空值，空值则进行未登录错误处理
      */
-    private Log createLog(HttpServletRequest request, Integer type, Integer status, String action)
+    private Log createLog(HttpServletRequest request,Integer type,Integer status,String action,Integer actionId)
     {
         String adminId= request.getHeader("id");
         if (adminId==null){
@@ -702,6 +703,7 @@ public class GoodsController {
         log.setIp(request.getRemoteAddr());
         log.setType(type);
         log.setActions(action);
+        log.setActionId(actionId);
         log.setStatusCode(status);
         return log;
     }

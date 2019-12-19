@@ -6,6 +6,7 @@
 
 package xmu.oomall.service.impl;
 
+import org.omg.CORBA.INTERNAL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xmu.oomall.dao.BrandDao;
@@ -34,7 +35,7 @@ public class BrandServiceImpl implements BrandService {
      * @return 商标列表
      */
     @Override
-    public List<BrandPo> findBrandListByIdAndName(String id, String name, Integer page, Integer limit) {
+    public List<BrandPo> findBrandListByIdAndName(Integer id, String name, Integer page, Integer limit) {
         List<BrandPo> brandList= brandDao.findBrandListByIdAndName(id,name);
         return divideByPage(brandList,page,limit);
     }

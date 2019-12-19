@@ -22,7 +22,7 @@ public interface BrandService {
      * @param limit 分页大小
      * @return 品牌列表
      */
-    List<BrandPo> findBrandListByIdAndName(String id, String name,Integer page,Integer limit);
+    List<BrandPo> findBrandListByIdAndName(Integer id, String name,Integer page,Integer limit);
 
     /**
      * 查看品牌列表
