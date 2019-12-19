@@ -268,7 +268,7 @@ public class FreightController {
      * @param limit
      * @return object
      */
-    @GetMapping("/specialFreight")
+    @GetMapping("/specialFreights")
     @ApiOperation(value = "获取特殊运费规则", notes = "")
     public Object getSpecialFreight(HttpServletRequest request,
                                     @RequestParam (defaultValue="1") Integer page,
@@ -376,7 +376,7 @@ public class FreightController {
      * @param specialFreight
      * @return obj
      */
-    @PostMapping("/specialFreight")
+    @PostMapping("/specialFreights")
     @ApiOperation(value = "新增特殊运费规则", notes = "")
     public Object addSpecialFreight(HttpServletRequest request,@RequestBody SpecialFreight specialFreight)
     {
@@ -503,6 +503,7 @@ public class FreightController {
     @ApiOperation(value = "修改特殊运费规则/delete", notes = "")
     public Object updateSpecialFreight(HttpServletRequest request,@PathVariable Integer id,@RequestBody SpecialFreight specialFreight)
     {
+        specialFreight.setId(id);
         if(freightService.updateSpecialFreight(specialFreight)==1)
         {
             Log log =createLog(request, 0, 1,"修改特殊运费规则",id);
@@ -514,7 +515,7 @@ public class FreightController {
             {
                 return ResponseUtil.unlogin();
             }
-            Object object = xmu.oomall.util.ResponseUtil.ok();
+            Object object = xmu.oomall.util.ResponseUtil.ok(specialFreight);
             return object;
         }
         else
@@ -544,6 +545,7 @@ public class FreightController {
     @ApiOperation(value = "修改默认运费规则", notes = "")
     public Object updateDefaultFreight(HttpServletRequest request,@PathVariable Integer id,@RequestBody DefaultFreightPo defaultFreightsPo)
     {
+        defaultFreightsPo.setId(id);
         if(freightService.updateDefaultFreight(defaultFreightsPo)==1)
         {
             Log log =createLog(request, 0, 1,"修改默认运费规则",id);
@@ -555,7 +557,7 @@ public class FreightController {
             {
                 return ResponseUtil.unlogin();
             }
-            Object object = xmu.oomall.util.ResponseUtil.ok();
+            Object object = xmu.oomall.util.ResponseUtil.ok(defaultFreightsPo);
             return object;
         }
         else
@@ -576,9 +578,11 @@ public class FreightController {
 
     @GetMapping("/freightPrice")
     @ApiOperation(value = "获取运费", notes = "")
-    public BigDecimal getFreight(Order order)
+    public BigDecimal getFreight(@RequestBody Order order)
     {
+        System.out.println("6666");
         double freight=freightService.getFreight(order);
+        System.out.println("7777");
         if(freight==-1)
         {
             return null;
