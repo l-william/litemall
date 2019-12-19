@@ -45,7 +45,11 @@ public class GoodsCategoryDao {
         goodsCategoryPo.setGmtCreate(LocalDateTime.now());
         goodsCategoryPo.setGmtModified(LocalDateTime.now());
         goodsCategoryPo.setBeDeleted(false);
-        return goodsCategoryMapper.addGoodsCategory(goodsCategoryPo);
+        int ret=goodsCategoryMapper.addGoodsCategory(goodsCategoryPo);
+        if(ret==0){
+            return null;
+        }
+        return goodsCategoryPo;
     }
 
     /**
@@ -82,7 +86,11 @@ public class GoodsCategoryDao {
             goodsCategoryPo.setGmtCreate(goodsCategoryMapper.findGoodsCategoryById(goodsCategoryPo.getId()).getGmtCreate());
         }
         goodsCategoryPo.setGmtModified(LocalDateTime.now());
-        return goodsCategoryMapper.updateGoodsCategory(goodsCategoryPo);
+        int ret=goodsCategoryMapper.updateGoodsCategory(goodsCategoryPo);
+        if(ret==0){
+            return null;
+        }
+        return goodsCategoryPo;
     }
 
     /**
@@ -97,7 +105,11 @@ public class GoodsCategoryDao {
             goodsCategoryPo.setGmtCreate(goodsCategoryMapper.findGoodsCategoryById(goodsCategoryPo.getId()).getGmtCreate());
         }
         goodsCategoryPo.setGmtModified(LocalDateTime.now());
-        return goodsCategoryMapper.updateGoodsCategoryPid(goodsCategoryPo);
+        int ret=goodsCategoryMapper.updateGoodsCategoryPid(goodsCategoryPo);
+        if(ret==0){
+            return null;
+        }
+        return goodsCategoryPo;
     }
 
     /**

@@ -40,7 +40,11 @@ public class ProductDao {
         productPo.setGmtCreate(LocalDateTime.now());
         productPo.setGmtModified(LocalDateTime.now());
         productPo.setBeDeleted(false);
-        return productMapper.addProduct(productPo);
+        int ret=productMapper.addProduct(productPo);
+        if(ret==0){
+            return null;
+        }
+        return productPo;
     }
 
     /**
@@ -71,7 +75,11 @@ public class ProductDao {
             productPo.setGmtModified(productMapper.findProductById(productPo.getId()).getGmtModified());
         }
         productPo.setGmtModified(LocalDateTime.now());
-        return productMapper.updateProduct(productPo);
+        int ret=productMapper.updateProduct(productPo);
+        if(ret==0){
+            return null;
+        }
+        return productPo;
     }
 
     /**

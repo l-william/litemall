@@ -6,7 +6,6 @@
 
 package xmu.oomall.dao;
 
-import org.omg.CORBA.INTERNAL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import xmu.oomall.domain.Brand;
@@ -64,7 +63,11 @@ public class BrandDao {
         brandPo.setGmtCreate(LocalDateTime.now());
         brandPo.setGmtModified(LocalDateTime.now());
         brandPo.setBeDeleted(false);
-        return brandMapper.addBrand(brandPo);
+        int ret= brandMapper.addBrand(brandPo);
+        if(ret==0){
+            return null;
+        }
+        return brandPo;
     }
 
     /**
@@ -75,7 +78,11 @@ public class BrandDao {
      */
     public BrandPo updateBrand(BrandPo brandPo){
         brandPo.setGmtModified(LocalDateTime.now());
-        return brandMapper.updateBrand(brandPo);
+        int ret=brandMapper.updateBrand(brandPo);
+        if(ret==0){
+            return null;
+        }
+        return brandPo;
     }
 
     /**

@@ -29,21 +29,21 @@ public interface GoodsMapper {
 
     /**
      * @param goodsPo
-     * @return 更新后的商品
+     * @return 操作结果码
      */
-    GoodsPo updateGoods(GoodsPo goodsPo);
+    int updateGoods(GoodsPo goodsPo);
 
     /**
      * @param id
-     * @return 返回操作结果
+     * @return 操作结果码
      */
     int deleteGoods(Integer id);
 
     /**
      * @param goodsPo
-     * @return 新增的商品
+     * @return 操作结果码
      */
-    GoodsPo addGoods(GoodsPo goodsPo);
+    int addGoods(GoodsPo goodsPo);
 
     /**
      * @param id
