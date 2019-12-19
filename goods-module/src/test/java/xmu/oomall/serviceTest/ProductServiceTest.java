@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import xmu.oomall.domain.Product;
+import xmu.oomall.domain.ProductPo;
 import xmu.oomall.service.ProductService;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class ProductServiceTest {
     void addProduct(){
         Product product=new Product();
         product.setId(100007);
-        if(productService.addProduct(product)==1)
+        if(productService.addProduct(product)!=null)
         {
             System.out.println("add success");
         }
@@ -41,7 +42,7 @@ public class ProductServiceTest {
     @Test
     void deleteAdById()
     {
-        if(productService.deleteProductById(100008)==1)
+        if(productService.deleteProduct(100008)==1)
         {
             System.out.println("del success");
         }
@@ -55,7 +56,7 @@ public class ProductServiceTest {
         Product product=new Product();
         product.setId(100001);
         product.setPicUrl("weqwqwqr");
-        if(productService.updateProduct(product)==true)
+        if(productService.updateProduct(product)!=null)
         {
             System.out.println("update success");
         }
@@ -67,9 +68,8 @@ public class ProductServiceTest {
     @Test
     void findProductList()
     {
-        String product_ids = "100002";
         Integer goods_id = 100002;
-        List<Product> productList = productService.findProductList(product_ids,goods_id);
+        List<ProductPo> productList = productService.findProductListByGoodsId(goods_id);
         if(productList.isEmpty())
         {
             System.out.println("is null");

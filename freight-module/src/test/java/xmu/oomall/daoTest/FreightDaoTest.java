@@ -4,10 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import xmu.oomall.dao.FreightDao;
-import xmu.oomall.domain.DefaultFreight;
-import xmu.oomall.domain.DefaultFreightPo;
-import xmu.oomall.domain.DefaultPieceFreight;
-import xmu.oomall.domain.DefaultPieceFreightPo;
+import xmu.oomall.domain.*;
 
 
 import java.util.List;
@@ -135,5 +132,23 @@ public class FreightDaoTest {
         {
             System.out.println("failed");
         }
+    }
+
+    @Test
+    void findIdFromRegion()
+    {
+        Integer id=freightDao.findIdFromRegion("北京市");
+        System.out.println(id);
+    }
+    @Test
+    void findItemsInAOrder()
+    {
+        Order order=new Order();
+        order.setId(35);
+        List<OrderItem> orderItems=freightDao.findItemsInAOrder(order);
+        if(orderItems!=null)
+            System.out.println(orderItems.size());
+        else
+            System.out.println("Failed");
     }
 }

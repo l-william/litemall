@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import xmu.oomall.dao.GoodsDao;
 import xmu.oomall.domain.Goods;
+import xmu.oomall.domain.GoodsPo;
 
 import java.util.List;
 
@@ -25,26 +26,47 @@ public class GoodsDaoTest {
     private GoodsDao goodsDao;
 
     @Test
-    public void findGoodsListByGoodSnAndName()
-    {
-        String goodsSn = "cdx";
-        String name = "深圳";
-        List<Goods> goodsList = goodsDao.findGoodsListByGoodSnAndName(goodsSn, name);
-
-        for(Goods goods : goodsList) {
-            System.out.println(goods);
+    void adminFindGoodsList(){
+        String goodsSn="ad";
+        String name="张三";
+        List<GoodsPo> goodsPos=goodsDao.adminFindGoodsList(goodsSn,name);
+        if(goodsPos!=null) {
+            System.out.println("Find successfully!");
+        } else {
+            System.out.println("Failed!");
         }
     }
 
     @Test
-    public void findGoodsById()
-    {
-        Integer id=370;
-        Goods goods = goodsDao.findGoodsById(id);
-        if(goods==null)
-            System.out.println("not find!");
-        else
-            System.out.println(goods.getId());
+    void userFindGoodsList(){
+        String name="张三";
+        List<GoodsPo> goodsPos=goodsDao.userFindGoodsList(name);
+        if(goodsPos!=null) {
+            System.out.println("Find successfully!");
+        } else {
+            System.out.println("Failed!");
+        }
+    }
+
+    @Test
+    void adminFindGoodsById(){
+        GoodsPo goodsPos=goodsDao.adminFindGoodsById(123);
+        if(goodsPos!=null) {
+            System.out.println("Find successfully!");
+        } else {
+            System.out.println("Failed!");
+        }
+
+    }
+
+    @Test
+    void userFindGoodsById(){
+        GoodsPo goodsPos=goodsDao.userFindGoodsById(123);
+        if(goodsPos!=null) {
+            System.out.println("Find successfully!");
+        } else {
+            System.out.println("Failed!");
+        }
     }
 
     @Test
@@ -55,7 +77,7 @@ public class GoodsDaoTest {
 
         System.out.println(goods);
 
-        if(goodsDao.addGoods(goods) == 1) {
+        if(goodsDao.addGoods(goods)!=null) {
             System.out.println("Add successfully!");
         } else {
             System.out.println("Failed!");
@@ -69,7 +91,7 @@ public class GoodsDaoTest {
         goods.setId(10003);
         goods.setName("咖啡");
 
-        if(goodsDao.updateGoods(goods) == 1) {
+        if(goodsDao.updateGoods(goods)!=null) {
             System.out.println("Update successfully!");
         } else {
             System.out.println("Failed!");
@@ -77,20 +99,14 @@ public class GoodsDaoTest {
     }
 
     @Test
-    public void deleteGoodsById()
+    public void deleteGoods()
     {
         Integer id = 10006;
 
-        if(goodsDao.deleteGoodsById(id) == 1) {
+        if(goodsDao.deleteGoods(id) == 1) {
             System.out.println("delete successfully!");
         } else {
             System.out.println("Failed!");
         }
-    }
-
-    @Test
-    public void getGoodsCount() {
-        int count = goodsDao.getGoodsCount();
-        System.out.println("On sale goods count: " + count);
     }
 }

@@ -23,9 +23,9 @@ public interface ProductMapper {
 
     /**
      * @param productPo
-     * @return
+     * @return status
      */
-    ProductPo addProduct(ProductPo productPo);
+    int addProduct(ProductPo productPo);
 
     /**
      * @param id
@@ -35,9 +35,9 @@ public interface ProductMapper {
 
     /**
      * @param productPo
-     * @return
+     * @return status
      */
-    ProductPo updateProduct(ProductPo productPo);
+    int updateProduct(ProductPo productPo);
 
     /**
      * @return

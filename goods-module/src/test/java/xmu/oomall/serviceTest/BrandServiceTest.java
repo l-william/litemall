@@ -22,24 +22,24 @@ public class BrandServiceTest {
 
     @Test
     void findBrandListByIdAndName(){
-        List<Brand> brandList=brandService.findBrandListByIdAndName("001","",1,10);
+        List<BrandPo> brandList=brandService.findBrandListByIdAndName(123,"132",1,10);
         if(brandList==null) {
             System.out.println("null");
             return;
         }
-        for (Brand brand:brandList) {
+        for (BrandPo brand:brandList) {
             System.out.println(brand.toString());
         }
     }
 
     @Test
     void findBrandList(){
-        List<Brand> brandList=brandService.findBrandList(1, 10);
+        List<BrandPo> brandList=brandService.findBrandList(1, 10);
         if(brandList==null) {
             System.out.println("null");
             return;
         }
-        for (Brand brand:brandList) {
+        for (BrandPo brand:brandList) {
             System.out.println(brand.toString());
         }
     }
