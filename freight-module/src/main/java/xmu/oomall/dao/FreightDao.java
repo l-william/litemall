@@ -233,4 +233,16 @@ public class FreightDao {
         specialFreight.setGmtModified(LocalDateTime.now());
         return freightMapper.updateSpecialFreight(specialFreight);
     }
+
+    /**
+     * 寻找地址信息对应的id码
+     *
+     * @param info
+     * @return id
+     */
+    public Integer findIdFromRegion(String info)
+    {
+        return freightMapper.findIdFromRegion(info);
+    }
+
 }

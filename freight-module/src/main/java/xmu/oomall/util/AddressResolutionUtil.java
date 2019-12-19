@@ -45,7 +45,7 @@ public class AddressResolutionUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(addressResolution("山西省太原市迎泽区"));
+        System.out.println(addressResolution("北京市市辖区朝阳区"));
     }
 
 }

@@ -152,4 +152,12 @@ public interface FreightMapper {
      * @return 操作码
      */
     int deleteSpecialFreight(Integer id);
+
+    /**
+     * 寻找对应地址信息的id编号
+     *
+     * @param info
+     * @return Id
+     */
+    Integer findIdFromRegion(String info);
 }

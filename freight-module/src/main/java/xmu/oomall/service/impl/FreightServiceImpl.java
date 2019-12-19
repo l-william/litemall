@@ -6,18 +6,28 @@
 
 package xmu.oomall.service.impl;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.github.pagehelper.PageHelper;
+import com.netflix.client.http.HttpRequest;
+import com.sun.org.apache.bcel.internal.generic.NEWARRAY;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.filter.OrderedRequestContextFilter;
 import org.springframework.stereotype.Service;
 import sun.awt.image.SurfaceManager;
+import xmu.oomall.controller.GoodsController;
 import xmu.oomall.dao.FreightDao;
+import xmu.oomall.dao.GoodsDao;
 import xmu.oomall.domain.*;
 import xmu.oomall.service.FreightService;
+import xmu.oomall.util.AddressResolutionUtil;
+import xmu.oomall.util.JacksonUtil;
 
 import javax.jws.WebService;
+import javax.servlet.http.HttpServletRequest;
 import java.awt.geom.RoundRectangle2D;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 运费的service实现类
@@ -135,29 +145,45 @@ public class FreightServiceImpl implements FreightService {
         if(order==null) {
             return -1;
         }
-        //此处本应该调用order模块
+        //此处本应调用order模块
         List <OrderItem> orderItemList=freightDao.findItemsInAOrder(order);
-        List<Integer> SpecialFreightID = null;
+        List<Integer> SpecialFreightID = new ArrayList<>();
         //记录特殊模板的id
-        List<Double> weight=null;
+        List<Double> weight= new ArrayList<>();;
         //记录每个商品的重量
-        List<Integer> nums=null;
+        List<Integer> nums= new ArrayList<>();
         //记录每个商品的件数
         String address=order.getAddress();
+        Map<String,String> addressInfo=AddressResolutionUtil.addressResolution(address).get(0);
+        String province=addressInfo.get("province");
+        String city=addressInfo.get("city");
+        String county=addressInfo.get("county");
+        List<Integer> addresscode = new ArrayList<>();
+        if(freightDao.findIdFromRegion(county)!=null)
+        {
+            addresscode.add(freightDao.findIdFromRegion(county));
+        }
+        if(freightDao.findIdFromRegion(city)!=null)
+        {
+            addresscode.add(freightDao.findIdFromRegion(city));
+        }
+        if(freightDao.findIdFromRegion(province)!=null)
+        {
+            addresscode.add(freightDao.findIdFromRegion(province));
+        }
         //订单配送地址
         for(OrderItem orderItem:orderItemList)
         {
             Integer goodsId=orderItem.getGoodsId();
             //调用商品服务中的findgoodsbyid查看其运费模板类别
             //暂时不知道怎么调用，先占位模拟逻辑过程
-            //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            Goods goods=new Goods();
-            //goods=GoodsController.findGoodsById(goodsId);
-            if(goods.getBeSpecial())
+            GoodsPo goodsPo=new GoodsPo();
+            goodsPo= GoodsController.findGoodsByIdForFreight(goodsId);
+            if(goodsPo.getBeSpecial())
             {
-                SpecialFreightID.add(goods.getSpecialFreightId());
+                SpecialFreightID.add(goodsPo.getSpecialFreightId());
             }
-            weight.add(goods.getWeight().doubleValue()*orderItem.getNumber());
+            weight.add(goodsPo.getWeight().doubleValue()*orderItem.getNumber());
             nums.add(orderItem.getNumber());
         }
         double freeFreightPrice =88;
@@ -173,6 +199,37 @@ public class FreightServiceImpl implements FreightService {
         DefaultFreight defaultFreight = null;
         //defaultFreight=find(address,DefaultFreightRedis);
         //通过address找到对应的默认运费模板
+        List<DefaultFreightPo> defaultFreightPoList=freightDao.findDefaultFreightList();
+        List<DefaultFreight> defaultFreightList = new ArrayList<>();
+        for(DefaultFreightPo defaultFreightPo1:defaultFreightPoList)
+        {
+            DefaultFreight defaultFreight1=new DefaultFreight();
+            defaultFreight1.setRegionIds(JacksonUtil.parseIntegerList(defaultFreightPo1.getDestination(), "dest"));
+            defaultFreight1.setFirstHeavyPrice(defaultFreightPo1.getFirstHeavyPrice());
+            defaultFreight1.setContinueHeavyPrice(defaultFreightPo1.getContinueHeavyPrice());
+            defaultFreight1.setOver10Price(defaultFreightPo1.getOver10Price());
+            defaultFreight1.setOver50Price(defaultFreightPo1.getOver50Price());
+            defaultFreight1.setOver100Price(defaultFreightPo1.getOver100Price());
+            defaultFreight1.setOver300Price(defaultFreightPo1.getOver300Price());
+            defaultFreightList.add(defaultFreight1);
+        }
+        boolean find=false;
+        for(Integer temp :addresscode)
+        {
+            for(DefaultFreight defaultFreight1:defaultFreightList)
+            {
+                if(defaultFreight1.getRegionIds().contains(temp))
+                {
+                    defaultFreight=defaultFreight1;
+                    find=true;
+                    break;
+                }
+            }
+            if(find==true)
+            {
+                break;
+            }
+        }
         double weightsum=weight.stream().reduce(Double::sum).orElse(0.0);
         double firstHevay=0.5;
         double continueHeavy=10.0;
@@ -219,7 +276,7 @@ public class FreightServiceImpl implements FreightService {
         }
 
         //再计算特殊运费模板(多种特殊运费模板)：
-        List<Double> specialPrice = null;
+        List<Double> specialPrice = new ArrayList<>();
         Integer numsAll=nums.stream().reduce(Integer::sum).orElse(0);
         for(Integer id:SpecialFreightID)
         {
@@ -229,6 +286,32 @@ public class FreightServiceImpl implements FreightService {
                 //从redis中取单件比率表
                 DefaultPieceFreight defaultPieceFreight=null;
                 //defaultPieceFreight=find(address,specialFreightRedis);
+                List<DefaultPieceFreightPo> defaultPieceFreightPoList=freightDao.findDefaultPieceFreightList();
+                List<DefaultPieceFreight> defaultPieceFreightList = new ArrayList<>();
+                for(DefaultPieceFreightPo defaultPieceFreightPo:defaultPieceFreightPoList)
+                {
+                    DefaultPieceFreight defaultPieceFreight1=new DefaultPieceFreight();
+                    defaultPieceFreight1.setRegionIds(JacksonUtil.parseIntegerList(defaultPieceFreightPo.getDestination(), "dest"));
+                    defaultPieceFreight1.setUnitRate(defaultPieceFreightPo.getUnitRate());
+                    defaultPieceFreightList.add(defaultPieceFreight1);
+                }
+                boolean find1=false;
+                for(Integer temp :addresscode)
+                {
+                    for(DefaultPieceFreight defaultPieceFreight1:defaultPieceFreightList)
+                    {
+                        if(defaultPieceFreight1.getRegionIds().contains(temp))
+                        {
+                            defaultPieceFreight=defaultPieceFreight1;
+                            find1=true;
+                            break;
+                        }
+                    }
+                    if(find1==true)
+                    {
+                        break;
+                    }
+                }
                 if(numsAll<=specialFreight.getFirstNumPiece())
                 {
                     specialPrice.add(numsAll*specialFreight.getFirstNumPiecePrice().doubleValue()*defaultPieceFreight.getUnitRate().doubleValue());
