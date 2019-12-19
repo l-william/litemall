@@ -6,5 +6,8 @@
 
 package xmu.oomall.serviceTest;
 
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
 public class GoodsServiceTest {
 }

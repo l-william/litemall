@@ -27,8 +27,8 @@ public class GoodsDaoTest {
     @Test
     public void findGoodsListByGoodSnAndName()
     {
-        String goodsSn = "we";
-        String name = "劳力";
+        String goodsSn = "cdx";
+        String name = "深圳";
         List<Goods> goodsList = goodsDao.findGoodsListByGoodSnAndName(goodsSn, name);
 
         for(Goods goods : goodsList) {
@@ -39,10 +39,12 @@ public class GoodsDaoTest {
     @Test
     public void findGoodsById()
     {
-        Integer id = 10003;
+        Integer id=370;
         Goods goods = goodsDao.findGoodsById(id);
-
-        System.out.println(goods);
+        if(goods==null)
+            System.out.println("not find!");
+        else
+            System.out.println(goods.getId());
     }
 
     @Test
