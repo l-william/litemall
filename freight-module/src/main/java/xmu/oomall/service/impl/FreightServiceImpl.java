@@ -10,10 +10,12 @@ import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.filter.OrderedRequestContextFilter;
 import org.springframework.stereotype.Service;
+import sun.awt.image.SurfaceManager;
 import xmu.oomall.dao.FreightDao;
 import xmu.oomall.domain.*;
 import xmu.oomall.service.FreightService;
 
+import javax.jws.WebService;
 import java.awt.geom.RoundRectangle2D;
 import java.util.List;
 
@@ -141,6 +143,8 @@ public class FreightServiceImpl implements FreightService {
         //记录每个商品的重量
         List<Integer> nums=null;
         //记录每个商品的件数
+        String address=order.getAddress();
+        //订单配送地址
         for(OrderItem orderItem:orderItemList)
         {
             Integer goodsId=orderItem.getGoodsId();
@@ -161,10 +165,99 @@ public class FreightServiceImpl implements FreightService {
         if(order.getGoodsPrice().doubleValue()>=freeFreightPrice) {
             return 0;
         }
+        //？？？？？？？？？？？？
+        //要将所有的模板放到redis中方便频繁查询
+        //？？？？？？？？？？？？
         //先计算默认运费模板：
+        double defaultPrice=0.0;
+        DefaultFreight defaultFreight = null;
+        //defaultFreight=find(address,DefaultFreightRedis);
+        //通过address找到对应的默认运费模板
+        double weightsum=weight.stream().reduce(Double::sum).orElse(0.0);
+        double firstHevay=0.5;
+        double continueHeavy=10.0;
+        double thirdHeavy=50.0;
+        double fourthHeavy=100.0;
+        double topHeavy=300.0;
+        if(weightsum<=firstHevay)
+        {
+            defaultPrice=defaultFreight.getFirstHeavyPrice().doubleValue();
+        }
+        else if(weightsum>firstHevay&&weightsum<=continueHeavy)
+        {
+            defaultPrice=defaultFreight.getFirstHeavyPrice().doubleValue()+defaultFreight.getContinueHeavyPrice().doubleValue()*((weightsum-0.5)/0.5);
+        }
+        else if(weightsum>continueHeavy&&weightsum<=thirdHeavy)
+        {
+            defaultPrice+=defaultFreight.getFirstHeavyPrice().doubleValue();
+            defaultPrice+=defaultFreight.getContinueHeavyPrice().doubleValue()*19.0;
+            defaultPrice+=defaultFreight.getOver10Price().doubleValue()*(weightsum-10.0);
+        }
+        else if(weightsum>thirdHeavy&&weightsum<=fourthHeavy)
+        {
+            defaultPrice+=defaultFreight.getFirstHeavyPrice().doubleValue();
+            defaultPrice+=defaultFreight.getContinueHeavyPrice().doubleValue()*19.0;
+            defaultPrice+=defaultFreight.getOver10Price().doubleValue()*(40.0);
+            defaultPrice+=defaultFreight.getOver50Price().doubleValue()*(weightsum-50.0);
+        }
+        else if(weightsum>fourthHeavy&&weightsum<=topHeavy)
+        {
+            defaultPrice+=defaultFreight.getFirstHeavyPrice().doubleValue();
+            defaultPrice+=defaultFreight.getContinueHeavyPrice().doubleValue()*19.0;
+            defaultPrice+=defaultFreight.getOver10Price().doubleValue()*(40.0);
+            defaultPrice+=defaultFreight.getOver50Price().doubleValue()*(50.0);
+            defaultPrice+=defaultFreight.getOver100Price().doubleValue()*(weightsum-100.0);
+        }
+        else
+        {
+            defaultPrice+=defaultFreight.getFirstHeavyPrice().doubleValue();
+            defaultPrice+=defaultFreight.getContinueHeavyPrice().doubleValue()*19.0;
+            defaultPrice+=defaultFreight.getOver10Price().doubleValue()*(40.0);
+            defaultPrice+=defaultFreight.getOver50Price().doubleValue()*(50.0);
+            defaultPrice+=defaultFreight.getOver100Price().doubleValue()*(200.0);
+            defaultPrice+=defaultFreight.getOver300Price().doubleValue()*(weightsum-300.0);
+        }
 
         //再计算特殊运费模板(多种特殊运费模板)：
-        return 0;
+        List<Double> specialPrice = null;
+        Integer numsAll=nums.stream().reduce(Integer::sum).orElse(0);
+        for(Integer id:SpecialFreightID)
+        {
+            SpecialFreight specialFreight=freightDao.findSpecialFreightById(id);
+            if(specialFreight!=null)
+            {
+                //从redis中取单件比率表
+                DefaultPieceFreight defaultPieceFreight=null;
+                //defaultPieceFreight=find(address,specialFreightRedis);
+                if(numsAll<=specialFreight.getFirstNumPiece())
+                {
+                    specialPrice.add(numsAll*specialFreight.getFirstNumPiecePrice().doubleValue()*defaultPieceFreight.getUnitRate().doubleValue());
+                }
+                else
+                {
+                    double temp=0.0;
+                    temp+=specialFreight.getFirstNumPiece()*specialFreight.getFirstNumPiecePrice().doubleValue()*defaultPieceFreight.getUnitRate().doubleValue();
+                    Integer n = (numsAll-specialFreight.getFirstNumPiece())/specialFreight.getContinueNumPiece()+1;
+                    temp+=n*specialFreight.getContinueNumPiecePrice().doubleValue()*defaultPieceFreight.getUnitRate().doubleValue();
+                    specialPrice.add(temp);
+                }
+            }
+        }
+        double specialPriceMax=specialPrice.stream().max((a, b) -> {
+            if (a > b) {
+                return 1;
+            } else {
+                return -1;
+            }
+        }).get();
+        if(specialPriceMax>defaultPrice)
+        {
+            return specialPriceMax;
+        }
+        else
+        {
+            return defaultPrice;
+        }
 
     }
 

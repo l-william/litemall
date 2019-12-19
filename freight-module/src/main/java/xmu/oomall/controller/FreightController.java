@@ -577,6 +577,10 @@ public class FreightController {
     public BigDecimal getFreight(Order order)
     {
         double freight=freightService.getFreight(order);
+        if(freight==-1)
+        {
+            return null;
+        }
         return BigDecimal.valueOf(freight);
     };
 
