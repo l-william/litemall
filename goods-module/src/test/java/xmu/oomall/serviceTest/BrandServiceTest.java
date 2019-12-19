@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import xmu.oomall.domain.Brand;
+import xmu.oomall.domain.BrandPo;
 import xmu.oomall.service.BrandService;
 
 import java.util.List;
@@ -45,8 +46,15 @@ public class BrandServiceTest {
 
     @Test
     void findBrandById(){
-        Brand brand=brandService.findBrandById(10003);
-        System.out.println(brand.toString());
+        if(brandService.findBrandById(100002)==null)
+        {
+            System.out.println("no find");
+        }
+        else
+        {
+            System.out.println(brandService.findBrandById(100002).getId());
+        }
+
     }
 
     @Test
@@ -59,15 +67,15 @@ public class BrandServiceTest {
 
     @Test
     void updateBrandById(){
-        Brand brand=new Brand();
+        BrandPo brand=new BrandPo();
         brand.setId(10005);
         brand.setBeDeleted(false);
         brand.setName("cfh_update_Test2");
-        brandService.updateBrandById(10005,brand);
+        brandService.updateBrand(brand);
     }
 
     @Test
     void deleteBrand(){
-        brandService.deleteBrandById(10006);
+        brandService.deleteBrand(10006);
     }
 }
