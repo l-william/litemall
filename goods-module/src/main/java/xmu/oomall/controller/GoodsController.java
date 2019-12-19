@@ -16,6 +16,7 @@ import xmu.oomall.domain.*;
 import xmu.oomall.service.BrandService;
 import xmu.oomall.service.GoodsCategoryService;
 import xmu.oomall.service.GoodsService;
+import xmu.oomall.service.ProductService;
 import xmu.oomall.util.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +33,8 @@ public class GoodsController {
     private GoodsService goodsService;
     @Autowired
     private BrandService brandService;
+    @Autowired
+    private ProductService productService;
     @Autowired
     private LoadBalancerClient loadBalancerClient;
 
@@ -450,7 +453,21 @@ public class GoodsController {
     @ApiOperation(value = "获取商品下的产品列表")
     public Object findProductList(HttpServletRequest request, @PathVariable Integer id)
     {
-
+        List<ProductPo> productPoList=productService.findProductList(id);
+        if(productPoList.size()==0)
+        {
+            Log log=createLog(request, 0, 0, "查看商品下的产品列表");
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.fail(785,"获取产品列表失败");
+        }
+        else
+        {
+            Log log=createLog(request, 0, 1, "查看商品下的产品列表");
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.ok(productPoList);
+        }
     }
 
     @PostMapping("/goods/{id}/products")
@@ -459,23 +476,67 @@ public class GoodsController {
                              @PathVariable Integer id,
                              @RequestBody ProductPo productPo)
     {
-
+        productPo.setGoodsId(id);
+        ProductPo retPo=productService.addProduct(productPo);
+        if(retPo==null)
+        {
+            Log log=createLog(request, 0, 0, "添加产品");
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.fail(781,"产品新增失败");
+        }
+        else
+        {
+            Log log=createLog(request, 0, 1, "添加产品");
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.ok(retPo);
+        }
     }
 
     @PutMapping("/products/{id}")
     @ApiOperation(value = "修改产品信息")
     public Object updateProduct(HttpServletRequest request,
-                             @PathVariable Integer id,
-                             @RequestBody ProductPo productPo)
+                                @PathVariable Integer id,
+                                @RequestBody ProductPo productPo)
     {
-
+        productPo.setId(id);
+        ProductPo retPo=productService.updateProduct(productPo);
+        if(retPo==null)
+        {
+            Log log=createLog(request, 0, 0, "更新产品");
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.fail(782,"产品修改失败");
+        }
+        else
+        {
+            Log log=createLog(request, 0, 1, "更新产品");
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.ok(retPo);
+        }
     }
 
     @DeleteMapping("/products/{id}")
     @ApiOperation(value = "删除产品信息")
     public Object deleteProduct(HttpServletRequest request,@PathVariable Integer id)
     {
-
+        int ret=productService.deleteProductById(id);
+        if(ret==0)
+        {
+            Log log=createLog(request, 0, 0, "删除产品");
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.fail(783,"产品删除失败");
+        }
+        else
+        {
+            Log log=createLog(request, 0, 1, "删除产品");
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.ok();
+        }
     }
 
     //--------------user
