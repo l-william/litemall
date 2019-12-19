@@ -39,4 +39,5 @@ public interface ProductService {
      */
     List<ProductPo> findProductListByGoodsId(Integer goodsId);
 
+    int updateStock(Integer id, Integer number);
 }
