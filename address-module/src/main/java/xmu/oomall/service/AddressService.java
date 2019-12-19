@@ -11,6 +11,7 @@ import java.util.List;
  * @date 2019/12/9 00:14
  * @version 1.0
  */
+@Service
 public interface AddressService {
 
     /**

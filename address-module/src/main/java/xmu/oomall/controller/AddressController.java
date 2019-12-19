@@ -144,7 +144,7 @@ public class AddressController {
                               @RequestParam(defaultValue = "1") Integer page,
                               @RequestParam(defaultValue = "10") Integer limit)
     {
-        Log log=createLog(request, 0, 1, "查询地址列表");
+        Log log=createLog(request, 0, 1, "查询地址列表",null);
         if(log!=null) {
             writeLog(log);
         }
@@ -193,9 +193,10 @@ public class AddressController {
      * @param type
      * @param status
      * @param action
+     * @param actionId
      * @return 返回生成的日志或者空值，空值则进行未登录错误处理
      */
-    private Log createLog(HttpServletRequest request,Integer type,Integer status,String action)
+    private Log createLog(HttpServletRequest request,Integer type,Integer status,String action,Integer actionId)
     {
         String adminId= request.getHeader("id");
         if (adminId==null){
@@ -206,6 +207,7 @@ public class AddressController {
         log.setIp(request.getRemoteAddr());
         log.setType(type);
         log.setActions(action);
+        log.setActionId(actionId);
         log.setStatusCode(status);
         return log;
     }
