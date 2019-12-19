@@ -100,7 +100,7 @@ public class AdController {
      * @param content
      * @return Object
      */
-    @GetMapping("/admins/ads")
+    @GetMapping("/admin/ads")
     @ApiOperation(value="管理员查看所有的广告  /list")
     public Object adminFindAdList(HttpServletRequest request,
                                   @RequestParam(defaultValue = "1") Integer page,

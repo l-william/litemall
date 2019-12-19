@@ -6,16 +6,29 @@
 
 package xmu.oomall.service.impl;
 
-
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.github.pagehelper.PageHelper;
+import com.netflix.client.http.HttpRequest;
+import com.sun.org.apache.bcel.internal.generic.NEWARRAY;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.filter.OrderedRequestContextFilter;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import sun.awt.image.SurfaceManager;
 import xmu.oomall.controller.GoodsController;
 import xmu.oomall.dao.FreightDao;
+import xmu.oomall.dao.GoodsDao;
 import xmu.oomall.domain.*;
 import xmu.oomall.service.FreightService;
 import xmu.oomall.util.AddressResolutionUtil;
 import xmu.oomall.util.JacksonUtil;
+
+import javax.jws.WebService;
+import javax.servlet.http.HttpServletRequest;
+import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +43,18 @@ public class FreightServiceImpl implements FreightService {
     private FreightDao freightDao;
     @Autowired
     private  GoodsController controller;
+    @Autowired
+    private LoadBalancerClient loadBalancerClient;
 
+    private GoodsPo findGoodsPoById(Integer id) {
+        RestTemplate restTemplate = new RestTemplate();
+        ServiceInstance instance = loadBalancerClient.choose("Goods");
+        System.out.println(instance.getHost());
+        System.out.println(instance.getPort());
+        String reqURL = String.format("http://%s:%s", instance.getHost(), instance.getPort() + "/test/goods/" + id);
+        System.out.println(reqURL);
+        return restTemplate.getForObject(reqURL, GoodsPo.class);
+    }
 
     /**
      * 查找默认运费
@@ -181,7 +205,8 @@ public class FreightServiceImpl implements FreightService {
             //暂时不知道怎么调用，先占位模拟逻辑过程
             GoodsPo goodsPo=new GoodsPo();
             System.out.println("99999");
-            goodsPo= controller.findGoodsByIdF(goodsId);
+            goodsPo= findGoodsPoById(goodsId);
+            System.out.println(goodsPo);
             System.out.println("99999");
             if(goodsPo.getBeSpecial())
             {
