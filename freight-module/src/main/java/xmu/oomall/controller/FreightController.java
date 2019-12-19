@@ -10,7 +10,6 @@ import ch.qos.logback.classic.pattern.RelativeTimeConverter;
 import ch.qos.logback.core.joran.spi.XMLUtil;
 import com.netflix.eureka.cluster.PeerEurekaNode;
 import com.netflix.ribbon.proxy.annotation.Http;
-import com.sun.xml.internal.bind.v2.runtime.InlineBinaryTransducer;
 import io.swagger.annotations.ApiOperation;
 import org.apache.logging.log4j.message.ReusableMessage;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -39,7 +39,7 @@ public class GoodsController {
     @Autowired
     private LoadBalancerClient loadBalancerClient;
 
-    @GetMapping("/admins/brands")
+    @GetMapping("/admin/brands")
     @ApiOperation(value="根据条件搜索品牌/list")
     public Object findBrandList(HttpServletRequest request,
                                 @RequestParam("BrandId") Integer id,
