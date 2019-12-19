@@ -75,6 +75,11 @@
         where id = #{id} and is_deleted = 0
     </update>
 
+    <select id="findGoodsListByBrandId" parameterType="Integer" resultMap="GoodsPo">
+        select * from oomall_goods
+        where brand_id = #{brandId} and is_deleted = 0
+    </select>
+
     <resultMap id="GoodsPo" type="GoodsPo">
         <id column="id" property="id"/>
         <result column="name" property="name"/>

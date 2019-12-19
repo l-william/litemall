@@ -80,9 +80,9 @@ public class GoodsController {
         }
     };
 
-    @GetMapping("/brands/{id}")
+    @GetMapping("/admin/brands/{id}")
     @ApiOperation(value="查看单个品牌信息/read")
-    public Object findBrandById(HttpServletRequest request,@PathVariable Integer id){
+    public Object adminFindBrandById(HttpServletRequest request,@PathVariable Integer id){
         BrandPo brandPo= brandService.findBrandById(id);
         if(brandPo==null){
             Log log = createLog(request, 0, 0, "查看单个品牌",id);
@@ -561,6 +561,28 @@ public class GoodsController {
         return ResponseUtil.ok(brandList);
     };
 
+    @GetMapping("brands/{id}")
+    @ApiOperation(value="查看品牌信息")
+    public Object userFindBrandById(HttpServletRequest request,@PathVariable Integer id){
+        BrandPo brandPo= brandService.findBrandById(id);
+        if(brandPo==null){
+            return ResponseUtil.fail(794,"该品牌不存在");
+        }
+        else {
+            return ResponseUtil.ok(brandPo);
+        }
+    };
+
+    @GetMapping("/brands/{id}/goods")
+    @ApiOperation(value="获取品牌下的商品")
+    public Object findGoodsListByBrandId(@PathVariable Integer id){
+        List<GoodsPo> goodsList=goodsService.findGoodsListByBrandId(id);
+        if(goodsList.size()==0){
+            return ResponseUtil.fail(776,"获取商品列表失败");
+        }
+        return ResponseUtil.ok(goodsList);
+    }
+
     @GetMapping("/categories/l2")
     @ApiOperation(value = "获取二级种类/getsecondgoodsCategory", notes = "获取二级种类")
     public Object findSecondLevelGoodsCategoryList()
@@ -695,12 +717,12 @@ public class GoodsController {
      * @param log 日志
      */
     private void writeLog(Log log) {
-        RestTemplate restTemplate = new RestTemplate();
-        ServiceInstance instance = loadBalancerClient.choose("Log");
-        System.out.println(instance.getHost());
-        System.out.println(instance.getPort());
-        String reqURL = String.format("http://%s:%s", instance.getHost(), instance.getPort() + "/logs");
-        restTemplate.postForObject(reqURL,log,Log.class);
+//        RestTemplate restTemplate = new RestTemplate();
+//        ServiceInstance instance = loadBalancerClient.choose("Log");
+//        System.out.println(instance.getHost());
+//        System.out.println(instance.getPort());
+//        String reqURL = String.format("http://%s:%s", instance.getHost(), instance.getPort() + "/logs");
+//        restTemplate.postForObject(reqURL,log,Log.class);
     }
 
     /**

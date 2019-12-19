@@ -127,5 +127,9 @@ public class GoodsDao {
         return goodsMapper.deleteGoods(id);
     }
 
+    public List<GoodsPo> findGoodsListByBrandId(Integer brandId)
+    {
+        return goodsMapper.findGoodsListByBrandId(brandId);
+    }
 }
 
