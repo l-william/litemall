@@ -6,25 +6,16 @@
 
 package xmu.oomall.service.impl;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
 import com.github.pagehelper.PageHelper;
-import com.netflix.client.http.HttpRequest;
-import com.sun.org.apache.bcel.internal.generic.NEWARRAY;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.filter.OrderedRequestContextFilter;
 import org.springframework.stereotype.Service;
-import sun.awt.image.SurfaceManager;
 import xmu.oomall.controller.GoodsController;
 import xmu.oomall.dao.FreightDao;
-import xmu.oomall.dao.GoodsDao;
 import xmu.oomall.domain.*;
 import xmu.oomall.service.FreightService;
 import xmu.oomall.util.AddressResolutionUtil;
 import xmu.oomall.util.JacksonUtil;
-
-import javax.jws.WebService;
-import javax.servlet.http.HttpServletRequest;
-import java.awt.geom.RoundRectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;

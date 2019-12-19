@@ -32,14 +32,14 @@ public class AdServiceTest {
     @Test
     void adminFindAdList()
     {
-        List<Ad> ads=adService.adminFindAdList(1,10,"张三","内容");
+        List<Ad> ads=adService.adminFindAdList(1,10,"诚",null);
         if(ads!=null)
-            System.out.println(ads.size());
+            System.out.println(ads);
         else
             System.out.println("Failed find");
     }
     @Test
-    void addAd()
+    void createAd()
     {
         Ad ad=new Ad();
         ad.setContent("www.4399.com");
@@ -53,7 +53,7 @@ public class AdServiceTest {
         }
     }
     @Test
-    void deleteAdById()
+    void deleteAd()
     {
         if(adService.deleteAd(1)==1)
         {

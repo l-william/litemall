@@ -33,7 +33,7 @@ public class GoodsCategoryServiceTest {
         }
     }
     @Test
-    public void createGoodsCategory()
+    public void addGoodsCategory()
     {
         GoodsCategory goodsCategory=new GoodsCategory();
         goodsCategory.setName("医药用品");

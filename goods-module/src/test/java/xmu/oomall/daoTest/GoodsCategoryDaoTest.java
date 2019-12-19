@@ -116,7 +116,7 @@ class GoodsCategoryDaoTest {
     @Test
     void updateGoodsCategoryPid(){
         GoodsCategoryPo goodsCategory=new GoodsCategoryPo();
-        goodsCategory.setId(100001);
+        goodsCategory.setId(133);
         goodsCategory.setPicUrl("brand");
         if(goodsCategoryDao.updateGoodsCategoryPid(goodsCategory)!=null)
         {

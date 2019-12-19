@@ -151,4 +151,59 @@ public class FreightDaoTest {
         else
             System.out.println("Failed");
     }
+    @Test
+    void findSpecialFreightList(){
+        Integer a=10080;
+        List<SpecialFreight> specialFreights=freightDao.findSpecialFreightList();
+        if(specialFreights==null)
+            System.out.println("not find!");
+        else
+            System.out.println(specialFreights.size());
+    }
+    @Test
+    void findSpecialFreightById(){
+        Integer a=10080;
+        SpecialFreight defaultFreight=freightDao.findSpecialFreightById(a);
+        if(defaultFreight==null)
+            System.out.println("not find!");
+        else
+            System.out.println(defaultFreight.getId());
+    }
+    @Test
+    void addSpecialFreight(){
+        SpecialFreight specialFreight=new SpecialFreight();
+        specialFreight.setFirstNumPiece(12);
+        if(freightDao.addSpecialFreight(specialFreight)==1)
+        {
+            System.out.println("add success");
+        }
+        else
+        {
+            System.out.println("failed");
+        }
+    }
+    @Test
+    void deleteSpecialFreight()
+    {
+        if(freightDao.deleteSpecialFreight(11085)==1)
+        {
+            System.out.println("del success");
+        }
+        else
+        {
+            System.out.println("failed");
+        }
+    }
+    @Test
+    void updateSpecialFreight()
+    {
+        SpecialFreight specialFreight=new SpecialFreight();
+        specialFreight.setId(11085);
+        specialFreight.setFirstNumPiece(12);
+        if(freightDao.updateSpecialFreight(specialFreight)==1)
+        {
+            System.out.println("update success");
+        }
+
+    }
 }

@@ -34,18 +34,18 @@
     <update id="updateGoodsCategory" parameterType="GoodsCategoryPo">
         update oomall_goods_category
         set name = #{name},
-            <!--pid = #{pid},-->
-            pic_url = #{picUrl},
+            pid = #{pid},
             gmt_create = #{gmtCreate},
             gmt_modified = #{gmtModified},
-            is_deleted = #{beDeleted}
+            is_deleted = #{beDeleted},
+            pic_url = #{picUrl}
         where id = #{id} and is_deleted = 0
     </update>
 
     <update id="updateGoodsCategoryPid" parameterType="GoodsCategoryPo">
         update oomall_goods_category
         set pid = #{pid},
-            gmt_modified = #{gmtModified},
+            gmt_modified = #{gmtModified}
         where id = #{id} and is_deleted = 0
     </update>
 

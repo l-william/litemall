@@ -6,22 +6,11 @@
 
 package xmu.oomall.controller;
 
-import ch.qos.logback.classic.pattern.RelativeTimeConverter;
-import ch.qos.logback.core.joran.spi.XMLUtil;
-import com.netflix.eureka.cluster.PeerEurekaNode;
-import com.netflix.ribbon.proxy.annotation.Http;
-import com.sun.xml.internal.bind.v2.runtime.InlineBinaryTransducer;
+
 import io.swagger.annotations.ApiOperation;
-import org.apache.logging.log4j.message.ReusableMessage;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.bind.DefaultValue;
-import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-import sun.security.timestamp.HttpTimestamper;
-import sun.text.normalizer.CharTrie;
 import xmu.oomall.domain.*;
 import xmu.oomall.service.FreightService;
 import xmu.oomall.util.ResponseUtil;
