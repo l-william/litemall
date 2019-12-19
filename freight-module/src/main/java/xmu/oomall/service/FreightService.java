@@ -6,10 +6,7 @@
 package xmu.oomall.service;
 
 import org.springframework.stereotype.Service;
-import xmu.oomall.domain.DefaultFreight;
-import xmu.oomall.domain.DefaultPieceFreight;
-import xmu.oomall.domain.Order;
-import xmu.oomall.domain.SpecialFreight;
+import xmu.oomall.domain.*;
 
 import java.awt.peer.ScrollbarPeer;
 import java.util.List;
@@ -24,30 +21,30 @@ public interface FreightService {
      *
      * @return 默认运费模板
      */
-    public List<DefaultFreight> findDefaultFreightsList(Integer page,Integer limit);
+    public List<DefaultFreightPo> findDefaultFreightsList(Integer page,Integer limit);
 
     /**
      * 查找默认运费比率表
      *
      * @return 返回默认运费比率表
      */
-    public List<DefaultPieceFreight> findDefaultPieceFreightList();
+    public List<DefaultPieceFreightPo> findDefaultPieceFreightList(Integer page, Integer limit);
 
     /**
      * 添加默认运费模板
      *
-     * @param defaultFreight
+     * @param defaultFreightPo
      * @return 操作成功与否
      */
-    public int addDefaultFreights(DefaultFreight defaultFreight);
+    public int addDefaultFreights(DefaultFreightPo defaultFreightPo);
 
     /**
      * 添加默认运费比率
      *
-     * @param defaultPieceFreight
+     * @param defaultPieceFreightPo
      * @return 操作成功与否
      */
-    public int addDefaultPieceFreights(DefaultPieceFreight defaultPieceFreight);
+    public int addDefaultPieceFreights(DefaultPieceFreightPo defaultPieceFreightPo);
 
     /**
      * 删除默认运费模板
@@ -55,7 +52,7 @@ public interface FreightService {
      * @param id
      * @return 操作成功与否
      */
-    public int deleteDefaultFreight(String id);
+    public int deleteDefaultFreight(Integer id);
 
     /**
      * 删除默认运费比率
@@ -63,24 +60,24 @@ public interface FreightService {
      * @param id
      * @return 操作成功与否
      */
-    public int deleteDefaultPieceFreight(String id);
+    public int deleteDefaultPieceFreight(Integer id);
 
 
     /**
      * 更新默认运费比率
      *
-     * @param defaultPieceFreight
+     * @param defaultPieceFreightPo
      * @return 操作成功与否
      */
-    public int updateDefaultPieceFreight(DefaultPieceFreight defaultPieceFreight);
+    public int updateDefaultPieceFreight(DefaultPieceFreightPo defaultPieceFreightPo);
 
     /**
      * 更新模型运费模板
      *
-     * @param defaultFreight
+     * @param defaultFreightPo
      * @return 操作成功与否
      */
-    public int updateDefaultFreight(DefaultFreight defaultFreight);
+    public int updateDefaultFreight(DefaultFreightPo defaultFreightPo);
 
     /**
      * 计算所需运费
@@ -104,14 +101,47 @@ public interface FreightService {
      * @param id
      * @return 特定默认运费比率
      */
-    public DefaultPieceFreight findDefaultPieceFreightById(Integer id);
+    public DefaultPieceFreightPo findDefaultPieceFreightById(Integer id);
 
-    public List<SpecialFreight> findSpecialFreightList();
+    /**
+     * 查看所有特殊运费
+     *
+     * @param page
+     * @param limit
+     * @return 特殊运费模板列表
+     */
+    public List<SpecialFreight> findSpecialFreightList(Integer page,Integer limit);
 
+    /**
+     * 通过id查找特殊运费模板
+     *
+     * @param id
+     * @return 特殊运费模板
+     */
+    public SpecialFreight findSpecialFreightById(Integer id);
+
+    /**
+     * 新增特殊运费模板
+     *
+     * @param specialFreight
+     * @return 操作码
+     */
     public int addSpecialFreight(SpecialFreight specialFreight);
 
+    /**
+     * 删除特殊运费模板
+     *
+     * @param id
+     * @return 操作码
+     */
     public int deleteSpecialFreight(Integer id);
 
+    /**
+     * 更新特殊运费模板
+     *
+     * @param specialFreight
+     * @return 操作码
+     */
     public int updateSpecialFreight(SpecialFreight specialFreight);
 
 

@@ -2,6 +2,7 @@ package xmu.oomall.service;
 
 import org.springframework.stereotype.Service;
 import xmu.oomall.domain.Product;
+import xmu.oomall.domain.ProductPo;
 
 import java.util.List;
 
@@ -10,30 +11,32 @@ public interface ProductService {
 
     /**
      * @param id
-     * @return
+     * @return 产品信息
      */
-    public Product findProductById(Integer id);
+    ProductPo findProductById(Integer id);
 
     /**
-     * @param product
-     * @return status
+     * @param productPo
+     * @return 新增的产品
      */
-    public int addProduct(Product product);
+    ProductPo addProduct(ProductPo productPo);
 
     /**
      * @param id
-     * @return status
+     * @return 是否操作成功
      */
-    public int deleteProductById(Integer id);
+    int deleteProduct(Integer id);
 
     /**
-     * @param product
-     * @return status
+     * @param productPo
+     * @return 更新后的产品
      */
-    public boolean updateProduct(Product product);
+    ProductPo updateProduct(ProductPo productPo);
 
     /**
-     * @return status
+     * @param goodsId
+     * @return 产品列表
      */
-    public List<Product> findProductList(String productIds, Integer goodsId);
+    List<ProductPo> findProductListByGoodsId(Integer goodsId);
+
 }

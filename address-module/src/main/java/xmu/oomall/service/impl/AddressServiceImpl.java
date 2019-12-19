@@ -14,6 +14,7 @@ import java.util.List;
  * @date 2019/12/9 00:17
  * @version 1.0
  */
+@Service
 public class AddressServiceImpl implements AddressService {
     @Autowired
     AddressDao addressDao;
@@ -80,6 +81,6 @@ public class AddressServiceImpl implements AddressService {
             return list.subList((page-1)*limit,list.size());
         }
         //page>maxPages
-        return null;
+        return list.subList(0,0);
     }
 }

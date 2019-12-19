@@ -1,21 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="xmu.oomall.mapper.BrandMapper">
-    <select id="findBrandById" resultType="Brand" parameterType="Integer">
+    <select id="findBrandById" resultMap="BrandPo" parameterType="Integer">
         select * from oomall_brand
         where id = #{id} and is_deleted = 0
     </select>
 
-    <select id="findBrandList" resultType="Brand">
+    <select id="findBrandList" resultMap="BrandPo">
         select * from oomall_brand
         where is_deleted = 0
     </select>
 
-    <select id="findBrandListByIdAndName" resultType="Brand" parameterType="String">
+    <select id="findBrandListByIdAndName" resultMap="BrandPo" >
         select * from oomall_brand
-        where cast(id as char) like concat('%', #{id}, '%')
-        and name like concat('%', #{name}, '%')
-        and is_deleted = 0
+        <where>
+            <if test="id!=null">
+                id = #{id} and
+            </if>
+            <if test="name!=null">
+                name = #{name} and
+            </if>
+            is_deleted = 0
+        </where>
     </select>
 
     <insert id="addBrand" parameterType="BrandPo" useGeneratedKeys="true" keyProperty="id">
@@ -31,14 +37,25 @@
             gmt_create = #{gmtCreate},
             gmt_modified = #{gmtModified},
             is_deleted = #{beDeleted}
-        where id = #{id}
+        where id = #{id} and is_deleted = 0
     </update>
 
-    <update id="deleteBrandById" parameterType="Integer,LocalDateTime">
+    <update id="deleteBrand">
         update oomall_brand
         set is_deleted = 1,
         gmt_modified = #{deleteTime}
-        where id = #{id}
+        where id = #{id} and is_deleted = 0
     </update>
+
+    <resultMap id="BrandPo" type="BrandPo">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="description" property="description"/>
+        <result column="pic_url" property="picUrl"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="is_deleted" property="beDeleted"/>
+    </resultMap>
+
 
 </mapper>

@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xmu.oomall.dao.ProductDao;
 import xmu.oomall.domain.Product;
+import xmu.oomall.domain.ProductPo;
 import xmu.oomall.service.ProductService;
 
 import java.util.List;
@@ -25,19 +26,19 @@ public class ProductServiceImpl implements ProductService {
      * @return 产品
      */
     @Override
-    public Product findProductById(Integer id) {
+    public ProductPo findProductById(Integer id) {
         return productDao.findProductById(id);
     }
 
     /**
      * 添加产品
      *
-     * @param product
-     * @return 操作码
+     * @param productPo
+     * @return 新增的产品
      */
     @Override
-    public int addProduct(Product product) {
-        return productDao.addProduct(product);
+    public ProductPo addProduct(ProductPo productPo) {
+        return productDao.addProduct(productPo);
     }
 
     /**
@@ -47,30 +48,30 @@ public class ProductServiceImpl implements ProductService {
      * @return 操作码
      */
     @Override
-    public int deleteProductById(Integer id) {
-        return productDao.deleteProductById(id);
+    public int deleteProduct(Integer id) {
+        return productDao.deleteProduct(id);
     }
 
     /**
      * 更新产品信息
      *
-     * @param product
-     * @return 操作成功与否
+     * @param productPo
+     * @return 更新后的产品
      */
     @Override
-    public boolean updateProduct(Product product) {
-        return productDao.updateProduct(product)==1;
+    public ProductPo updateProduct(ProductPo productPo) {
+        return productDao.updateProduct(productPo);
     }
 
     /**
      * 查看产品列表
      *
-     * @param productIds
      * @param goodsId
      * @return 产品列表
      */
     @Override
-    public List<Product> findProductList(String productIds, Integer goodsId) {
-        return productDao.findProductList(productIds,goodsId);
+    public List<ProductPo> findProductListByGoodsId(Integer goodsId) {
+        return productDao.findProductListByGoodsId(goodsId);
     }
+
 }

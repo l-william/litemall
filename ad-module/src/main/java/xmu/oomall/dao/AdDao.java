@@ -65,6 +65,7 @@ public class AdDao {
     {
         ad.setGmtCreate(LocalDateTime.now());
         ad.setBeDeleted(false);
+        ad.setGmtModified(LocalDateTime.now());
         return adMapper.addAd(ad);
     }
 
@@ -76,6 +77,12 @@ public class AdDao {
      */
     public int updateAd(Ad ad)
     {
+        Ad ad1=adMapper.findAdById(ad.getId());
+        if(ad1!=null)
+        {
+            ad.setGmtCreate(ad1.getGmtCreate());
+            ad.setBeDeleted(ad1.getBeDeleted());
+        }
         ad.setGmtModified(LocalDateTime.now());
         return adMapper.updateAd(ad);
     }
@@ -88,6 +95,12 @@ public class AdDao {
      */
     public int deleteAdById(Integer id)
     {
+        Ad ad=adMapper.findAdById(id);
+        if(ad!=null)
+        {
+            ad.setGmtModified(LocalDateTime.now());
+            adMapper.updateAd(ad);
+        }
         return adMapper.deleteAdById(id);
     }
 }

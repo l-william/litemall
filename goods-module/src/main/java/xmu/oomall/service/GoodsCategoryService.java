@@ -7,6 +7,7 @@ package xmu.oomall.service;
 
 import org.springframework.stereotype.Service;
 import xmu.oomall.domain.GoodsCategory;
+import xmu.oomall.domain.GoodsCategoryPo;
 
 import java.util.List;
 
@@ -16,44 +17,50 @@ public interface GoodsCategoryService {
      * @param id
      * @return 返回查找到的分类
      */
-    GoodsCategory findGoodsCategoryById(Integer id);
+    GoodsCategoryPo findGoodsCategoryById(Integer id);
 
     /**
-     * @param goodsCategory
+     * @param goodsCategoryPo
      * @return 创建成功与否
      */
-    public int CreateGoodsCategory(GoodsCategory goodsCategory);
+    GoodsCategoryPo addGoodsCategory(GoodsCategoryPo goodsCategoryPo);
 
     /**
      * @param id
      * @return 删除成功与否
      */
-    public int deleteGoodsCategory(Integer id);
+    int deleteGoodsCategory(Integer id);
 
     /**
-     * @param goodsCategory
+     * @param goodsCategoryPo
      * @return 修改成功与否
      */
-    public int updateGoodsCategory(GoodsCategory goodsCategory);
+    GoodsCategoryPo updateGoodsCategory(GoodsCategoryPo goodsCategoryPo);
+
+    /**
+     * @param goodsCategoryPo
+     * @return 修改成功与否
+     */
+    GoodsCategoryPo updateGoodsCategoryPid(GoodsCategoryPo goodsCategoryPo);
 
     /**
      * @return 全部分类的列表
      */
-    public List<GoodsCategory> findGoodsCategoryList();
+    List<GoodsCategoryPo> findGoodsCategoryList(Integer page,Integer limit);
 
     /**
      * @return 全部一级分类的列表
      */
-    public List<GoodsCategory> findOneLevelGoodsCategoryList();
+    List<GoodsCategoryPo> findFirstLevelGoodsCategoryList();
 
     /**
      * @return 全部二级分类列表
      */
-    public List<GoodsCategory> findSecondLevelGoodsCategoryList();
+    List<GoodsCategoryPo> findSecondLevelGoodsCategoryList();
 
     /**
      * @param id
      * @return 某个一级目录下的全部二级目录
      */
-    public List<GoodsCategory> findSecondLevelGoodsCategoryListById(Integer id);
+    List<GoodsCategoryPo> findSecondLevelGoodsCategoryListByPid(Integer id);
 }

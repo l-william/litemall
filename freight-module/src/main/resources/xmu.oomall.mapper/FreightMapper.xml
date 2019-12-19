@@ -1,33 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="xmu.oomall.mapper.FreightMapper">
-    <select id="findDefaultFreightById" resultType="DefaultFreight" parameterType="Integer">
+    <select id="findDefaultFreightById" resultMap="DefaultFreight" parameterType="Integer">
         select * from oomall_default_freight
         where id = #{id} and is_deleted = 0
     </select>
 
-    <select id="findDefaultFreightList" resultType="DefaultFreight">
+    <select id="findDefaultFreightList" resultMap="DefaultFreightPo">
         select * from oomall_default_freight
         where is_deleted = 0
     </select>
 
-    <select id="findDefaultFreightByPlace" parameterType="String" resultType="DefaultFreight">
+    <select id="findDefaultFreightByPlace" parameterType="String" resultMap="DefaultFreight">
         select * from oomall_default_freight
         where contains(destination,#{place})
     </select>
 
-    <select id="findOrderItemListByOrderId" parameterType="Integer" resultType="OrderItem">
-	select * from oomall_order_item
-	where order_id = #{OrderId} and is_deleted = 0
+    <select id="findOrderItemListByOrderId" parameterType="Integer" resultMap="OrderItem">
+    	select * from oomall_order_item
+    	where order_id = #{orderId} and is_deleted = 0
     </select>
 
-    <insert id="addDefaultFreight" parameterType="DefaultFreight" useGeneratedKeys="true" keyProperty="id">
-        insert into oomall_default_freight(destination, first_heavy_price, continue_heavy_price, over10_price, over50_price, over100_price, over300_price, require_days, gmt_create, gmt_modified)
+    <select id="findSpecialFreightById" parameterType="Integer" resultMap="SpecialFreight">
+            select * from oomall_special_freight
+            where id=#{id} and is_deleted=0
+    </select>
+
+    <insert id="addDefaultFreight" parameterType="DefaultFreightPo" useGeneratedKeys="true" keyProperty="id">
+        insert into oomall_default_freight(destination, first_heavy_price, continue_heavy_price, over10_price, over50_price, over100_price, over300_price, require_days, gmt_create, gmt_modified,is_deleted)
         values (#{destination}, #{firstHeavyPrice}, #{continueHeavyPrice}, #{over10Price}, #{over50Price}, #{over100Price}, #{over300Price},
-        #{requireDays}, #{gmtCreate}, #{gmtModified})
+        #{requireDays}, #{gmtCreate}, #{gmtModified},#{beDeleted})
     </insert>
 
-    <update id="updateDefaultFreight" parameterType="DefaultFreight">
+    <update id="updateDefaultFreight" parameterType="DefaultFreightPo">
         update oomall_default_freight
         set destination = #{destination},
             first_heavy_price = #{firstHeavyPrice},
@@ -38,7 +43,8 @@
             over300_price = #{over300Price},
             require_days = #{requireDays},
             gmt_create = #{gmtCreate},
-            gmt_modified = #{gmtModified}
+            gmt_modified = #{gmtModified},
+            is_deleted=#{beDeleted}
         where id = #{id}
     </update>
 
@@ -48,28 +54,56 @@
         where id = #{id}
     </update>
 
-    <select id="findDefaultPieceFreightById" resultType="DefaultPieceFreight" parameterType="Integer">
+    <select id="findDefaultPieceFreightById" resultMap="DefaultPieceFreight" parameterType="Integer">
         select * from oomall_default_piece_freight
         where id = #{id} and is_deleted = 0
     </select>
 
-    <select id="findDefaultPieceFreightList" resultType="DefaultPieceFreight">
+    <select id="findSpecialFreightList" resultMap="SpecialFreight">
+        select * from oomall_special_freight
+        where is_deleted = 0
+    </select>
+
+    <select id="findDefaultPieceFreightList" resultMap="DefaultPieceFreightPo">
         select * from oomall_default_piece_freight
         where is_deleted = 0
     </select>
 
-    <insert id="addDefaultPieceFreight" parameterType="DefaultPieceFreight" useGeneratedKeys="true" keyProperty="id">
-        insert into oomall_default_piece_freight(destination, require_days, unit_rate, gmt_create, gmt_modified)
-        values (#{destination}, #{requireDays}, #{unitRate}, #{gmtCreate}, #{gmtModified})
+    <select id="findIdFromRegion" parameterType="String" resultType="Integer">
+        select id from oomall_region
+        where name=#{info}
+    </select>
+
+    <insert id="addDefaultPieceFreight" parameterType="DefaultPieceFreightPo" useGeneratedKeys="true" keyProperty="id">
+        insert into oomall_default_piece_freight(destination, unit_rate, gmt_create, gmt_modified,require_days)
+        values (#{destination},#{unitRate}, #{gmtCreate}, #{gmtModified},#{requireDays})
     </insert>
 
-    <update id="updateDefaultPieceFreight" parameterType="DefaultPieceFreight">
+    <insert id="addSpecialFreight" parameterType="SpecialFreight" useGeneratedKeys="true" keyProperty="id">
+        insert into oomall_special_freight(first_num_piece,first_num_piece_price,continue_num_piece,continue_num_piece_price,gmt_create, gmt_modified,is_deleted)
+        values (#{firstNumPiece}, #{firstNumPiecePrice}, #{continueNumPiece}, #{continueNumPiecePrice}, #{gmtModified},#{beDeleted})
+    </insert>
+
+    <update id="updateDefaultPieceFreight" parameterType="DefaultPieceFreightPo">
         update oomall_default_piece_freight
         set destination = #{destination},
-            require_days = #{requireDays},
             unit_rate = #{unitRate},
             gmt_modified = #{gmtCreate},
-            gmt_create = #{gmtModified}
+            gmt_create = #{gmtModified},
+            is_deleted=#{beDeleted},
+            require_days = #{requireDays}
+        where id = #{id}
+    </update>
+
+    <update id="updateSpecialFreight" parameterType="SpecialFreight">
+        update oomall_special_freight
+        set first_num_piece=#{firstNumPiece},
+            first_num_piece_price=#{firstNumPiecePrice},
+            continue_num_piece=#{continueNumPiece},
+            continue_num_piece_price=#{continueNumPiecePrice},
+            gmt_modified = #{gmtCreate},
+            gmt_create = #{gmtModified},
+            is_deleted=#{beDeleted}
         where id = #{id}
     </update>
 
@@ -79,9 +113,93 @@
         where id = #{id}
     </update>
 
-    <select id="findOrderItemListByOrderId" parameterType="Integer" resultType="OrderItem">
-        select * from oomall_order_item
-        where order_id = #{OrderId} and is_deleted = 0
-    </select>
+    <update id="deleteSpecialFreight" parameterType="Integer">
+        update oomall_special_freight
+        set is_deleted = 1
+        where id = #{id}
+    </update>
+
+<!--    <select id="findOrderItemListByOrderId" parameterType="Integer" resultMap="OrderItem">-->
+<!--        select * from oomall_order_item-->
+<!--        where order_id = #{OrderId} and is_deleted = 0-->
+<!--    </select>-->
+    
+    <resultMap id="DefaultFreight" type="DefaultFreight">
+        <id column="id" property="id"/>
+        <result column="destination" property="destination"/>
+        <result column="first_heavy_price" property="firstHeavyPrice"/>
+        <result column="continue_heavy_price" property="continueHeavyPrice"/>
+        <result column="over10_price" property="over10Price"/>
+        <result column="over50_price" property="over50Price"/>
+        <result column="over100_price" property="over100Price"/>
+        <result column="over300_price" property="over300Price"/>
+        <result column="require_days" property="requireDays"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="is_deleted" property="beDeleted"/>
+    </resultMap>
+
+    <resultMap id="DefaultFreightPo" type="DefaultFreightPo">
+        <id column="id" property="id"/>
+        <result column="destination" property="destination"/>
+        <result column="first_heavy_price" property="firstHeavyPrice"/>
+        <result column="continue_heavy_price" property="continueHeavyPrice"/>
+        <result column="over10_price" property="over10Price"/>
+        <result column="over50_price" property="over50Price"/>
+        <result column="over100_price" property="over100Price"/>
+        <result column="over300_price" property="over300Price"/>
+        <result column="require_days" property="requireDays"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="is_deleted" property="beDeleted"/>
+    </resultMap>
+
+    <resultMap id="DefaultPieceFreight" type="DefaultPieceFreight">
+        <id column="id" property="id"/>
+        <result column="destination" property="destination"/>
+        <result column="unit_rate" property="unitRate"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="is_deleted" property="beDeleted"/>
+        <result column="require_days" property="requireDays"/>
+    </resultMap>
+
+    <resultMap id="DefaultPieceFreightPo" type="DefaultPieceFreightPo">
+        <id column="id" property="id"/>
+        <result column="destination" property="destination"/>
+        <result column="unit_rate" property="unitRate"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="is_deleted" property="beDeleted"/>
+        <result column="require_days" property="requireDays"/>
+    </resultMap>
+
+    <resultMap id="SpecialFreight" type="SpecialFreight">
+        <id column="id" property="id"/>
+        <result column="first_num_piece" property="firstNumPiece"/>
+        <result column="first_num_piece_price" property="firstNumPiecePrice"/>
+        <result column="continue_num_piece" property="continueNumPiece"/>
+        <result column="continue_num_piece_price" property="continueNumPiecePrice"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="is_deleted" property="beDeleted"/>
+        <result column="require_days" property="requireDays"/>
+    </resultMap>
+
+    <resultMap id="OrderItem" type="OrderItem">
+        <id column="id" property="id"/>
+        <result column="order_id" property="orderId"/>
+        <result column="item_type" property="itemType"/>
+        <result column="status" property="status"/>
+        <result column="number" property="number"/>
+        <result column="price" property="price"/>
+        <result column="deal_price" property="dealPrice"/>
+        <result column="product_id" property="productId"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="is_deleted" property="beDeleted"/>
+        <result column="goods_id" property="goodsId"/>
+        <result column="pic_url" property="picUrl"/>
+        <result column="name_with_specifications" property="nameWithSpecifications"/>
+    </resultMap>
 
 </mapper>

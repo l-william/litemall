@@ -6,6 +6,7 @@
 package xmu.oomall.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import xmu.oomall.domain.Brand;
 import xmu.oomall.domain.BrandPo;
 
@@ -19,7 +20,7 @@ public interface BrandMapper {
      *
      * @return 品牌列表
      */
-    List<Brand> findBrandList();
+    List<BrandPo> findBrandList();
 
     /**
      * 根据品牌ID和品牌名称查找品牌列表
@@ -28,7 +29,7 @@ public interface BrandMapper {
      * @param name 品牌名称
      * @return 品牌列表
      */
-    List<Brand> findBrandListByIdAndName(String id, String name);
+    List<BrandPo> findBrandListByIdAndName(@Param("id") Integer id, @Param("name") String name);
 
     /**
      * 根据品牌ID获取品牌信息
@@ -36,7 +37,7 @@ public interface BrandMapper {
      * @param id 品牌ID
      * @return 品牌信息
      */
-    Brand findBrandById(Integer id);
+    BrandPo findBrandById(Integer id);
 
     /**
      * 添加品牌

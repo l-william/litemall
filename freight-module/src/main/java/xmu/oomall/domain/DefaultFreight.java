@@ -4,6 +4,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -12,6 +13,8 @@ import java.util.List;
  * @Description:默认计重模板对象
  * @Data:Created in 14:50 2019/12/11
  **/
+
+@Repository
 @Getter
 @Setter
 @ToString

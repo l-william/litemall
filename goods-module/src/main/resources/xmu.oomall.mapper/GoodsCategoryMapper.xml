@@ -1,49 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="xmu.oomall.mapper.GoodsCategoryMapper">
-    <select id="findGoodsCategoryById" resultType="goodsCategory" parameterType="Integer">
+    <select id="findGoodsCategoryById" resultMap="GoodsCategoryPo" parameterType="Integer">
         select * from oomall_goods_category
         where id = #{id} and is_deleted = 0
     </select>
-    <select id="findGoodsCategoryList" resultType="goodsCategory" >
+
+    <select id="findGoodsCategoryList" resultMap="GoodsCategoryPo" >
         select * from oomall_goods_category
         where is_deleted = 0
     </select>
 
-    <select id="findOneLevelGoodsCategoryList" resultType="goodsCategory" >
+    <select id="findFirstLevelGoodsCategoryList" resultMap="GoodsCategoryPo" >
         select * from oomall_goods_category
         where pid is null and is_deleted = 0
     </select>
 
-    <select id="findSecondLevelGoodsCategoryList" resultType="goodsCategory" >
+    <select id="findSecondLevelGoodsCategoryList" resultMap="GoodsCategoryPo" >
         select * from oomall_goods_category
         where pid is not null and is_deleted = 0
     </select>
 
-    <select id="findGoodsCategoryListByPid" resultType="goodsCategory" parameterType="Integer">
+    <select id="findGoodsCategoryListByPid" resultMap="GoodsCategoryPo" parameterType="Integer">
         select * from oomall_goods_category
         where pid = #{pid} and is_deleted = 0
     </select>
 
-    <insert id="addGoodsCategory" parameterType="goodsCategory" useGeneratedKeys="true" keyProperty="id">
-        insert into oomall_goods_category(name, pid, gmt_create, gmt_modified, is_deleted)
-        values (#{name}, #{pid}, #{gmtCreate}, #{gmtModified}, #{beDeleted})
+    <insert id="addGoodsCategory" parameterType="GoodsCategoryPo" useGeneratedKeys="true" keyProperty="id">
+        insert into oomall_goods_category(name, pid, pic_url, gmt_create, gmt_modified, is_deleted)
+        values (#{name}, #{pid}, #{picUrl}, #{gmtCreate}, #{gmtModified}, #{beDeleted})
     </insert>
 
-    <update id="updateGoodsCategory" parameterType="goodsCategory">
+    <update id="updateGoodsCategory" parameterType="GoodsCategoryPo">
         update oomall_goods_category
         set name = #{name},
-            pid = #{pid},
+            <!--pid = #{pid},-->
+            pic_url = #{picUrl},
             gmt_create = #{gmtCreate},
             gmt_modified = #{gmtModified},
             is_deleted = #{beDeleted}
-        where id = #{id}
+        where id = #{id} and is_deleted = 0
     </update>
 
-    <update id="deleteGoodsCategoryById" parameterType="Integer">
+    <update id="updateGoodsCategoryPid" parameterType="GoodsCategoryPo">
+        update oomall_goods_category
+        set pid = #{pid},
+            gmt_modified = #{gmtModified},
+        where id = #{id} and is_deleted = 0
+    </update>
+
+    <update id="deleteGoodsCategory" parameterType="Integer">
         update oomall_goods_category
         set is_deleted = 1
-        where id = #{id}
+        where id = #{id} and is_deleted = 0
     </update>
+
+    <update id="deleteGoodsCategoryByPid" parameterType="Integer">
+        update oomall_goods_category
+        set is_deleted = 1
+        where pid = #{pid} and is_deleted = 0
+    </update>
+
+    <resultMap id="GoodsCategoryPo" type="GoodsCategoryPo">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="pic_url" property="picUrl"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="is_deleted" property="beDeleted"/>
+    </resultMap>
 
 </mapper>

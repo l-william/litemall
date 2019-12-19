@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xmu.oomall.dao.GoodsDao;
 import xmu.oomall.domain.Goods;
+import xmu.oomall.domain.GoodsPo;
 import xmu.oomall.service.GoodsService;
 
 import java.util.List;
@@ -20,110 +21,108 @@ public class GoodsServiceImpl implements GoodsService {
     private GoodsDao goodsDao;
 
     /**
-     * 查看商品列表
+     * 管理员查看商品列表
      *
      * @param goodsSn
      * @param name
+     * @param page
+     * @param limit
      * @return 商品列表
      */
     @Override
-    public List<Goods> findGoodsList(String goodsSn, String name) {
-        return goodsDao.findGoodsListByGoodSnAndName(goodsSn,name);
+    public List<GoodsPo> adminFindGoodsList(String goodsSn, String name, Integer page, Integer limit) {
+        List<GoodsPo> goodsList=goodsDao.adminFindGoodsList(goodsSn,name);
+        return divideByPage(goodsList,page,limit);
     }
 
     /**
-     * 通过id查找商品
+     * 用户查看商品列表
+     *
+     * @param name
+     * @param page
+     * @param limit
+     * @return 商品列表
+     */
+    @Override
+    public List<GoodsPo> userFindGoodsList(String name, Integer page, Integer limit) {
+        List<GoodsPo> goodsList=goodsDao.userFindGoodsList(name);
+        return divideByPage(goodsList,page,limit);
+    }
+
+    /**
+     * 管理员通过id查找商品
      *
      * @param id
      * @return 商品
      */
     @Override
-    public Goods findGoodsById(Integer id) {
-        return goodsDao.findGoodsById(id);
+    public GoodsPo adminFindGoodsById(Integer id) {
+        return goodsDao.adminFindGoodsById(id);
     }
 
     /**
-     * 更新商品信息
+     * 用户通过id查找商品
      *
-     * @param goods
+     * @param id
+     * @return 商品
+     */
+    @Override
+    public GoodsPo userFindGoodsById(Integer id) {
+        return goodsDao.userFindGoodsById(id);
+    }
+
+    /**
+     * 更新商品
+     *
+     * @param goodsPo
      * @return 操作码
      */
     @Override
-    public int updateGoods(Goods goods) {
-        return goodsDao.updateGoods(goods);
+    public GoodsPo updateGoods(GoodsPo goodsPo) {
+        return goodsDao.updateGoods(goodsPo);
     }
 
     /**
-     * 通过id删除商品
+     * 删除商品
      *
      * @param id
      * @return  操作码
      */
     @Override
-    public int deleteGoodsById(Integer id) {
-        return goodsDao.deleteGoodsById(id);
+    public int deleteGoods(Integer id) {
+        return goodsDao.deleteGoods(id);
     }
 
     /**
      * 添加商品
      *
-     * @param goods
+     * @param goodsPo
      * @return 操作码
      */
     @Override
-    public int addGoods(Goods goods) {
-        return goodsDao.addGoods(goods);
+    public GoodsPo addGoods(GoodsPo goodsPo) {
+        return goodsDao.addGoods(goodsPo);
     }
 
-    /**
-     * 通过两个id查找商品
-     *
-     * @param userId
-     * @param id
-     * @return 商品
-     */
-    @Override
-    public Goods findGoodsById(Integer userId, Integer id) {
-        //记录用户的足迹待补充
-        //！！！！！！！！！！
-        return goodsDao.findGoodsById(userId,id);
-    }
 
     /**
-     * 通过很多信息一起搜索商品
+     * 分页功能
      *
-     * @param goodsCategoryId
-     * @param brandId
-     * @param keyword
-     * @param isNew
-     * @param isHot
-     * @return 商品列表
+     * @param list 父列表
+     * @param page 分页页数
+     * @param limit 分页大小
+     * @param <T> 列表元素类型
+     * @return 子列表
      */
-    @Override
-    public List<Goods> findGoodsListBySearchInfo(Integer goodsCategoryId, Integer brandId, String keyword, Boolean isNew, Boolean isHot) {
-        //待补充缺省值判断
-        //！！！！！！！！
-        return goodsDao.findGoodsListBySearchInfo(goodsCategoryId, brandId, keyword, isNew, isHot);
-    }
-
-    /**
-     * 查找推荐商品
-     *
-     * @param id
-     * @return 商品
-     */
-    @Override
-    public Goods findRecommendedGoods(Integer id) {
-        return goodsDao.findRecommendedGoods(id);
-    }
-
-    /**
-     * 查看在售商品总数
-     *
-     * @return 操作码
-     */
-    @Override
-    public int findGoodsCounts() {
-        return goodsDao.getGoodsCount();
+    private <T> List<T> divideByPage(List<T> list,Integer page,Integer limit){
+        int maxPages=(list.size()-1)/limit+1;
+        if(page<maxPages){
+            return list.subList((page-1)*limit,page*limit);
+        }
+        if(page==maxPages){
+            return list.subList((page-1)*limit,list.size());
+        }
+        //page>maxPages
+        return list.subList(0,0);
     }
 }

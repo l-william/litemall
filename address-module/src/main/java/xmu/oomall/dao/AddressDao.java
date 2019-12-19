@@ -45,6 +45,12 @@ public class AddressDao {
     }
 
     public AddressPo updateAddress(AddressPo addressPo) {
+        AddressPo addressPo1=addressMapper.findAddressById(addressPo.getId());
+        if(addressPo1!=null)
+        {
+            addressPo.setGmtCreate(addressPo1.getGmtCreate());
+            addressPo.setBeDeleted(addressPo1.getBeDeleted());
+        }
         addressPo.setGmtModified(LocalDateTime.now());
         int ret=addressMapper.updateAddress(addressPo);
         if(ret==0){
