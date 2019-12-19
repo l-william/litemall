@@ -2,12 +2,14 @@ package xmu.oomall.serviceTest;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import xmu.oomall.domain.Address;
 import xmu.oomall.domain.AddressPo;
 import xmu.oomall.service.AddressService;
 
 import java.util.List;
 
+@SpringBootTest
 public class AddressServiceTest {
     
     @Autowired
@@ -103,6 +105,13 @@ public class AddressServiceTest {
         {
             System.out.println("delete failed");
         }
+    }
+
+    @Test
+    void  clearDefaultAddress()
+    {
+        Integer id=123;
+        addressService.clearDefaultAddress(id);
     }
 
 }

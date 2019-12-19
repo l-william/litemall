@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Param;
 import xmu.oomall.domain.Product;
 import xmu.oomall.domain.ProductPo;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -43,5 +44,13 @@ public interface ProductMapper {
      * @return
      */
     List<ProductPo> findProductListByGoodsId(Integer goodsId);
+
+    /**
+     * @param id
+     * @param number
+     * @param updateTime
+     * @return
+     */
+    int updateStock(Integer id,Integer number,LocalDateTime updateTime);
 
 }

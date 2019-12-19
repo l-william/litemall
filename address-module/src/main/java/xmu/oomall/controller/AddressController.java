@@ -144,6 +144,10 @@ public class AddressController {
                               @RequestParam(defaultValue = "1") Integer page,
                               @RequestParam(defaultValue = "10") Integer limit)
     {
+        if(name=="")
+        {
+            name=null;
+        }
         Log log=createLog(request, 0, 1, "查询地址列表",null);
         if(log!=null) {
             writeLog(log);

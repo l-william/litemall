@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import xmu.oomall.dao.ProductDao;
 import xmu.oomall.domain.Product;
+import xmu.oomall.domain.ProductPo;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public class ProductDaoTest {
     @Test
     void findProductById(){
         Integer a=100001;
-        Product product=productDao.findProductById(a);
+        ProductPo product=productDao.findProductById(a);
         if(product==null)
             System.out.println("not find!");
         else
@@ -31,7 +32,7 @@ public class ProductDaoTest {
     void addProduct(){
         Product product=new Product();
         product.setId(100007);
-        if(productDao.addProduct(product)==1)
+        if(productDao.addProduct(product)!=null)
         {
             System.out.println("add success");
         }
@@ -44,7 +45,7 @@ public class ProductDaoTest {
     @Test
     void deleteAdById()
     {
-        if(productDao.deleteProductById(100007)==1)
+        if(productDao.deleteProduct(100007)==1)
         {
             System.out.println("del success");
         }
@@ -58,7 +59,7 @@ public class ProductDaoTest {
         Product product=new Product();
         product.setId(100001);
         product.setPicUrl("asfsaf");
-        if(productDao.updateProduct(product)==1)
+        if(productDao.updateProduct(product)!=null)
         {
             System.out.println("update success");
         }
@@ -70,9 +71,8 @@ public class ProductDaoTest {
     @Test
     void findProductList()
     {
-        String product_ids = "100002";
         Integer goods_id = 100002;
-        List<Product> productList = productDao.findProductList(product_ids,goods_id);
+        List<ProductPo> productList = productDao.findProductListByGoodsId(goods_id);
         if(productList.isEmpty())
         {
             System.out.println("is null");

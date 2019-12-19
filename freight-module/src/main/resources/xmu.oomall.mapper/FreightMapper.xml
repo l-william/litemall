@@ -81,7 +81,7 @@
 
     <insert id="addSpecialFreight" parameterType="SpecialFreight" useGeneratedKeys="true" keyProperty="id">
         insert into oomall_special_freight(first_num_piece,first_num_piece_price,continue_num_piece,continue_num_piece_price,gmt_create, gmt_modified,is_deleted)
-        values (#{firstNumPiece}, #{firstNumPiecePrice}, #{continueNumPiece}, #{continueNumPiecePrice}, #{gmtModified},#{beDeleted})
+        values (#{firstNumPiece}, #{firstNumPiecePrice}, #{continueNumPiece}, #{continueNumPiecePrice},#{gmtCreate}, #{gmtModified},#{beDeleted})
     </insert>
 
     <update id="updateDefaultPieceFreight" parameterType="DefaultPieceFreightPo">
@@ -189,7 +189,7 @@
         <id column="id" property="id"/>
         <result column="order_id" property="orderId"/>
         <result column="item_type" property="itemType"/>
-        <result column="status" property="status"/>
+        <result column="status" property="statusCode"/>
         <result column="number" property="number"/>
         <result column="price" property="price"/>
         <result column="deal_price" property="dealPrice"/>

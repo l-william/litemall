@@ -92,4 +92,8 @@ public class ProductDao {
         return productMapper.findProductListByGoodsId(goodsId);
     }
 
+    public int updateStock(Integer id,Integer number){
+        LocalDateTime updateTime=LocalDateTime.now();
+        return productMapper.updateStock(id,number,updateTime);
+    }
 }

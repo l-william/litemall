@@ -30,6 +30,15 @@ public class AdDaoTest {
             System.out.println(ad.getId());
     }
     @Test
+    void findAdList()
+    {
+        List<Ad> ads=adDao.findAdList();
+        if(ads!=null)
+            System.out.println(ads.size());
+        else
+            System.out.println("Failed find");
+    }
+    @Test
     void addAd()
     {
         Ad ad=new Ad();
