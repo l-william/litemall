@@ -22,7 +22,7 @@
 //    @Test
 //    void adminFindAd()
 //    {
-//        System.out.println(adController.adminFindAd(11111).toString());
+//        System.out.println(adController.adminFindAd(11111));
 //    }
 //    @Test
 //    void adminUpdateAd()

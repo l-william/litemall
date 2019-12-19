@@ -3,6 +3,7 @@ package xmu.oomall.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import xmu.oomall.domain.GoodsCategory;
+import xmu.oomall.domain.GoodsCategoryPo;
 
 import java.util.List;
 
@@ -15,45 +16,57 @@ public interface GoodsCategoryMapper {
      * @param id
      * @return 对应ID的分类目录
      */
-    GoodsCategory findGoodsCategoryById(Integer id);
+    GoodsCategoryPo findGoodsCategoryById(Integer id);
 
     /**
      * @param pid
      * @return 一级目录下的二级目录列表
      */
-    List<GoodsCategory> findGoodsCategoryListByPid(Integer pid);
+    List<GoodsCategoryPo> findGoodsCategoryListByPid(Integer pid);
 
     /**
-     * @param goodsCategory
+     * @param goodsCategoryPo
      * @return 操作状态码
      */
-    int addGoodsCategory(GoodsCategory goodsCategory);
+    int addGoodsCategory(GoodsCategoryPo goodsCategoryPo);
 
     /**
-     * @param goodsCategory
+     * @param goodsCategoryPo
      * @return 操作状态码
      */
-    int updateGoodsCategory(GoodsCategory goodsCategory);
+    int updateGoodsCategory(GoodsCategoryPo goodsCategoryPo);
+
+    /**
+     * @param goodsCategoryPo
+     * @return 操作状态码
+     */
+    int updateGoodsCategoryPid(GoodsCategoryPo goodsCategoryPo);
 
     /**
      * @param id
      * @return 操作状态码
      */
-    int deleteGoodsCategoryById(Integer id);
+    int deleteGoodsCategory(Integer id);
+
+    /**
+     * @param pid
+     * @return 操作状态码
+     */
+    int deleteGoodsCategoryByPid(Integer pid);
 
     /**
      * @return 所有的商品分类
      */
-    List<GoodsCategory> findGoodsCategoryList();
+    List<GoodsCategoryPo> findGoodsCategoryList();
 
     /**
      * @return 所有的商品的一级分类
      */
-    List<GoodsCategory> findOneLevelGoodsCategoryList();
+    List<GoodsCategoryPo> findFirstLevelGoodsCategoryList();
 
     /**
      * @return 所有的商品的二级分类
      */
-    List<GoodsCategory> findSecondLevelGoodsCategoryList();
+    List<GoodsCategoryPo> findSecondLevelGoodsCategoryList();
 
 }

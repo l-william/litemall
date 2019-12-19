@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
-import org.springframework.core.annotation.Order;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +16,6 @@ import xmu.oomall.service.AddressService;
 import xmu.oomall.util.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -31,7 +29,7 @@ import java.util.List;
 @Validated
 public class AddressController {
 
-    @Autowired(required = false)
+    @Autowired
     private AddressService addressService;
     @Autowired
     private LoadBalancerClient loadBalancerClient;
@@ -66,7 +64,7 @@ public class AddressController {
     public Object getAddressById(@PathVariable Integer id) {
         Address address=addressService.findAddressById(id);
         if(address==null){
-            return ResponseUtil.badArgumentValue();
+            return ResponseUtil.fail(744, "地址不存在");
         }
         return ResponseUtil.ok(address);
     }
@@ -80,7 +78,7 @@ public class AddressController {
     @PostMapping("/addresses")
     public Object addAddress(@RequestBody AddressPo addressPo) {
         if(!validate(addressPo)){
-            return ResponseUtil.badArgument();
+            return ResponseUtil.fail(751, "地址新增失败");
         }
         if(addressPo.isBeDefault()){
             Integer userId=addressPo.getUserId();
@@ -88,7 +86,7 @@ public class AddressController {
         }
         AddressPo retPo=addressService.addAddress(addressPo);
         if(retPo==null){
-            return ResponseUtil.updatedDataFailed();
+            return ResponseUtil.fail(751, "地址新增失败");
         }
         return ResponseUtil.ok(retPo);
     }
@@ -103,7 +101,7 @@ public class AddressController {
     public Object deleteAddress(@PathVariable Integer id) {
         int ret= addressService.deleteAddress(id);
         if(ret==0){
-            return ResponseUtil.updatedDataFailed();
+            return ResponseUtil.fail(753, "地址删除失败");
         }
         return  ResponseUtil.ok();
     }
@@ -118,7 +116,7 @@ public class AddressController {
     @PutMapping("/addresses/{id}")
     public Object updateAddress(@PathVariable Integer id,@RequestBody AddressPo addressPo) {
         if(!validate(addressPo)){
-            return ResponseUtil.badArgument();
+            return ResponseUtil.fail(752, "地址修改是失败");
         }
         if(addressPo.isBeDefault()){
             Integer userId=addressPo.getUserId();
@@ -127,7 +125,7 @@ public class AddressController {
         addressPo.setId(id);
         AddressPo retPo=addressService.updateAddress(addressPo);
         if(retPo==null){
-            return ResponseUtil.updatedDataFailed();
+            return ResponseUtil.fail(752, "地址修改失败");
         }
         return ResponseUtil.ok(retPo);
     }
@@ -139,14 +137,14 @@ public class AddressController {
      * @param name 用户名
      * @return 用户的地址列表
      */
-    @GetMapping("admin/addresses")
+    @GetMapping("/admin/addresses")
     public Object getAddressList(HttpServletRequest request,
                               @RequestParam Integer userId,
                               @RequestParam String name,
                               @RequestParam(defaultValue = "1") Integer page,
                               @RequestParam(defaultValue = "10") Integer limit)
     {
-        Log log=createLog(request, 0, 1, "查询地址列表");
+        Log log=createLog(request, 0, 1, "查询地址列表",null);
         if(log!=null) {
             writeLog(log);
         }
@@ -195,9 +193,10 @@ public class AddressController {
      * @param type
      * @param status
      * @param action
+     * @param actionId
      * @return 返回生成的日志或者空值，空值则进行未登录错误处理
      */
-    private Log createLog(HttpServletRequest request,Integer type,Integer status,String action)
+    private Log createLog(HttpServletRequest request,Integer type,Integer status,String action,Integer actionId)
     {
         String adminId= request.getHeader("id");
         if (adminId==null){
@@ -208,6 +207,7 @@ public class AddressController {
         log.setIp(request.getRemoteAddr());
         log.setType(type);
         log.setActions(action);
+        log.setActionId(actionId);
         log.setStatusCode(status);
         return log;
     }

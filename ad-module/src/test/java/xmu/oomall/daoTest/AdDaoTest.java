@@ -71,10 +71,10 @@ public class AdDaoTest {
         }
     }
     @Test
-    void findAdListBynameAndContent()
+    void findAdListByNameAndContent()
     {
-        String name = "凉被";
-        String content = "看";
+        String name = "诚";
+        String content = null;
         List<Ad> adList = adDao.findAdListByNameAndContent(name ,content);
         if(adList.isEmpty())
         {

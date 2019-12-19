@@ -16,6 +16,7 @@ import xmu.oomall.domain.*;
 import xmu.oomall.service.BrandService;
 import xmu.oomall.service.GoodsCategoryService;
 import xmu.oomall.service.GoodsService;
+import xmu.oomall.service.ProductService;
 import xmu.oomall.util.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,52 +34,67 @@ public class GoodsController {
     @Autowired
     private BrandService brandService;
     @Autowired
+    private ProductService productService;
+    @Autowired
     private LoadBalancerClient loadBalancerClient;
 
     @GetMapping("/admins/brands")
     @ApiOperation(value="根据条件搜索品牌/list")
     public Object findBrandList(HttpServletRequest request,
-                                @RequestParam("BrandId") String id,
+                                @RequestParam("BrandId") Integer id,
                                 @RequestParam("BrandName") String name,
                                 @RequestParam(defaultValue = "1") Integer page,
                                 @RequestParam(defaultValue = "10") Integer limit)
     {
-        Log log=createLog(request, 0, 1, "查询品牌列表");
-        if(log!=null) {
-            writeLog(log);
+        List<BrandPo> brandList= brandService.findBrandListByIdAndName(id,name,page,limit);
+        if(brandList.size()==0){
+            Log log=createLog(request, 0, 0, "查询品牌列表",id);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.fail(795,"获取品牌列表失败");
         }
-        else {
-            return ResponseUtil.unlogin();
+        else{
+            Log log=createLog(request, 0, 1, "查询品牌列表",id);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.ok(brandList);
         }
-        List<Brand> brandList= brandService.findBrandListByIdAndName(id,name,page,limit);
-        return ResponseUtil.ok(brandList);
     };
 
     @PostMapping("/brands")
     @ApiOperation(value = "创建一个品牌/create")
     public Object addBrand(HttpServletRequest request,@RequestBody BrandPo brandPo){
-        Log log=createLog(request, 0, 1, "添加品牌");
-        if(log!=null) {
-            writeLog(log);
-        }
-        else {
-            return ResponseUtil.unlogin();
-        }
         BrandPo retPo=brandService.addBrand(brandPo);
         if(retPo==null) {
-            return ResponseUtil.updatedDataFailed();
+            Log log=createLog(request, 0, 0, "添加品牌",null);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.fail(791,"品牌新增失败");
         }
-        return ResponseUtil.ok(retPo);
+        else {
+            Log log = createLog(request, 0, 1, "添加品牌",null);
+            if (log != null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.ok(retPo);
+        }
     };
 
     @GetMapping("/brands/{id}")
     @ApiOperation(value="查看单个品牌信息/read")
-    public Object findBrandById(@PathVariable Integer id){
-        Brand brand= brandService.findBrandById(id);
-        if(brand==null){
-            return ResponseUtil.badArgumentValue();
+    public Object findBrandById(HttpServletRequest request,@PathVariable Integer id){
+        BrandPo brandPo= brandService.findBrandById(id);
+        if(brandPo==null){
+            Log log = createLog(request, 0, 0, "查看单个品牌",id);
+            if (log != null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.fail(794,"该品牌不存在");
         }
-        return  ResponseUtil.ok(brand);
+        else {
+            Log log = createLog(request, 0, 1, "查看单个品牌",id);
+            if (log != null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.ok(brandPo);
+        }
     };
 
 
@@ -88,191 +104,268 @@ public class GoodsController {
                               @PathVariable Integer id,
                               @RequestBody BrandPo brandPo)
     {
-        Log log=createLog(request, 0, 1, "更新品牌");
-        if(log!=null) {
-            writeLog(log);
-        }
-        else {
-            return ResponseUtil.unlogin();
-        }
         brandPo.setId(id);
         BrandPo retPo= brandService.updateBrand(brandPo);
         if(retPo==null){
-            return ResponseUtil.updatedDataFailed();
+            Log log=createLog(request, 0, 0, "更新品牌",id);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.fail(792,"品牌修改失败");
         }
-        return ResponseUtil.ok(retPo);
+        else{
+            Log log=createLog(request, 0, 1, "更新品牌",id);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.ok(retPo);
+        }
     };
 
 
     @DeleteMapping("/brands/{id}")
     @ApiOperation(value = "删除一个品牌/delete")
     public Object deleteBrand(HttpServletRequest request,@PathVariable Integer id){
-        Log log=createLog(request, 0, 1, "删除品牌");
-        if(log!=null) {
-            writeLog(log);
-        }
-        else {
-            return ResponseUtil.unlogin();
-        }
         int ret= brandService.deleteBrand(id);
         if(ret==0){
-            return ResponseUtil.updatedDataFailed();
+            Log log=createLog(request, 0, 0, "删除品牌",id);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.fail(793,"品牌删除失败");
         }
-        return ResponseUtil.ok();
+        else {
+            Log log=createLog(request, 0, 1, "删除品牌",id);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.ok();
+        }
     };
-
 
 
     @GetMapping("/categories")
     @ApiOperation("查看所有的分类/list")
-    public Object listGoodsCategory()
+    public Object findGoodsCategoryList(HttpServletRequest request,
+                                        @RequestParam(defaultValue = "1") Integer page,
+                                        @RequestParam(defaultValue = "10") Integer limit)
     {
-        List<GoodsCategory> goodsCategoryList=goodsCategoryService.findGoodsCategoryList();
-        return ResponseUtil.ok(goodsCategoryList);
+        List<GoodsCategoryPo> goodsCategoryList=goodsCategoryService.findGoodsCategoryList(page,limit);
+        if(goodsCategoryList.size()==0){
+            Log log=createLog(request, 0, 0, "查看所有商品分类",null);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.fail(805,"获取分类列表失败");
+        }
+        else {
+            Log log=createLog(request, 0, 1, "查看所有商品分类",null);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.ok(goodsCategoryList);
+        }
     };
-
-
 
     @PostMapping("/categories")
     @ApiOperation(value="新建一个分类/create")
-    public Object addGoodsCategory(@RequestBody GoodsCategory goodsCategory)
+    public Object addGoodsCategory(HttpServletRequest request,@RequestBody GoodsCategoryPo goodsCategoryPo)
     {
-        if(goodsCategoryService.CreateGoodsCategory(goodsCategory)==1)
+        GoodsCategoryPo retPo=goodsCategoryService.addGoodsCategory(goodsCategoryPo);
+        if(retPo==null)
         {
-            Object object = ResponseUtil.ok(goodsCategory);
-            return object;
+            Log log=createLog(request, 0, 0, "添加商品分类",null);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.fail(801,"分类新增失败");
         }
-        else
-        {
-            Object object= ResponseUtil.fail();
-            return object;
+        else {
+            Log log=createLog(request, 0, 1, "添加商品分类",null);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.ok(retPo);
         }
     };
 
     @GetMapping("/categories/{id}")
     @ApiOperation(value="查看单个分类信息/read")
-    public Object getGoodsCategoryById(@NotNull Integer id)
+    public Object findGoodsCategoryById(HttpServletRequest request,@PathVariable Integer id)
     {
-        GoodsCategory goodsCategory=goodsCategoryService.findGoodsCategoryById(id);
-        if(goodsCategory!=null)
+        GoodsCategoryPo goodsCategoryPo=goodsCategoryService.findGoodsCategoryById(id);
+        if(goodsCategoryPo==null)
         {
-            Object object = ResponseUtil.ok(goodsCategory);
-            return object;
+            Log log=createLog(request, 0, 0, "查看单个商品分类",id);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.fail(804,"该分类不存在");
         }
         else
         {
-            Object object= ResponseUtil.fail();
-            return object;
+            Log log=createLog(request, 0, 1, "查看单个商品分类",id);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.ok(goodsCategoryPo);
         }
     };
-
 
 
     @PutMapping("/categories/{id}")
     @ApiOperation(value="修改分类信息/update")
-    public Object updateGoodsCategoryById(@PathVariable Integer id,@RequestBody GoodsCategory goodsCategory)
+    public Object updateGoodsCategory(HttpServletRequest request,
+                                      @PathVariable Integer id,
+                                      @RequestBody GoodsCategoryPo goodsCategoryPo)
     {
-        if(goodsCategoryService.updateGoodsCategory(goodsCategory)==1)
+        goodsCategoryPo.setId(id);
+        GoodsCategoryPo retPo=goodsCategoryService.updateGoodsCategory(goodsCategoryPo);
+        if(retPo==null)
         {
-            Object object = ResponseUtil.ok(goodsCategory);
-            return object;
+            Log log=createLog(request, 0, 0, "更新商品分类",id);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.fail(802,"分类修改失败");
         }
         else
         {
-            Object object= ResponseUtil.fail();
-            return object;
+            Log log=createLog(request, 0, 1, "更新商品分类",id);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.ok(retPo);
         }
     };
-
 
 
     @DeleteMapping("/categories/{id}")
     @ApiOperation(value="删除单个分类/delete")
-    public Object deleteGoodsCategory(@PathVariable Integer id,@RequestBody GoodsCategory goodsCategory)
+    public Object deleteGoodsCategory(HttpServletRequest request,
+                                      @PathVariable Integer id)
     {
-        if(goodsCategoryService.deleteGoodsCategory(id)==1)
+        int ret=goodsCategoryService.deleteGoodsCategory(id);
+        if(ret==0)
         {
-            Object object = ResponseUtil.ok(goodsCategory);
-            return object;
+            Log log=createLog(request, 0, 0, "删除商品分类",id);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.fail(803,"分类删除失败​");
         }
         else
         {
-            Object object= ResponseUtil.fail();
-            return object;
+            Log log=createLog(request, 0, 1, "删除商品分类",id);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.ok();
         }
     };
 
-    @GetMapping("/categories/l1")
-    @ApiOperation(value="查看所有一级分类/l1")
-    public Object listOneLevelGoodsCategory()
+    @PutMapping("/categories/l2/{id}")
+    @ApiOperation(value="更改子分类在父分类下的位置/l2")
+    public Object updateGoodsCategoryPid(HttpServletRequest request,
+                                         @PathVariable Integer id,
+                                         @RequestBody GoodsCategoryPo goodsCategoryPo)
     {
-        List<GoodsCategory> goodsCategoryList=goodsCategoryService.findOneLevelGoodsCategoryList();
-        if(goodsCategoryList.size()!=0)
+        GoodsCategoryPo destPo=goodsCategoryService.findGoodsCategoryById(id);
+        //被修改的分类的PID不能为空，修改后的PID不能为空
+        boolean editable=destPo!=null&&destPo.getPid()!=null&&goodsCategoryPo.getPid()!=null;
+        if(!editable){
+            Log log=createLog(request, 0, 0, "更改子分类在父分类下的位置",id);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.fail(802,"分类修改失败");
+        }
+        goodsCategoryPo.setId(id);
+        GoodsCategoryPo retPo=goodsCategoryService.updateGoodsCategoryPid(goodsCategoryPo);
+        if(retPo==null)
         {
-            Object object = ResponseUtil.ok(goodsCategoryList);
-            return object;
+            Log log=createLog(request, 0, 0, "更改子分类在父分类下的位置",id);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.fail(802,"分类修改失败");
         }
         else
         {
-            Object object= ResponseUtil.fail();
-            return object;
+            Log log=createLog(request, 0, 1, "更改子分类在父分类下的位置",id);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.ok(retPo);
+        }
+    };
+
+
+    /**
+     * 可能被删除
+     */
+    @GetMapping("/categories/l1")
+    @ApiOperation(value = "获取一级种类/getOneGoodsCategory", notes = "获取一级种类")
+    public Object findFirstLevelGoodsCategoryList(HttpServletRequest request)
+    {
+        List<GoodsCategoryPo> goodsCategoryList=goodsCategoryService.findFirstLevelGoodsCategoryList();
+        if(goodsCategoryList.size()==0){
+            Log log=createLog(request, 0, 0, "查看一级商品分类",null);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.fail(805,"获取分类列表失败");
+        }
+        else {
+            Log log=createLog(request, 0, 1, "查看一级商品分类",null);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.ok(goodsCategoryList);
         }
     };
 
 
     /**
      * 查询商品
-     *
      * @param goodsSn
      * @param name
-    //     * @param page
-    //     * @param limit
-    //     * @param sort
-    //     * @param order
+     * @param page
+     * @param limit
      * @return
      */
-    @GetMapping("/goods")
+    @GetMapping("/admin/goods")
     @ApiOperation(value = "获取商品列表/list", notes = "获取商品列表")
-    public Object listGoods(String goodsSn, String name
-//                            @RequestParam(defaultValue = "1") Integer page,
-//                            @RequestParam(defaultValue = "10") Integer limit,
-    )
+    public Object adminFindGoodsList(HttpServletRequest request,
+                                @RequestParam String goodsSn,
+                                @RequestParam String name,
+                                @RequestParam(defaultValue = "1") Integer page,
+                                @RequestParam(defaultValue = "10") Integer limit)
     {
-        List<Goods> goods=goodsService.findGoodsList(goodsSn, name);
-        if(goods.size()!=0)
-        {
-            Object object = ResponseUtil.ok(goods);
-            return object;
+        List<GoodsPo> goodsList=goodsService.adminFindGoodsList(goodsSn,name,page,limit);
+        if(goodsList.size()==0){
+            Log log=createLog(request, 0, 0, "获取商品列表",null);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.fail(776,"获取商品列表失败");
         }
-        else
-        {
-            Object object= ResponseUtil.fail();
-            return object;
+        else {
+            Log log=createLog(request, 0, 1, "获取商品列表",null);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.ok(goodsList);
         }
     };
-
 
 
     /**
      * 编辑商品
      *
-     * @param goods
+     * @param goodsPo
      * @return
      */
     @PutMapping("/goods/{id}")
     @ApiOperation(value = "根据id更新商品信息/update", notes = "根据id更新商品信息")
-    public Object updateGoodsById(@PathVariable Integer id,@RequestBody Goods goods)
+    public Object updateGoods(HttpServletRequest request,
+                              @PathVariable Integer id,
+                              @RequestBody GoodsPo goodsPo)
     {
-        goods.setId(id);
-        if(goodsService.updateGoods(goods)==1)
+        goodsPo.setId(id);
+        GoodsPo retPo=goodsService.updateGoods(goodsPo);
+        if(retPo==null)
         {
-            Object object = ResponseUtil.ok(goods);
-            return object;
+            Log log=createLog(request, 0, 0, "更新商品",id);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.fail(772,"商品修改失败");
         }
         else
         {
-            Object object= ResponseUtil.fail();
-            return object;
+            Log log=createLog(request, 0, 1, "更新商品",id);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.ok(retPo);
         }
     };
 
@@ -284,40 +377,49 @@ public class GoodsController {
      */
     @DeleteMapping("/goods/{id}")
     @ApiOperation(value = "根据id删除商品信息/delete", notes = "根据id删除商品信息")
-    public Object deleteGoodsById(@PathVariable Integer id)
+    public Object deleteGoods(HttpServletRequest request,@PathVariable Integer id)
     {
-        Goods goods=goodsService.findGoodsById(id);
-        if(goodsService.deleteGoodsById(id)==1)
+        int ret=goodsService.deleteGoods(id);
+        if(ret==0)
         {
-            Object object = ResponseUtil.ok(goods);
-            return object;
+            Log log=createLog(request, 0, 0, "删除商品",id);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.fail(773,"商品删除失败");
         }
         else
         {
-            Object object= ResponseUtil.fail();
-            return object;
+            Log log=createLog(request, 0, 1, "删除商品",id);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.ok();
         }
     };
 
     /**
      * 添加商品
      *
-     * @param goods
+     * @param goodsPo
      * @return
      */
     @PostMapping("/goods")
     @ApiOperation(value = "新建/上架一个商品/create", notes = "新建/上架一个商品")
-    public Object addGoods(@RequestBody Goods goods)
+    public Object addGoods(HttpServletRequest request,@RequestBody GoodsPo goodsPo)
     {
-        if(goodsService.addGoods(goods)==1)
+        GoodsPo retPo=goodsService.addGoods(goodsPo);
+        if(retPo==null)
         {
-            Object object = ResponseUtil.ok(goods);
-            return object;
+            Log log=createLog(request, 0, 0, "添加商品",null);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.fail(771,"商品新增失败");
         }
         else
         {
-            Object object= ResponseUtil.fail();
-            return object;
+            Log log=createLog(request, 0, 1, "添加商品",null);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.ok(retPo);
         }
     };
 
@@ -327,22 +429,116 @@ public class GoodsController {
      * @param id
      * @return
      */
-    @GetMapping("/goods/{id}")
+    @GetMapping("/admin/goods/{id}")
     @ApiOperation(value = "根据id获取某个商品/detail", notes = "根据id获取某个商品")
-    public Object getGoodsById(@NotNull Integer id)
+    public Object adminFindGoodsById(HttpServletRequest request,@PathVariable Integer id)
     {
-        Goods goods=goodsService.findGoodsById(id);
-        if(goods!=null)
+        GoodsPo goodsPo=goodsService.adminFindGoodsById(id);
+        if(goodsPo==null)
         {
-            Object object = ResponseUtil.ok(goods);
-            return object;
+            Log log=createLog(request, 0, 0, "查看单个商品",id);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.fail(775,"该商品不存在​");
         }
         else
         {
-            Object object= ResponseUtil.fail();
-            return object;
+            Log log=createLog(request, 0, 1, "查看单个商品",id);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.ok(goodsPo);
         }
     };
+
+    @GetMapping("/goods/{id}/products")
+    @ApiOperation(value = "获取商品下的产品列表")
+    public Object findProductListByGoodsId(HttpServletRequest request, @PathVariable Integer id)
+    {
+        List<ProductPo> productList=productService.findProductListByGoodsId(id);
+        if(productList.size()==0)
+        {
+            Log log=createLog(request, 0, 0, "查看商品下的产品列表",id);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.fail(785,"获取产品列表失败");
+        }
+        else
+        {
+            Log log=createLog(request, 0, 1, "查看商品下的产品列表",id);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.ok(productList);
+        }
+    }
+
+    @PostMapping("/goods/{id}/products")
+    @ApiOperation(value = "添加产品到商品")
+    public Object addProduct(HttpServletRequest request,
+                             @PathVariable Integer id,
+                             @RequestBody ProductPo productPo)
+    {
+        productPo.setGoodsId(id);
+        ProductPo retPo=productService.addProduct(productPo);
+        if(retPo==null)
+        {
+            Log log=createLog(request, 0, 0, "添加产品",id);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.fail(781,"产品新增失败");
+        }
+        else
+        {
+            Log log=createLog(request, 0, 1, "添加产品",id);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.ok(retPo);
+        }
+    }
+
+    @PutMapping("/products/{id}")
+    @ApiOperation(value = "修改产品信息")
+    public Object updateProduct(HttpServletRequest request,
+                                @PathVariable Integer id,
+                                @RequestBody ProductPo productPo)
+    {
+        productPo.setId(id);
+        ProductPo retPo=productService.updateProduct(productPo);
+        if(retPo==null)
+        {
+            Log log=createLog(request, 0, 0, "更新产品",id);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.fail(782,"产品修改失败");
+        }
+        else
+        {
+            Log log=createLog(request, 0, 1, "更新产品",id);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.ok(retPo);
+        }
+    }
+
+    @DeleteMapping("/products/{id}")
+    @ApiOperation(value = "删除产品信息")
+    public Object deleteProduct(HttpServletRequest request,@PathVariable Integer id)
+    {
+        int ret=productService.deleteProduct(id);
+        if(ret==0)
+        {
+            Log log=createLog(request, 0, 0, "删除产品",id);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.fail(783,"产品删除失败");
+        }
+        else
+        {
+            Log log=createLog(request, 0, 1, "删除产品",id);
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.ok();
+        }
+    }
 
     //--------------user
     /**
@@ -355,28 +551,24 @@ public class GoodsController {
     @GetMapping("/brands")
     @ApiOperation(value="查看所有品牌 /list")
     public Object findBrandList(@RequestParam(defaultValue = "1") Integer page,
-                                @RequestParam(defaultValue = "10") Integer limit
-    )
+                                @RequestParam(defaultValue = "10") Integer limit)
     {
-        List<Brand> brandList= brandService.findBrandList(page,limit);
+        List<BrandPo> brandList= brandService.findBrandList(page,limit);
+        if(brandList.size()==0){
+            return ResponseUtil.fail(795,"获取品牌列表失败");
+        }
         return ResponseUtil.ok(brandList);
     };
 
     @GetMapping("/categories/l2")
     @ApiOperation(value = "获取二级种类/getsecondgoodsCategory", notes = "获取二级种类")
-    public Object listSecondLevelGoodsCategory()
+    public Object findSecondLevelGoodsCategoryList()
     {
-        List<GoodsCategory> goodsCategoryList=goodsCategoryService.findSecondLevelGoodsCategoryList();
-        if(goodsCategoryList.size()!=0)
-        {
-            Object object = ResponseUtil.ok(goodsCategoryList);
-            return object;
+        List<GoodsCategoryPo> goodsCategoryList=goodsCategoryService.findSecondLevelGoodsCategoryList();
+        if(goodsCategoryList.size()==0) {
+            return ResponseUtil.fail(805,"获取分类列表失败");
         }
-        else
-        {
-            Object object= ResponseUtil.fail();
-            return object;
-        }
+        return ResponseUtil.ok(goodsCategoryList);
     };
 
     /**
@@ -387,130 +579,94 @@ public class GoodsController {
      */
     @GetMapping("categories/l1/{id}/l2")
     @ApiOperation(value = "获取当前一级分类下的二级分类 /current", notes = "获取分类栏目")
-    public Object listSecondLevelGoodsCategoryById(@NotNull Integer id)
+    public Object findSecondLevelGoodsCategoryListByPid(@PathVariable Integer id)
     {
-        List<GoodsCategory> goodsCategoryList=goodsCategoryService.findSecondLevelGoodsCategoryListById(id);
-        if(goodsCategoryList.size()!=0)
-        {
-            Object object =ResponseUtil.ok(goodsCategoryList);
-            return object;
+        List<GoodsCategoryPo> goodsCategoryList=goodsCategoryService.findSecondLevelGoodsCategoryListByPid(id);
+        if(goodsCategoryList.size()==0) {
+            return ResponseUtil.fail(805,"获取分类列表失败");
         }
-        else
-        {
-            Object object= ResponseUtil.fail();
-            return object;
-        }
+        return ResponseUtil.ok(goodsCategoryList);
+
     };
 
     /**
-     * 商品详情
-     * <p>
-     * 用户可以不登录。
-     * 如果用户登录，则记录用户足迹以及返回用户收藏信息。
      *
-     * @param userId 用户ID
-     * @param id     商品ID
+     * @param name 商品名
+     * @param page
+     * @param limit
      * @return 商品详情
      */
     @GetMapping("/goods")
-    @ApiOperation(value = "获取商品信息列表/detail", notes = "获取商品信息列表")
-    public Object getGoodsById( Integer userId, @NotNull Integer id)
-    {
-        Goods goods=goodsService.findGoodsById(userId,id);
-        if(goods!=null)
-        {
-            Object object = ResponseUtil.ok(goods);
-            return object;
-        }
-        else
-        {
-            Object object= ResponseUtil.fail();
-            return object;
-        }
-    };
-
-
-
-    /**
-     * 根据条件搜素商品
-     * <p>
-     * 1. 这里的前五个参数都是可选的，甚至都是空
-     * 2. 用户是可选登录，如果登录，则记录用户的搜索关键字
-     *
-     * @param goodsCategoryId 分类类目ID，可选
-     * @param brandId    品牌商ID，可选
-     * @param keyword    关键字，可选
-     * @param isNew      是否新品，可选
-     * @param isHot      是否热买，可选
-    //     * @param userId     用户ID
-    //     * @param page       分页页数
-    //     * @param limit       分页大小
-     * @return 根据条件搜素的商品详情
-     */
-    @GetMapping("/goods/searchinformation")
     @ApiOperation(value = "根据条件搜素商品/list", notes = "根据条件搜素商品")
-    public Object listGoodsBySearchInfo(
-            Integer goodsCategoryId,
-            Integer brandId,
-            String keyword,
-            Boolean isNew,
-            Boolean isHot
-//            @LoginUser Integer userId,
-//            @RequestParam(defaultValue = "1") Integer page,
-//            @RequestParam(defaultValue = "10") Integer limit,
-    )
+    public Object userFindGoods(@RequestParam String name,
+                                @RequestParam(defaultValue = "1") Integer page,
+                                @RequestParam(defaultValue = "10") Integer limit)
     {
-        List<Goods> goods=goodsService.findGoodsListBySearchInfo(goodsCategoryId, brandId,keyword,isNew,isHot);
-        if(goods.size()!=0)
+        List<GoodsPo> goodsList=goodsService.userFindGoodsList(name,page,limit);
+        if(goodsList.size()==0)
         {
-            Object object = ResponseUtil.ok(goods);
-            return object;
+            return ResponseUtil.fail(776,"获取商品列表失败");
         }
-        else
-        {
-            Object object= ResponseUtil.fail();
-            return object;
-        }
+        return ResponseUtil.ok();
     };
 
-
-
-    /**
-     * 商品详情页面“大家都在看”推荐商品
-     *
-     * @param id, 商品ID
-     * @return 商品详情页面推荐商品
-     */
-    @GetMapping("/recommendedGoods")
-    @ApiOperation(value = "查看推荐商品/related", notes = "查看推荐商品")
-    public Object getRecommendedGoods(@NotNull Integer id)
+    @GetMapping("/goods/{id}")
+    @ApiOperation(value = "根据id获取某个商品/detail", notes = "根据id获取某个商品")
+    public Object userFindGoodsById(@PathVariable Integer id)
     {
-        Goods goods=goodsService.findRecommendedGoods(id);
-        if(goods!=null)
+        GoodsPo goodsPo=goodsService.userFindGoodsById(id);
+        if(goodsPo==null)
         {
-            Object object = ResponseUtil.ok(goods);
-            return object;
+            return ResponseUtil.fail(775,"该商品不存在​");
         }
-        else
-        {
-            Object object= ResponseUtil.fail();
-            return object;
-        }
+        return ResponseUtil.ok(goodsPo);
     };
 
-    /**
-     * 在售的商品总数
-     *
-     * @return 在售的商品总数
-     */
-    @GetMapping("/goodsCounts")
-    @ApiOperation(value = "查看在售的商品总数/count", notes = "查看在售的商品总数")
-    public Object getGoodsCounts()
-    {
-        Integer count=goodsService.findGoodsCounts();
-        Object object = ResponseUtil.ok(count);
-        return object;
-    };
+    //----------------内部接口
+
+    @GetMapping("/goods/{id}/isOnSale")
+    @ApiOperation(value = "判断商品是否在售")
+    public boolean beOnSale(@PathVariable Integer goodsId){
+        GoodsPo goodsPo=goodsService.userFindGoodsById(goodsId);
+        if(goodsPo==null){
+            return false;
+        }
+        return true;
+    }
+
+    @PutMapping("/product/list/deduct")
+    @ApiOperation(value = "根据订单物品列表修改库存",notes = "operation：true代表加库存，false代表减库存")
+    public boolean operateStock(@RequestBody List<OrderItem> orderItemList,@RequestParam boolean operation){
+        return true;
+    }
+
+    @GetMapping("/user/product/{id}")
+    @ApiOperation(value = "根据产品ID返回封装的Product")
+    public Product getProductById(@PathVariable Integer id){
+        ProductPo productPo=productService.findProductById(id);
+        if(productPo==null){
+            return null;
+        }
+        Integer goodsId=productPo.getGoodsId();
+        GoodsPo goodsPo=goodsService.adminFindGoodsById(goodsId);
+        Product product=new Product();
+        product.setId(productPo.getId());
+        product.setGoodsId(productPo.getGoodsId());
+        product.setSpecifications(productPo.getSpecifications());
+        product.setSafetyStock(productPo.getSafetyStock());
+        product.setPicUrl(productPo.getPicUrl());
+        product.setPrice(productPo.getPrice());
+        product.setGoodsPo(goodsPo);
+        product.setGmtCreate(productPo.getGmtCreate());
+        product.setGmtModified(productPo.getGmtModified());
+        product.setBeDeleted(productPo.getBeDeleted());
+        return product;
+    }
+
+
+
+
+
 
     /**
      * 日志记录函数
@@ -533,9 +689,10 @@ public class GoodsController {
      * @param type
      * @param status
      * @param action
+     * @param actionId
      * @return 返回生成的日志或者空值，空值则进行未登录错误处理
      */
-    private Log createLog(HttpServletRequest request, Integer type, Integer status, String action)
+    private Log createLog(HttpServletRequest request,Integer type,Integer status,String action,Integer actionId)
     {
         String adminId= request.getHeader("id");
         if (adminId==null){
@@ -546,8 +703,26 @@ public class GoodsController {
         log.setIp(request.getRemoteAddr());
         log.setType(type);
         log.setActions(action);
+        log.setActionId(actionId);
         log.setStatusCode(status);
         return log;
     }
+
+    //----------------测试
+
+
+    @GetMapping("/test/goods/{id}")
+    public GoodsPo findGoodsByIdF(@PathVariable  Integer id){
+        GoodsPo goodsPo=goodsService.adminFindGoodsById(id);
+        if(goodsPo==null)
+        {
+            return null;
+        }
+        else
+        {
+            return goodsPo;
+        }
+    }
+
 
 }

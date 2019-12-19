@@ -4,6 +4,7 @@ package xmu.oomall.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import xmu.oomall.domain.Product;
+import xmu.oomall.domain.ProductPo;
 
 import java.util.List;
 
@@ -18,28 +19,29 @@ public interface ProductMapper {
      * @param id
      * @return
      */
-    Product findProductById(Integer id);
+    ProductPo findProductById(Integer id);
 
     /**
-     * @param product
+     * @param productPo
      * @return status
      */
-    int addProduct(Product product);
+    int addProduct(ProductPo productPo);
 
     /**
      * @param id
      * @return status
      */
-    int deleteProductById(Integer id);
+    int deleteProduct(Integer id);
 
     /**
-     * @param product
+     * @param productPo
      * @return status
      */
-    int updateProduct(Product product);
+    int updateProduct(ProductPo productPo);
 
     /**
-     * @return status
+     * @return
      */
-    public List<Product> findProductList(@Param("productIds") String productIds, @Param("goodsId") Integer goodsId);
+    List<ProductPo> findProductListByGoodsId(Integer goodsId);
+
 }

@@ -22,7 +22,7 @@ public interface BrandService {
      * @param limit 分页大小
      * @return 品牌列表
      */
-    List<Brand> findBrandListByIdAndName(String id, String name,Integer page,Integer limit);
+    List<BrandPo> findBrandListByIdAndName(Integer id, String name,Integer page,Integer limit);
 
     /**
      * 查看品牌列表
@@ -31,7 +31,7 @@ public interface BrandService {
      * @param limit 分页大小
      * @return 品牌列表
      */
-    List<Brand> findBrandList(Integer page,Integer limit);
+    List<BrandPo> findBrandList(Integer page,Integer limit);
 
     /**
      * 查看单个品牌信息
@@ -39,7 +39,7 @@ public interface BrandService {
      * @param id 品牌ID
      * @return 品牌信息
      */
-    Brand findBrandById(Integer id);
+    BrandPo findBrandById(Integer id);
 
     /**
      * 创建一个品牌

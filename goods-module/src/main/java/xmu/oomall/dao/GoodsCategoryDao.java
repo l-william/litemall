@@ -9,6 +9,7 @@ package xmu.oomall.dao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import xmu.oomall.domain.GoodsCategory;
+import xmu.oomall.domain.GoodsCategoryPo;
 import xmu.oomall.mapper.GoodsCategoryMapper;
 
 import java.time.LocalDateTime;
@@ -21,7 +22,14 @@ import java.util.List;
 public class GoodsCategoryDao {
     @Autowired(required = false)
     private GoodsCategoryMapper goodsCategoryMapper;
-    public GoodsCategory findGoodsCategoryById(Integer id)
+
+    /**
+     * 通过ID查找商品分类
+     *
+     * @param id
+     * @return 商品分类
+     */
+    public GoodsCategoryPo findGoodsCategoryById(Integer id)
     {
         return goodsCategoryMapper.findGoodsCategoryById(id);
     }
@@ -29,15 +37,19 @@ public class GoodsCategoryDao {
     /**
      * 添加商品分类
      *
-     * @param goodsCategory
-     * @return 操作成功与否
+     * @param goodsCategoryPo
+     * @return 新增的商品分类
      */
-    public int addGoodsCategory(GoodsCategory goodsCategory)
+    public GoodsCategoryPo addGoodsCategory(GoodsCategoryPo goodsCategoryPo)
     {
-        goodsCategory.setGmtCreate(LocalDateTime.now());
-        goodsCategory.setGmtModified(LocalDateTime.now());
-        goodsCategory.setBeDeleted(false);
-        return goodsCategoryMapper.addGoodsCategory(goodsCategory);
+        goodsCategoryPo.setGmtCreate(LocalDateTime.now());
+        goodsCategoryPo.setGmtModified(LocalDateTime.now());
+        goodsCategoryPo.setBeDeleted(false);
+        int ret=goodsCategoryMapper.addGoodsCategory(goodsCategoryPo);
+        if(ret==0){
+            return null;
+        }
+        return goodsCategoryPo;
     }
 
     /**
@@ -48,28 +60,56 @@ public class GoodsCategoryDao {
      */
     public int deleteGoodsCategory(Integer id)
     {
-        GoodsCategory goodsCategory=goodsCategoryMapper.findGoodsCategoryById(id);
-        if(goodsCategory!=null)
+        GoodsCategoryPo goodsCategoryPo=goodsCategoryMapper.findGoodsCategoryById(id);
+        if(goodsCategoryPo!=null)
         {
-            goodsCategory.setGmtModified(LocalDateTime.now());
-            goodsCategoryMapper.updateGoodsCategory(goodsCategory);
+            goodsCategoryPo.setGmtModified(LocalDateTime.now());
+            goodsCategoryMapper.updateGoodsCategory(goodsCategoryPo);
         }
-        return goodsCategoryMapper.deleteGoodsCategoryById(id);
+        return goodsCategoryMapper.deleteGoodsCategory(id);
+    }
+
+    public int deleteGoodsCategoryByPid(Integer pid)
+    {
+        return goodsCategoryMapper.deleteGoodsCategoryByPid(pid);
     }
 
     /**
      * 更新商品分类
      *
-     * @param goodsCategory
-     * @return 操作成功与否
+     * @param goodsCategoryPo
+     * @return 更新后的商品分类
      */
-    public int updateGoodsCategory(GoodsCategory goodsCategory)
+    public GoodsCategoryPo updateGoodsCategory(GoodsCategoryPo goodsCategoryPo)
     {
-        if(goodsCategoryMapper.findGoodsCategoryById(goodsCategory.getId())!=null) {
-            goodsCategory.setGmtCreate(goodsCategoryMapper.findGoodsCategoryById(goodsCategory.getId()).getGmtCreate());
+        if(goodsCategoryMapper.findGoodsCategoryById(goodsCategoryPo.getId())!=null) {
+            goodsCategoryPo.setGmtCreate(goodsCategoryMapper.findGoodsCategoryById(goodsCategoryPo.getId()).getGmtCreate());
         }
-        goodsCategory.setGmtModified(LocalDateTime.now());
-        return goodsCategoryMapper.updateGoodsCategory(goodsCategory);
+        goodsCategoryPo.setGmtModified(LocalDateTime.now());
+        int ret=goodsCategoryMapper.updateGoodsCategory(goodsCategoryPo);
+        if(ret==0){
+            return null;
+        }
+        return goodsCategoryPo;
+    }
+
+    /**
+     * 更新商品分类
+     *
+     * @param goodsCategoryPo
+     * @return 更新后的商品分类
+     */
+    public GoodsCategoryPo updateGoodsCategoryPid(GoodsCategoryPo goodsCategoryPo)
+    {
+        if(goodsCategoryMapper.findGoodsCategoryById(goodsCategoryPo.getId())!=null) {
+            goodsCategoryPo.setGmtCreate(goodsCategoryMapper.findGoodsCategoryById(goodsCategoryPo.getId()).getGmtCreate());
+        }
+        goodsCategoryPo.setGmtModified(LocalDateTime.now());
+        int ret=goodsCategoryMapper.updateGoodsCategoryPid(goodsCategoryPo);
+        if(ret==0){
+            return null;
+        }
+        return goodsCategoryPo;
     }
 
     /**
@@ -77,7 +117,7 @@ public class GoodsCategoryDao {
      *
      * @return 商品分类列表
      */
-    public List<GoodsCategory> findGoodsCategoryList()
+    public List<GoodsCategoryPo> findGoodsCategoryList()
     {
         return goodsCategoryMapper.findGoodsCategoryList();
     }
@@ -87,9 +127,9 @@ public class GoodsCategoryDao {
      *
      * @return 商品分类列表
      */
-    public List<GoodsCategory> findOneLevelGoodsCategoryList()
+    public List<GoodsCategoryPo> findFirstLevelGoodsCategoryList()
     {
-        return goodsCategoryMapper.findOneLevelGoodsCategoryList();
+        return goodsCategoryMapper.findFirstLevelGoodsCategoryList();
     }
 
     /**
@@ -97,7 +137,7 @@ public class GoodsCategoryDao {
      *
      * @return 商品分类列表
      */
-    public List<GoodsCategory> findSecondLevelGoodsCategoryList()
+    public List<GoodsCategoryPo> findSecondLevelGoodsCategoryList()
     {
         return goodsCategoryMapper.findSecondLevelGoodsCategoryList();
     }
@@ -108,7 +148,7 @@ public class GoodsCategoryDao {
      * @param id
      * @return 商品分类列表
      */
-    public List<GoodsCategory> findSecondLevelGoodsCategoryListById(Integer id)
+    public List<GoodsCategoryPo> findSecondLevelGoodsCategoryListByPid(Integer id)
     {
         return goodsCategoryMapper.findGoodsCategoryListByPid(id);
     }

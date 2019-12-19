@@ -1,79 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="xmu.oomall.mapper.GoodsMapper">
-    <select id="findGoodsById" resultType="goods" parameterType="Integer">
+    <select id="adminFindGoodsById" resultMap="GoodsPo" parameterType="Integer">
         select * from oomall_goods
         where id = #{id} and is_deleted = 0
     </select>
 
-    <select id="findGoodsListByGoodsSnAndName" resultType="goods" parameterType="String">
+    <select id="userFindGoodsById" resultMap="GoodsPo" parameterType="Integer">
         select * from oomall_goods
-        where
-        <if test="goodsSn != null">
-            goods_sn like concat('%', #{goodsSn}, '%') and
-        </if>
-        <if test="name != null">
-            name like concat('%', #{name}, '%') and
-        </if>
-        is_deleted = 0
+        where id = #{id} and is_deleted = 0 and status = 1
     </select>
 
-    <select id="getGoodsCount" resultType="Integer">
-        select count(id) from oomall_goods
-        where status = 1
-        and is_deleted = 0
+    <select id="adminFindGoodsList" resultMap="GoodsPo" parameterType="String">
+        select * from oomall_goods
+        <where>
+            <if test="goodsSn != null">
+            goods_sn = #{goodsSn} and
+            </if>
+            <if test="name != null">
+            name = #{name} and
+            </if>
+            is_deleted = 0
+        </where>
     </select>
 
-    <insert id="addGoods" parameterType="Goods" useGeneratedKeys="true" keyProperty="id">
+    <select id="userFindGoodsList" resultMap="GoodsPo" parameterType="String">
+        select * from oomall_goods
+        where name = #{name} and is_deleted = 0
+    </select>
+
+    <insert id="addGoods" parameterType="GoodsPo" useGeneratedKeys="true" keyProperty="id">
         insert into oomall_goods(
-            gmt_create,
-            gmt_modified,
-            name,
-            goods_sn,
-            short_name,
-            description,
-            brief,
-            pic_url,
-            detail,
-            status,
-            share_url,
-            gallery,
-            goods_category_id,
-            brand_id,
-            is_deleted,
-            weight,
-            volume,
-            special_freight_id,
-            is_special,
-            price)
+            name, goods_sn, short_name, description, brief,
+            pic_url, detail, status, share_url, gallery,
+            goods_category_id, brand_id, weight, volume,
+            special_freight_id, is_special, price,
+            gmt_create, gmt_modified, is_deleted)
         values (
-            #{gmtCreate},
-            #{gmtModified},
-            #{name},
-            #{goodsSn},
-            #{shortName},
-            #{description},
-            #{brief},
-            #{picUrl},
-            #{detail},
-            #{statusCode},
-            #{shareUrl},
-            #{gallery},
-            #{goodsCategoryId},
-            #{brandId},
-            #{beDeleted},
-            #{weight},
-            #{volume},
-            #{specialFreightId},
-            #{beSpecial},
-            #{price})
+            #{name}, #{goodsSn}, #{shortName}, #{description}, #{brief},
+            #{picUrl}, #{detail}, #{statusCode}, #{shareUrl}, #{gallery},
+            #{goodsCategoryId}, #{brandId}, #{weight}, #{volume},
+            #{specialFreightId}, #{beSpecial}, #{price},
+            #{gmtCreate}, #{gmtModified}, #{beDeleted})
     </insert>
 
-    <update id="updateGoods" parameterType="Goods">
+    <update id="updateGoods" parameterType="goodsPo">
         update oomall_goods
-        set gmt_create = #{gmtCreate},
-            gmt_modified = #{gmtModified},
-            name = #{name},
+        set name = #{name},
             goods_sn = #{goodsSn},
             short_name = #{shortName},
             description = #{description},
@@ -85,25 +58,25 @@
             gallery = #{gallery},
             goods_category_id = #{goodsCategoryId},
             brand_id = #{brandId},
-            is_deleted = #{beDeleted},
             weight = #{weight},
             volume = #{volume},
             special_freight_id = #{specialFreightId},
             is_special = #{beSpecial},
-            price = #{price}
-        where id = #{id}
+            price = #{price},
+            gmt_create = #{gmtCreate},
+            gmt_modified = #{gmtModified},
+            is_deleted = #{beDeleted}
+        where id = #{id} and is_deleted = 0
     </update>
 
-    <update id="deleteGoodsById" parameterType="Integer">
+    <update id="deleteGoods" parameterType="Integer">
         update oomall_goods
         set is_deleted = 1
-        where id = #{id}
+        where id = #{id} and is_deleted = 0
     </update>
 
-    <resultMap id="Goods" type="Goods">
+    <resultMap id="GoodsPo" type="GoodsPo">
         <id column="id" property="id"/>
-        <result column="gmt_create" property="gmtCreate"/>
-        <result column="gmt_modified" property="gmtModified"/>
         <result column="name" property="name"/>
         <result column="goods_sn" property="goodsSn"/>
         <result column="short_name" property="shortName"/>
@@ -111,7 +84,7 @@
         <result column="brief" property="brief"/>
         <result column="pic_url" property="picUrl"/>
         <result column="detail" property="detail"/>
-        <result column="status" property="status"/>
+        <result column="status" property="statusCode"/>
         <result column="share_url" property="shareUrl"/>
         <result column="gallery" property="gallery"/>
         <result column="goods_category_id" property="goodsCategoryId"/>
@@ -121,6 +94,9 @@
         <result column="special_freight_id" property="specialFreightId"/>
         <result column="is_special" property="beSpecial"/>
         <result column="price" property="price"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="is_deleted" property="beDeleted"/>
     </resultMap>
 
 </mapper>
