@@ -4,7 +4,6 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
-import org.springframework.core.annotation.Order;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +16,6 @@ import xmu.oomall.service.AddressService;
 import xmu.oomall.util.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -31,7 +29,7 @@ import java.util.List;
 @Validated
 public class AddressController {
 
-    @Autowired(required = false)
+    @Autowired
     private AddressService addressService;
     @Autowired
     private LoadBalancerClient loadBalancerClient;
@@ -66,7 +64,7 @@ public class AddressController {
     public Object getAddressById(@PathVariable Integer id) {
         Address address=addressService.findAddressById(id);
         if(address==null){
-            return ResponseUtil.fail(744, "地址不存在");
+            return ResponseUtil.badArgumentValue();
         }
         return ResponseUtil.ok(address);
     }
@@ -88,7 +86,7 @@ public class AddressController {
         }
         AddressPo retPo=addressService.addAddress(addressPo);
         if(retPo==null){
-            return ResponseUtil.fail(751, "地址新增失败");
+            return ResponseUtil.updatedDataFailed();
         }
         return ResponseUtil.ok(retPo);
     }
@@ -103,7 +101,7 @@ public class AddressController {
     public Object deleteAddress(@PathVariable Integer id) {
         int ret= addressService.deleteAddress(id);
         if(ret==0){
-            return ResponseUtil.fail(743, "地址删除失败");
+            return ResponseUtil.updatedDataFailed();
         }
         return  ResponseUtil.ok();
     }
@@ -127,7 +125,7 @@ public class AddressController {
         addressPo.setId(id);
         AddressPo retPo=addressService.updateAddress(addressPo);
         if(retPo==null){
-            return ResponseUtil.fail(752, "地址修改失败");
+            return ResponseUtil.updatedDataFailed();
         }
         return ResponseUtil.ok(retPo);
     }
@@ -180,12 +178,12 @@ public class AddressController {
      * @param log 日志
      */
     private void writeLog(Log log) {
-//        RestTemplate restTemplate = new RestTemplate();
-//        ServiceInstance instance = loadBalancerClient.choose("Log");
-//        System.out.println(instance.getHost());
-//        System.out.println(instance.getPort());
-//        String reqURL = String.format("http://%s:%s", instance.getHost(), instance.getPort() + "/logs");
-//        restTemplate.postForObject(reqURL,log,Log.class);
+        RestTemplate restTemplate = new RestTemplate();
+        ServiceInstance instance = loadBalancerClient.choose("Log");
+        System.out.println(instance.getHost());
+        System.out.println(instance.getPort());
+        String reqURL = String.format("http://%s:%s", instance.getHost(), instance.getPort() + "/logs");
+        restTemplate.postForObject(reqURL,log,Log.class);
     }
 
     /**

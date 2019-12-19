@@ -99,6 +99,6 @@ public class AdServiceImpl implements AdService {
             return list.subList((page-1)*limit,list.size());
         }
         //page>maxPages
-        return null;
+        return list.subList(0,0);
     }
 }
