@@ -137,7 +137,7 @@ public class FreightDaoTest {
     @Test
     void findIdFromRegion()
     {
-        Integer id=freightDao.findIdFromRegion("北京市");
+        List<Integer> id=freightDao.findIdFromRegion("朝阳区");
         System.out.println(id);
     }
     @Test
