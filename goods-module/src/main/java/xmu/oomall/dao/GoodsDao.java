@@ -82,7 +82,11 @@ public class GoodsDao {
         goodsPo.setGmtCreate(LocalDateTime.now());
         goodsPo.setGmtModified(LocalDateTime.now());
         goodsPo.setBeDeleted(false);
-        return goodsMapper.addGoods(goodsPo);
+        int ret=goodsMapper.addGoods(goodsPo);
+        if(ret==0){
+            return null;
+        }
+        return goodsPo;
     }
 
     /**
@@ -98,7 +102,11 @@ public class GoodsDao {
             goodsPo.setGmtCreate(goodsMapper.adminFindGoodsById(goodsPo.getId()).getGmtCreate());
         }
         goodsPo.setGmtModified(LocalDateTime.now());
-        return goodsMapper.updateGoods(goodsPo);
+        int ret=goodsMapper.updateGoods(goodsPo);
+        if(ret==0){
+            return null;
+        }
+        return goodsPo;
     }
 
     /**

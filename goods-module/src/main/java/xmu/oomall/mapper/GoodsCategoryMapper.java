@@ -26,21 +26,21 @@ public interface GoodsCategoryMapper {
 
     /**
      * @param goodsCategoryPo
-     * @return 新增的分类
+     * @return 操作状态码
      */
-    GoodsCategoryPo addGoodsCategory(GoodsCategoryPo goodsCategoryPo);
+    int addGoodsCategory(GoodsCategoryPo goodsCategoryPo);
 
     /**
      * @param goodsCategoryPo
-     * @return 更新后的分类
+     * @return 操作状态码
      */
-    GoodsCategoryPo updateGoodsCategory(GoodsCategoryPo goodsCategoryPo);
+    int updateGoodsCategory(GoodsCategoryPo goodsCategoryPo);
 
     /**
      * @param goodsCategoryPo
-     * @return 更新后的分类
+     * @return 操作状态码
      */
-    GoodsCategoryPo updateGoodsCategoryPid(GoodsCategoryPo goodsCategoryPo);
+    int updateGoodsCategoryPid(GoodsCategoryPo goodsCategoryPo);
 
     /**
      * @param id

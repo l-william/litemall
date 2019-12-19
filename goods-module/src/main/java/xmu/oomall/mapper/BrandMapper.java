@@ -29,7 +29,7 @@ public interface BrandMapper {
      * @param name 品牌名称
      * @return 品牌列表
      */
-    List<BrandPo> findBrandListByIdAndName(@Param("id") Integer id, @Param("name") String name);
+    List<BrandPo> findBrandListByIdAndName(Integer id,String name);
 
     /**
      * 根据品牌ID获取品牌信息
@@ -45,7 +45,7 @@ public interface BrandMapper {
      * @param brandPo 品牌
      * @return 是否操作成功
      */
-    BrandPo addBrand(BrandPo brandPo);
+    int addBrand(BrandPo brandPo);
 
     /**
      * 更新品牌
@@ -53,7 +53,7 @@ public interface BrandMapper {
      * @param brandPo 品牌信息
      * @return 是否操作成功
      */
-    BrandPo updateBrand(BrandPo brandPo);
+    int updateBrand(BrandPo brandPo);
 
     /**
      * 删除品牌
