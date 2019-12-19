@@ -4,12 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import xmu.oomall.dao.BrandDao;
-import xmu.oomall.domain.Brand;
 import xmu.oomall.domain.BrandPo;
-
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class BrandDaoTest {
@@ -19,7 +16,7 @@ class BrandDaoTest {
 
     @Test
     void findBrandList() {
-        List<Brand> goods = brandDao.findBrandList();
+        List<BrandPo> goods = brandDao.findBrandList();
         if(goods==null)
             System.out.println("not find!");
         else
@@ -30,7 +27,7 @@ class BrandDaoTest {
     void findBrandListByIdAndName() {
         Integer id=85;
         String name="张松茂";
-        List<Brand> goods = brandDao.findBrandListByIdAndName(name,id.toString());
+        List<BrandPo> goods = brandDao.findBrandListByIdAndName(id,name);
         if(goods==null)
             System.out.println("not find!");
         else
@@ -40,7 +37,7 @@ class BrandDaoTest {
     @Test
     void findBrandById() {
         Integer id=85;
-        Brand brand = brandDao.findBrandById(id);
+        BrandPo brand = brandDao.findBrandById(id);
         if(brand==null)
             System.out.println("not find!");
         else

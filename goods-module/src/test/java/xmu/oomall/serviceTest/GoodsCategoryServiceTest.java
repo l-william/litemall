@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import xmu.oomall.domain.GoodsCategory;
+import xmu.oomall.domain.GoodsCategoryPo;
 import xmu.oomall.service.GoodsCategoryService;
 
 import java.util.List;
@@ -21,7 +22,7 @@ public class GoodsCategoryServiceTest {
     @Test
     public void findGoodsCategoryById()
     {
-        GoodsCategory goodsCategory=goodsCategoryService.findGoodsCategoryById(10001);
+        GoodsCategoryPo goodsCategory=goodsCategoryService.findGoodsCategoryById(10001);
         if(goodsCategory==null)
         {
             System.out.println("not find");
@@ -36,7 +37,7 @@ public class GoodsCategoryServiceTest {
     {
         GoodsCategory goodsCategory=new GoodsCategory();
         goodsCategory.setName("医药用品");
-        if(goodsCategoryService.CreateGoodsCategory(goodsCategory)==1)
+        if(goodsCategoryService.addGoodsCategory(goodsCategory)!=null)
         {
             System.out.println("create success");
         }
@@ -62,7 +63,7 @@ public class GoodsCategoryServiceTest {
         GoodsCategory goodsCategory=new GoodsCategory();
         goodsCategory.setId(10002);
         goodsCategory.setName("床上用品");
-        if(goodsCategoryService.updateGoodsCategory(goodsCategory)==1)
+        if(goodsCategoryService.updateGoodsCategory(goodsCategory)!=null)
         {
             System.out.println("update success");
         }
@@ -75,7 +76,7 @@ public class GoodsCategoryServiceTest {
     @Test
     public void findGoodsCategoryList()
     {
-        List<GoodsCategory> goodsCategoryList=goodsCategoryService.findGoodsCategoryList();
+        List<GoodsCategoryPo> goodsCategoryList=goodsCategoryService.findGoodsCategoryList(1,10);
         if(goodsCategoryList.size()!=0) {
             System.out.println(goodsCategoryList.size());
         }
@@ -84,9 +85,9 @@ public class GoodsCategoryServiceTest {
         }
     }
     @Test
-    public void findL1GoodsCategoryList()
+    public void findFirstLevelGoodsCategoryList()
     {
-        List<GoodsCategory> goodsCategoryList=goodsCategoryService.findOneLevelGoodsCategoryList();
+        List<GoodsCategoryPo> goodsCategoryList=goodsCategoryService.findFirstLevelGoodsCategoryList();
         if(goodsCategoryList.size()!=0) {
             System.out.println(goodsCategoryList.size());
         }
@@ -96,9 +97,9 @@ public class GoodsCategoryServiceTest {
 
     }
     @Test
-    public void findL2GoodsCategoryList()
+    public void findSecondLevelGoodsCategoryList()
     {
-        List<GoodsCategory> goodsCategoryList=goodsCategoryService.findSecondLevelGoodsCategoryList();
+        List<GoodsCategoryPo> goodsCategoryList=goodsCategoryService.findSecondLevelGoodsCategoryList();
         if(goodsCategoryList.size()!=0) {
             System.out.println(goodsCategoryList.size());
         }
@@ -107,14 +108,29 @@ public class GoodsCategoryServiceTest {
         }
     }
     @Test
-    public void findL2GoodsCategoryListById()
+    public void findSecondLevelGoodsCategoryListByPid()
     {
-        List<GoodsCategory> goodsCategoryList=goodsCategoryService.findSecondLevelGoodsCategoryListById(10001);
+        List<GoodsCategoryPo> goodsCategoryList=goodsCategoryService.findSecondLevelGoodsCategoryListByPid(10001);
         if(goodsCategoryList.size()!=0) {
             System.out.println(goodsCategoryList.size());
         }
         else {
             System.out.println("not find");
+        }
+    }
+    @Test
+    void updateGoodsCategoryPid()
+    {
+        GoodsCategory goodsCategory=new GoodsCategory();
+        goodsCategory.setId(10002);
+        goodsCategory.setName("床上用品");
+        if(goodsCategoryService.updateGoodsCategoryPid(goodsCategory)!=null)
+        {
+            System.out.println("update success");
+        }
+        else
+        {
+            System.out.println("update failed");
         }
     }
 }

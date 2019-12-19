@@ -15,7 +15,7 @@
     <select id="findAddressListByUserIdAndConsignee" resultMap="Address">
         select * from oomall_address
         <where>
-            <if test="userId !=0">
+            <if test="userId !=null">
                 `user_id`=#{userId} and
             </if>
             <if test="consignee !=null">
