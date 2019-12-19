@@ -66,7 +66,7 @@ public class BrandServiceTest {
     }
 
     @Test
-    void updateBrandById(){
+    void updateBrand(){
         BrandPo brand=new BrandPo();
         brand.setId(10005);
         brand.setBeDeleted(false);

@@ -112,6 +112,10 @@ public class AddressServiceTest {
     {
         Integer id=123;
         addressService.clearDefaultAddress(id);
+        if (addressService.findAddressById(id).isBeDefault()==true)
+            System.out.println("Successful");
+        else
+            System.out.println("Failed");
     }
 
 }

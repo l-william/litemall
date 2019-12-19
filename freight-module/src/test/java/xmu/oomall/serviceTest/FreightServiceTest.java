@@ -38,7 +38,7 @@ public class FreightServiceTest {
     }
 
     @Test
-    void deleteDefaultFreightById()
+    void deleteDefaultFreight()
     {
         if(freightService.deleteDefaultFreight(10007)==1)
         {

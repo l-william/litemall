@@ -50,7 +50,7 @@ public class GoodsDaoTest {
 
     @Test
     void adminFindGoodsById(){
-        GoodsPo goodsPos=goodsDao.adminFindGoodsById(123);
+        GoodsPo goodsPos=goodsDao.adminFindGoodsById(341);
         if(goodsPos!=null) {
             System.out.println("Find successfully!");
         } else {

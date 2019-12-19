@@ -43,7 +43,7 @@ public class ProductDaoTest {
     }
 
     @Test
-    void deleteAdById()
+    void deleteProduct()
     {
         if(productDao.deleteProduct(100007)==1)
         {
@@ -69,7 +69,7 @@ public class ProductDaoTest {
         }
     }
     @Test
-    void findProductList()
+    void findProductListByGoodsId()
     {
         Integer goods_id = 100002;
         List<ProductPo> productList = productDao.findProductListByGoodsId(goods_id);

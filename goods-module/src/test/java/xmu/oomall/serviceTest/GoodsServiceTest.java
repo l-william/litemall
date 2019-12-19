@@ -46,7 +46,7 @@ public class GoodsServiceTest {
 
     @Test
     void adminFindGoodsById(){
-        GoodsPo goodsPos=goodsService.adminFindGoodsById(341);
+        GoodsPo goodsPos=goodsService.adminFindGoodsById(273);
         if(goodsPos!=null) {
             System.out.println("Find successfully!");
         } else {
