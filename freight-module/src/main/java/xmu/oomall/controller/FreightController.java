@@ -81,6 +81,7 @@ public class FreightController {
         return log;
     }
 
+
     /**
      * 获取默认运费比例表
      *

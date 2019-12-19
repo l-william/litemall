@@ -56,7 +56,6 @@ public class GoodsDao {
      */
     public GoodsPo adminFindGoodsById(Integer id)
     {
-        System.out.println("ZZZZZZZ");
         return goodsMapper.adminFindGoodsById(id);
     }
 
