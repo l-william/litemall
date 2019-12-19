@@ -84,25 +84,4 @@ public class ProductDao {
         return productMapper.findProductListByGoodsId(goodsId);
     }
 
-    /**
-     * 增加库存
-     *
-     * @param id
-     * @param number
-     * @return
-     */
-    boolean increaseStock(Integer id,Integer number){
-        return productMapper
-    }
-
-    /**
-     * 减少库存
-     *
-     * @param id
-     * @param number
-     * @return
-     */
-    boolean decreaseStock(Integer id,Integer number){
-
-    }
 }

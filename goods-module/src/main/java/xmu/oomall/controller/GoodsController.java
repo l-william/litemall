@@ -637,9 +637,7 @@ public class GoodsController {
     @PutMapping("/product/list/deduct")
     @ApiOperation(value = "根据订单物品列表修改库存",notes = "operation：true代表加库存，false代表减库存")
     public boolean operateStock(@RequestBody List<OrderItem> orderItemList,@RequestParam boolean operation){
-        for (OrderItem orderItem:orderItemList) {
-
-        }
+        return true;
     }
 
     @GetMapping("/user/product/{id}")
@@ -706,6 +704,22 @@ public class GoodsController {
         log.setActions(action);
         log.setStatusCode(status);
         return log;
+    }
+
+    //----------------测试
+
+
+    @GetMapping("/test/goods/{id}")
+    public Object findGoodsByIdF(@PathVariable  Integer id){
+        GoodsPo goodsPo=goodsService.adminFindGoodsById(id);
+        if(goodsPo==null)
+        {
+            return ResponseUtil.fail(775,"该商品不存在​");
+        }
+        else
+        {
+            return ResponseUtil.ok(goodsPo);
+        }
     }
 
 
