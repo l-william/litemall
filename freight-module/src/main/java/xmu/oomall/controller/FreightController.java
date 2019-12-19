@@ -62,19 +62,21 @@ public class FreightController {
      * @param type
      * @param status
      * @param action
+     * @param actionId
      * @return 返回生成的日志或者空值，空值则进行未登录错误处理
      */
-    private Log createLog(HttpServletRequest request, Integer type, Integer status, String action)
+    private Log createLog(HttpServletRequest request,Integer type,Integer status,String action,Integer actionId)
     {
         String adminId= request.getHeader("id");
         if (adminId==null){
             return null;
         }
         Log log=new Log();
-      log.setAdminId(Integer.valueOf(adminId));
+        log.setAdminId(Integer.valueOf(adminId));
         log.setIp(request.getRemoteAddr());
         log.setType(type);
         log.setActions(action);
+        log.setActionId(actionId);
         log.setStatusCode(status);
         return log;
     }
@@ -93,7 +95,7 @@ public class FreightController {
                                           @RequestParam (defaultValue = "1") Integer page,
                                           @RequestParam (defaultValue = "10") Integer limit)
     {
-        Log log =createLog(request, 0, 1,"获取默认运费比率表" );
+        Log log =createLog(request, 0, 1,"获取默认运费比率表",null);
         if(log!=null)
         {
             writeLog(log);
@@ -122,7 +124,7 @@ public class FreightController {
         int re=freightService.addDefaultPieceFreights(defaultPieceFreightPo);
         if(re==1)
         {
-            Log log =createLog(request, 0, 1,"新建默认运费比率" );
+            Log log =createLog(request, 0, 1,"新建默认运费比率",null );
             if(log!=null)
             {
                 writeLog(log);
@@ -135,7 +137,7 @@ public class FreightController {
         }
         else
         {
-            Log log =createLog(request, 0, 0,"新建默认运费比率" );
+            Log log =createLog(request, 0, 0,"新建默认运费比率",null );
             if(log!=null)
             {
                 writeLog(log);
@@ -164,7 +166,7 @@ public class FreightController {
         int re=freightService.updateDefaultPieceFreight(defaultPieceFreightPo);
         if(re==1)
         {
-            Log log =createLog(request, 0, 1,"修改默认运费比率" );
+            Log log =createLog(request, 0, 1,"修改默认运费比率",id );
             if(log!=null)
             {
                 writeLog(log);
@@ -177,7 +179,7 @@ public class FreightController {
         }
         else
         {
-            Log log =createLog(request, 0, 0,"修改默认运费比率" );
+            Log log =createLog(request, 0, 0,"修改默认运费比率",id );
             if(log!=null)
             {
                 writeLog(log);
@@ -204,7 +206,7 @@ public class FreightController {
         int re=freightService.deleteDefaultPieceFreight(id);
         if(re==1)
         {
-            Log log =createLog(request, 0, 1,"删除默认运费比率" );
+            Log log =createLog(request, 0, 1,"删除默认运费比率" ,id);
             if(log!=null)
             {
                 writeLog(log);
@@ -217,7 +219,7 @@ public class FreightController {
         }
         else
         {
-            Log log =createLog(request, 0, 0,"删除默认运费比率" );
+            Log log =createLog(request, 0, 0,"删除默认运费比率",id);
             if(log!=null)
             {
                 writeLog(log);
@@ -242,7 +244,7 @@ public class FreightController {
                                      @RequestParam (defaultValue = "1") Integer page,
                                      @RequestParam (defaultValue = "10") Integer limit)
     {
-        Log log =createLog(request, 0, 1,"获取默认运费规则" );
+        Log log =createLog(request, 0, 1,"获取默认运费规则",null);
         if(log!=null)
         {
             writeLog(log);
@@ -272,7 +274,7 @@ public class FreightController {
                                     @RequestParam (defaultValue="1") Integer page,
                                     @RequestParam (defaultValue = "10") Integer limit)
     {
-        Log log =createLog(request, 0, 1,"获取特殊运费规则" );
+        Log log =createLog(request, 0, 1,"获取特殊运费规则",null);
         if(log!=null)
         {
             writeLog(log);
@@ -300,7 +302,7 @@ public class FreightController {
         SpecialFreight specialFreight=freightService.findSpecialFreightById(id);
         if(specialFreight!=null)
         {
-            Log log =createLog(request, 0, 1,"获得单条特殊运费规则" );
+            Log log =createLog(request, 0, 1,"获得单条特殊运费规则",id );
             if(log!=null)
             {
                 writeLog(log);
@@ -313,7 +315,7 @@ public class FreightController {
         }
         else
         {
-            Log log =createLog(request, 0, 0,"获得单条特殊运费规则" );
+            Log log =createLog(request, 0, 0,"获得单条特殊运费规则",id);
             if(log!=null)
             {
                 writeLog(log);
@@ -339,7 +341,7 @@ public class FreightController {
     {
         if(freightService.addDefaultFreights(body)==1)
         {
-            Log log =createLog(request, 0, 1,"新增默认运费规则" );
+            Log log =createLog(request, 0, 1,"新增默认运费规则",null);
             if(log!=null)
             {
                 writeLog(log);
@@ -353,7 +355,7 @@ public class FreightController {
         }
         else
         {
-            Log log =createLog(request, 0, 0,"新增默认运费规则" );
+            Log log =createLog(request, 0, 0,"新增默认运费规则",null );
             if(log!=null)
             {
                 writeLog(log);
@@ -380,7 +382,7 @@ public class FreightController {
     {
         if(freightService.addSpecialFreight(specialFreight)==1)
         {
-            Log log =createLog(request, 0, 1,"新增特殊运费规则" );
+            Log log =createLog(request, 0, 1,"新增特殊运费规则",null );
             if(log!=null)
             {
                 writeLog(log);
@@ -394,7 +396,7 @@ public class FreightController {
         }
         else
         {
-            Log log =createLog(request, 0, 0,"新增特殊运费规则" );
+            Log log =createLog(request, 0, 0,"新增特殊运费规则",null );
             if(log!=null)
             {
                 writeLog(log);
@@ -421,7 +423,7 @@ public class FreightController {
     {
         if(freightService.deleteDefaultFreight(id)==1)
         {
-            Log log =createLog(request, 0, 1,"删除默认运费规则" );
+            Log log =createLog(request, 0, 1,"删除默认运费规则",id );
             if(log!=null)
             {
                 writeLog(log);
@@ -435,7 +437,7 @@ public class FreightController {
         }
         else
         {
-            Log log =createLog(request, 0, 0,"删除默认运费规则" );
+            Log log =createLog(request, 0, 0,"删除默认运费规则",id );
             if(log!=null)
             {
                 writeLog(log);
@@ -462,7 +464,7 @@ public class FreightController {
     {
         if(freightService.deleteSpecialFreight(id)==1)
         {
-            Log log =createLog(request, 0, 1,"删除特殊运费规则" );
+            Log log =createLog(request, 0, 1,"删除特殊运费规则",id);
             if(log!=null)
             {
                 writeLog(log);
@@ -476,7 +478,7 @@ public class FreightController {
         }
         else
         {
-            Log log =createLog(request, 0, 0,"删除特殊运费规则" );
+            Log log =createLog(request, 0, 0,"删除特殊运费规则",id );
             if(log!=null)
             {
                 writeLog(log);
@@ -503,7 +505,7 @@ public class FreightController {
     {
         if(freightService.updateSpecialFreight(specialFreight)==1)
         {
-            Log log =createLog(request, 0, 1,"修改特殊运费规则" );
+            Log log =createLog(request, 0, 1,"修改特殊运费规则",id);
             if(log!=null)
             {
                 writeLog(log);
@@ -517,7 +519,7 @@ public class FreightController {
         }
         else
         {
-            Log log =createLog(request, 0, 0,"修改特殊运费规则" );
+            Log log =createLog(request, 0, 0,"修改特殊运费规则",id );
             if(log!=null)
             {
                 writeLog(log);
@@ -544,7 +546,7 @@ public class FreightController {
     {
         if(freightService.updateDefaultFreight(defaultFreightsPo)==1)
         {
-            Log log =createLog(request, 0, 1,"修改默认运费规则" );
+            Log log =createLog(request, 0, 1,"修改默认运费规则",id);
             if(log!=null)
             {
                 writeLog(log);
@@ -558,7 +560,7 @@ public class FreightController {
         }
         else
         {
-            Log log =createLog(request, 0, 0,"修改默认运费规则" );
+            Log log =createLog(request, 0, 0,"修改默认运费规则",id);
             if(log!=null)
             {
                 writeLog(log);

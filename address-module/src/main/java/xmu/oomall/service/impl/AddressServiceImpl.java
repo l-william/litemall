@@ -14,6 +14,7 @@ import java.util.List;
  * @date 2019/12/9 00:17
  * @version 1.0
  */
+@Service
 public class AddressServiceImpl implements AddressService {
     @Autowired
     AddressDao addressDao;

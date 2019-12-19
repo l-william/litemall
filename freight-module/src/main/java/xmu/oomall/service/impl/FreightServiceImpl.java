@@ -237,7 +237,14 @@ public class FreightServiceImpl implements FreightService {
                 {
                     double temp=0.0;
                     temp+=specialFreight.getFirstNumPiece()*specialFreight.getFirstNumPiecePrice().doubleValue()*defaultPieceFreight.getUnitRate().doubleValue();
-                    Integer n = (numsAll-specialFreight.getFirstNumPiece())/specialFreight.getContinueNumPiece()+1;
+                    Integer n;
+                    if((numsAll-specialFreight.getFirstNumPiece())%specialFreight.getContinueNumPiece()==0)
+                    {
+                        n = (numsAll-specialFreight.getFirstNumPiece())/specialFreight.getContinueNumPiece();
+                    }
+                    else {
+                        n = (numsAll-specialFreight.getFirstNumPiece())/specialFreight.getContinueNumPiece()+1;
+                    }
                     temp+=n*specialFreight.getContinueNumPiecePrice().doubleValue()*defaultPieceFreight.getUnitRate().doubleValue();
                     specialPrice.add(temp);
                 }
