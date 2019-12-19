@@ -710,15 +710,15 @@ public class GoodsController {
 
 
     @GetMapping("/test/goods/{id}")
-    public Object findGoodsByIdF(@PathVariable  Integer id){
+    public GoodsPo findGoodsByIdF(@PathVariable  Integer id){
         GoodsPo goodsPo=goodsService.adminFindGoodsById(id);
         if(goodsPo==null)
         {
-            return ResponseUtil.fail(775,"该商品不存在​");
+            return null;
         }
         else
         {
-            return ResponseUtil.ok(goodsPo);
+            return goodsPo;
         }
     }
 

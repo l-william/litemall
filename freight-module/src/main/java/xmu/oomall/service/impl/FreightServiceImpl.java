@@ -37,6 +37,8 @@ import java.util.Map;
 public class FreightServiceImpl implements FreightService {
     @Autowired
     private FreightDao freightDao;
+    @Autowired
+    private  GoodsController controller;
 
 
     /**
@@ -178,7 +180,7 @@ public class FreightServiceImpl implements FreightService {
             //调用商品服务中的findgoodsbyid查看其运费模板类别
             //暂时不知道怎么调用，先占位模拟逻辑过程
             GoodsPo goodsPo=new GoodsPo();
-            goodsPo= GoodsController.findGoodsByIdForFreight(goodsId);
+            goodsPo= controller.findGoodsByIdF(goodsId);
             if(goodsPo.getBeSpecial())
             {
                 SpecialFreightID.add(goodsPo.getSpecialFreightId());
