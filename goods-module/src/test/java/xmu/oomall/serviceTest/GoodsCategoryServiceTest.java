@@ -85,7 +85,7 @@ public class GoodsCategoryServiceTest {
         }
     }
     @Test
-    public void findL1GoodsCategoryList()
+    public void findFirstLevelGoodsCategoryList()
     {
         List<GoodsCategoryPo> goodsCategoryList=goodsCategoryService.findFirstLevelGoodsCategoryList();
         if(goodsCategoryList.size()!=0) {
@@ -97,7 +97,7 @@ public class GoodsCategoryServiceTest {
 
     }
     @Test
-    public void findL2GoodsCategoryList()
+    public void findSecondLevelGoodsCategoryList()
     {
         List<GoodsCategoryPo> goodsCategoryList=goodsCategoryService.findSecondLevelGoodsCategoryList();
         if(goodsCategoryList.size()!=0) {
@@ -108,7 +108,7 @@ public class GoodsCategoryServiceTest {
         }
     }
     @Test
-    public void findL2GoodsCategoryListById()
+    public void findSecondLevelGoodsCategoryListByPid()
     {
         List<GoodsCategoryPo> goodsCategoryList=goodsCategoryService.findSecondLevelGoodsCategoryListByPid(10001);
         if(goodsCategoryList.size()!=0) {
@@ -116,6 +116,21 @@ public class GoodsCategoryServiceTest {
         }
         else {
             System.out.println("not find");
+        }
+    }
+    @Test
+    void updateGoodsCategoryPid()
+    {
+        GoodsCategory goodsCategory=new GoodsCategory();
+        goodsCategory.setId(10002);
+        goodsCategory.setName("床上用品");
+        if(goodsCategoryService.updateGoodsCategoryPid(goodsCategory)!=null)
+        {
+            System.out.println("update success");
+        }
+        else
+        {
+            System.out.println("update failed");
         }
     }
 }

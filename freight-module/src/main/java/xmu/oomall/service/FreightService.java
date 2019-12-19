@@ -8,7 +8,6 @@ package xmu.oomall.service;
 import org.springframework.stereotype.Service;
 import xmu.oomall.domain.*;
 
-import java.awt.peer.ScrollbarPeer;
 import java.util.List;
 
 /**
@@ -110,6 +109,7 @@ public interface FreightService {
      * @param limit
      * @return 特殊运费模板列表
      */
+
     public List<SpecialFreight> findSpecialFreightList(Integer page,Integer limit);
 
     /**
