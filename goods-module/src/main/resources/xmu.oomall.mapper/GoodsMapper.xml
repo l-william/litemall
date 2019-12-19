@@ -69,7 +69,7 @@
             #{price})
     </insert>
 
-    <update id="updateGoods" parameterType="goods">
+    <update id="updateGoods" parameterType="Goods">
         update oomall_goods
         set gmt_create = #{gmtCreate},
             gmt_modified = #{gmtModified},
@@ -99,5 +99,28 @@
         set is_deleted = 1
         where id = #{id}
     </update>
+
+    <resultMap id="Goods" type="Goods">
+        <id column="id" property="id"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <result column="gmt_modified" property="gmtModified"/>
+        <result column="name" property="name"/>
+        <result column="goods_sn" property="goodsSn"/>
+        <result column="short_name" property="shortName"/>
+        <result column="description" property="description"/>
+        <result column="brief" property="brief"/>
+        <result column="pic_url" property="picUrl"/>
+        <result column="detail" property="detail"/>
+        <result column="status" property="status"/>
+        <result column="share_url" property="shareUrl"/>
+        <result column="gallery" property="gallery"/>
+        <result column="goods_category_id" property="goodsCategoryId"/>
+        <result column="brand_id" property="brandId"/>
+        <result column="weight" property="weight"/>
+        <result column="volume" property="volume"/>
+        <result column="special_freight_id" property="specialFreightId"/>
+        <result column="is_special" property="beSpecial"/>
+        <result column="price" property="price"/>
+    </resultMap>
 
 </mapper>
