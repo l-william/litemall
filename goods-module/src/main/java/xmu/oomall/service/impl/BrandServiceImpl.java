@@ -34,8 +34,8 @@ public class BrandServiceImpl implements BrandService {
      * @return 商标列表
      */
     @Override
-    public List<Brand> findBrandListByIdAndName(String id, String name, Integer page, Integer limit) {
-        List<Brand> brandList= brandDao.findBrandListByIdAndName(id,name);
+    public List<BrandPo> findBrandListByIdAndName(String id, String name, Integer page, Integer limit) {
+        List<BrandPo> brandList= brandDao.findBrandListByIdAndName(id,name);
         return divideByPage(brandList,page,limit);
     }
 
@@ -47,8 +47,8 @@ public class BrandServiceImpl implements BrandService {
      * @return 商标列表
      */
     @Override
-    public List<Brand> findBrandList(Integer page, Integer limit) {
-        List<Brand> brandList= brandDao.findBrandList();
+    public List<BrandPo> findBrandList(Integer page, Integer limit) {
+        List<BrandPo> brandList= brandDao.findBrandList();
         return divideByPage(brandList,page,limit);
     }
 
@@ -59,7 +59,7 @@ public class BrandServiceImpl implements BrandService {
      * @return 商标
      */
     @Override
-    public Brand findBrandById(Integer id) {
+    public BrandPo findBrandById(Integer id) {
         return brandDao.findBrandById(id);
     }
 

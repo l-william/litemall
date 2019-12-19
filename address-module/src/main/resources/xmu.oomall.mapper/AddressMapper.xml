@@ -70,7 +70,7 @@
         <result column="is_deleted" property="beDeleted"/>
     </resultMap>
 
-    <resultMap id="AddressResultPo" type="AddressPo">
+    <resultMap id="AddressPo" type="AddressPo">
         <id column="id" property="id"/>
         <result column="user_id" property="userId"/>
         <result column="city_id" property="cityId"/>
