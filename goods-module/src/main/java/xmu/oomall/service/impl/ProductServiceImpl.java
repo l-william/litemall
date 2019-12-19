@@ -73,4 +73,14 @@ public class ProductServiceImpl implements ProductService {
     public List<ProductPo> findProductListByGoodsId(Integer goodsId) {
         return productDao.findProductListByGoodsId(goodsId);
     }
+
+    @Override
+    public boolean increaseStock(Integer id, Integer number) {
+        return
+    }
+
+    @Override
+    public boolean decreaseStock(Integer id, Integer number) {
+        return false;
+    }
 }

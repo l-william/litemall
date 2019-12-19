@@ -49,6 +49,12 @@ public interface GoodsCategoryMapper {
     int deleteGoodsCategory(Integer id);
 
     /**
+     * @param pid
+     * @return 操作状态码
+     */
+    int deleteGoodsCategoryByPid(Integer pid);
+
+    /**
      * @return 所有的商品分类
      */
     List<GoodsCategoryPo> findGoodsCategoryList();

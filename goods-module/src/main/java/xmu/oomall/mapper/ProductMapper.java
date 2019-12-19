@@ -43,4 +43,22 @@ public interface ProductMapper {
      * @return
      */
     List<ProductPo> findProductListByGoodsId(Integer goodsId);
+
+    /**
+     * 增加库存
+     *
+     * @param id
+     * @param number
+     * @return
+     */
+    boolean increaseStock(Integer id,Integer number);
+
+    /**
+     * 减少库存
+     *
+     * @param id
+     * @param number
+     * @return
+     */
+    boolean decreaseStock(Integer id,Integer number);
 }

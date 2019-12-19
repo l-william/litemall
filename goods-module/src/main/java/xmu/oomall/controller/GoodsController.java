@@ -622,6 +622,54 @@ public class GoodsController {
         return ResponseUtil.ok(goodsPo);
     };
 
+    //----------------内部接口
+
+    @GetMapping("/goods/{id}/isOnSale")
+    @ApiOperation(value = "判断商品是否在售")
+    public boolean beOnSale(@PathVariable Integer goodsId){
+        GoodsPo goodsPo=goodsService.userFindGoodsById(goodsId);
+        if(goodsPo==null){
+            return false;
+        }
+        return true;
+    }
+
+    @PutMapping("/product/list/deduct")
+    @ApiOperation(value = "根据订单物品列表修改库存",notes = "operation：true代表加库存，false代表减库存")
+    public boolean operateStock(@RequestBody List<OrderItem> orderItemList,@RequestParam boolean operation){
+        for (OrderItem orderItem:orderItemList) {
+
+        }
+    }
+
+    @GetMapping("/user/product/{id}")
+    @ApiOperation(value = "根据产品ID返回封装的Product")
+    public Product getProductById(@PathVariable Integer id){
+        ProductPo productPo=productService.findProductById(id);
+        if(productPo==null){
+            return null;
+        }
+        Integer goodsId=productPo.getGoodsId();
+        GoodsPo goodsPo=goodsService.adminFindGoodsById(goodsId);
+        Product product=new Product();
+        product.setId(productPo.getId());
+        product.setGoodsId(productPo.getGoodsId());
+        product.setSpecifications(productPo.getSpecifications());
+        product.setSafetyStock(productPo.getSafetyStock());
+        product.setPicUrl(productPo.getPicUrl());
+        product.setPrice(productPo.getPrice());
+        product.setGoodsPo(goodsPo);
+        product.setGmtCreate(productPo.getGmtCreate());
+        product.setGmtModified(productPo.getGmtModified());
+        product.setBeDeleted(productPo.getBeDeleted());
+        return product;
+    }
+
+
+
+
+
+
     /**
      * 日志记录函数
      *
@@ -659,5 +707,6 @@ public class GoodsController {
         log.setStatusCode(status);
         return log;
     }
+
 
 }

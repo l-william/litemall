@@ -55,6 +55,12 @@
         where id = #{id} and is_deleted = 0
     </update>
 
+    <update id="deleteGoodsCategoryByPid" parameterType="Integer">
+        update oomall_goods_category
+        set is_deleted = 1
+        where pid = #{pid} and is_deleted = 0
+    </update>
+
     <resultMap id="GoodsCategoryPo" type="GoodsCategoryPo">
         <id column="id" property="id"/>
         <result column="name" property="name"/>
