@@ -71,7 +71,7 @@ public class AdDaoTest {
         }
     }
     @Test
-    void findAdListBynameAndContent()
+    void findAdListByNameAndContent()
     {
         String name = "凉被";
         String content = "看";
