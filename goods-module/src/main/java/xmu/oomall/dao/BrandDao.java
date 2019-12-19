@@ -28,7 +28,7 @@ public class BrandDao {
      *
      * @return 商标列表
      */
-    public List<Brand> findBrandList(){
+    public List<BrandPo> findBrandList(){
         return brandMapper.findBrandList();
     }
 
@@ -39,7 +39,7 @@ public class BrandDao {
      * @param name
      * @return 商标列表
      */
-    public List<Brand> findBrandListByIdAndName(String id,String name){
+    public List<BrandPo> findBrandListByIdAndName(String id,String name){
         return brandMapper.findBrandListByIdAndName(id,name);
     }
 
@@ -49,7 +49,7 @@ public class BrandDao {
      * @param id
      * @return 商标
      */
-    public Brand findBrandById(Integer id){
+    public BrandPo findBrandById(Integer id){
         return brandMapper.findBrandById(id);
     }
 

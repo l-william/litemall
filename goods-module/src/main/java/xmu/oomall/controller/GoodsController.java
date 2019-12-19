@@ -16,6 +16,7 @@ import xmu.oomall.domain.*;
 import xmu.oomall.service.BrandService;
 import xmu.oomall.service.GoodsCategoryService;
 import xmu.oomall.service.GoodsService;
+import xmu.oomall.service.ProductService;
 import xmu.oomall.util.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -33,6 +34,8 @@ public class GoodsController {
     @Autowired
     private BrandService brandService;
     @Autowired
+    private ProductService productService;
+    @Autowired
     private LoadBalancerClient loadBalancerClient;
 
     @GetMapping("/admins/brands")
@@ -43,8 +46,8 @@ public class GoodsController {
                                 @RequestParam(defaultValue = "1") Integer page,
                                 @RequestParam(defaultValue = "10") Integer limit)
     {
-        List<BrandPo> brandPoList= brandService.findBrandListByIdAndName(id,name,page,limit);
-        if(brandPoList.size()==0){
+        List<BrandPo> brandList= brandService.findBrandListByIdAndName(id,name,page,limit);
+        if(brandList.size()==0){
             Log log=createLog(request, 0, 0, "查询品牌列表");
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
@@ -54,7 +57,7 @@ public class GoodsController {
             Log log=createLog(request, 0, 1, "查询品牌列表");
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
-            return ResponseUtil.ok(brandPoList);
+            return ResponseUtil.ok(brandList);
         }
     };
 
@@ -79,8 +82,8 @@ public class GoodsController {
     @GetMapping("/brands/{id}")
     @ApiOperation(value="查看单个品牌信息/read")
     public Object findBrandById(HttpServletRequest request,@PathVariable Integer id){
-        Brand brand= brandService.findBrandById(id);
-        if(brand==null){
+        BrandPo brandPo= brandService.findBrandById(id);
+        if(brandPo==null){
             Log log = createLog(request, 0, 0, "查看单个品牌");
             if (log != null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
@@ -90,7 +93,7 @@ public class GoodsController {
             Log log = createLog(request, 0, 1, "查看单个品牌");
             if (log != null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
-            return ResponseUtil.ok(brand);
+            return ResponseUtil.ok(brandPo);
         }
     };
 
@@ -143,8 +146,8 @@ public class GoodsController {
                                         @RequestParam(defaultValue = "1") Integer page,
                                         @RequestParam(defaultValue = "10") Integer limit)
     {
-        List<GoodsCategoryPo> goodsCategoryPoList=goodsCategoryService.findGoodsCategoryList(page,limit);
-        if(goodsCategoryPoList.size()==0){
+        List<GoodsCategoryPo> goodsCategoryList=goodsCategoryService.findGoodsCategoryList(page,limit);
+        if(goodsCategoryList.size()==0){
             Log log=createLog(request, 0, 0, "查看所有商品分类");
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
@@ -154,7 +157,7 @@ public class GoodsController {
             Log log=createLog(request, 0, 1, "查看所有商品分类");
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
-            return ResponseUtil.ok(goodsCategoryPoList);
+            return ResponseUtil.ok(goodsCategoryList);
         }
     };
 
@@ -162,7 +165,7 @@ public class GoodsController {
     @ApiOperation(value="新建一个分类/create")
     public Object addGoodsCategory(HttpServletRequest request,@RequestBody GoodsCategoryPo goodsCategoryPo)
     {
-        GoodsCategoryPo retPo=goodsCategoryService.CreateGoodsCategory(goodsCategoryPo);
+        GoodsCategoryPo retPo=goodsCategoryService.addGoodsCategory(goodsCategoryPo);
         if(retPo==null)
         {
             Log log=createLog(request, 0, 0, "添加商品分类");
@@ -262,7 +265,8 @@ public class GoodsController {
             else { return ResponseUtil.unlogin(); }
             return ResponseUtil.fail(802,"分类修改失败");
         }
-        GoodsCategoryPo retPo=goodsCategoryService.updateGoodsCategoryPid(id,goodsCategoryPo);
+        goodsCategoryPo.setId(id);
+        GoodsCategoryPo retPo=goodsCategoryService.updateGoodsCategoryPid(goodsCategoryPo);
         if(retPo==null)
         {
             Log log=createLog(request, 0, 0, "更改子分类在父分类下的位置");
@@ -285,10 +289,10 @@ public class GoodsController {
      */
     @GetMapping("/categories/l1")
     @ApiOperation(value = "获取一级种类/getOneGoodsCategory", notes = "获取一级种类")
-    public Object listFirstLevelGoodsCategory(HttpServletRequest request)
+    public Object findFirstLevelGoodsCategoryList(HttpServletRequest request)
     {
-        List<GoodsCategoryPo> goodsCategoryPoList=goodsCategoryService.findOneLevelGoodsCategoryList();
-        if(goodsCategoryPoList.size()==0){
+        List<GoodsCategoryPo> goodsCategoryList=goodsCategoryService.findFirstLevelGoodsCategoryList();
+        if(goodsCategoryList.size()==0){
             Log log=createLog(request, 0, 0, "查看一级商品分类");
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
@@ -298,7 +302,7 @@ public class GoodsController {
             Log log=createLog(request, 0, 1, "查看一级商品分类");
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
-            return ResponseUtil.ok(goodsCategoryPoList);
+            return ResponseUtil.ok(goodsCategoryList);
         }
     };
 
@@ -319,8 +323,8 @@ public class GoodsController {
                                 @RequestParam(defaultValue = "1") Integer page,
                                 @RequestParam(defaultValue = "10") Integer limit)
     {
-        List<GoodsPo> goodsPoList=goodsService.adminFindGoodsList(goodsSn,name,page,limit);
-        if(goodsPoList.size()==0){
+        List<GoodsPo> goodsList=goodsService.adminFindGoodsList(goodsSn,name,page,limit);
+        if(goodsList.size()==0){
             Log log=createLog(request, 0, 0, "获取商品列表");
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
@@ -330,7 +334,7 @@ public class GoodsController {
             Log log=createLog(request, 0, 1, "获取商品列表");
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
-            return ResponseUtil.ok(goodsPoList);
+            return ResponseUtil.ok(goodsList);
         }
     };
 
@@ -375,7 +379,7 @@ public class GoodsController {
     @ApiOperation(value = "根据id删除商品信息/delete", notes = "根据id删除商品信息")
     public Object deleteGoods(HttpServletRequest request,@PathVariable Integer id)
     {
-        int ret=goodsService.deleteGoodsById(id);
+        int ret=goodsService.deleteGoods(id);
         if(ret==0)
         {
             Log log=createLog(request, 0, 0, "删除商品");
@@ -448,9 +452,23 @@ public class GoodsController {
 
     @GetMapping("/goods/{id}/products")
     @ApiOperation(value = "获取商品下的产品列表")
-    public Object findProductList(HttpServletRequest request, @PathVariable Integer id)
+    public Object findProductListByGoodsId(HttpServletRequest request, @PathVariable Integer id)
     {
-
+        List<ProductPo> productList=productService.findProductListByGoodsId(id);
+        if(productList.size()==0)
+        {
+            Log log=createLog(request, 0, 0, "查看商品下的产品列表");
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.fail(785,"获取产品列表失败");
+        }
+        else
+        {
+            Log log=createLog(request, 0, 1, "查看商品下的产品列表");
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.ok(productList);
+        }
     }
 
     @PostMapping("/goods/{id}/products")
@@ -459,23 +477,67 @@ public class GoodsController {
                              @PathVariable Integer id,
                              @RequestBody ProductPo productPo)
     {
-
+        productPo.setGoodsId(id);
+        ProductPo retPo=productService.addProduct(productPo);
+        if(retPo==null)
+        {
+            Log log=createLog(request, 0, 0, "添加产品");
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.fail(781,"产品新增失败");
+        }
+        else
+        {
+            Log log=createLog(request, 0, 1, "添加产品");
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.ok(retPo);
+        }
     }
 
     @PutMapping("/products/{id}")
     @ApiOperation(value = "修改产品信息")
     public Object updateProduct(HttpServletRequest request,
-                             @PathVariable Integer id,
-                             @RequestBody ProductPo productPo)
+                                @PathVariable Integer id,
+                                @RequestBody ProductPo productPo)
     {
-
+        productPo.setId(id);
+        ProductPo retPo=productService.updateProduct(productPo);
+        if(retPo==null)
+        {
+            Log log=createLog(request, 0, 0, "更新产品");
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.fail(782,"产品修改失败");
+        }
+        else
+        {
+            Log log=createLog(request, 0, 1, "更新产品");
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.ok(retPo);
+        }
     }
 
     @DeleteMapping("/products/{id}")
     @ApiOperation(value = "删除产品信息")
     public Object deleteProduct(HttpServletRequest request,@PathVariable Integer id)
     {
-
+        int ret=productService.deleteProduct(id);
+        if(ret==0)
+        {
+            Log log=createLog(request, 0, 0, "删除产品");
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.fail(783,"产品删除失败");
+        }
+        else
+        {
+            Log log=createLog(request, 0, 1, "删除产品");
+            if(log!=null) { writeLog(log); }
+            else { return ResponseUtil.unlogin(); }
+            return ResponseUtil.ok();
+        }
     }
 
     //--------------user
@@ -491,22 +553,22 @@ public class GoodsController {
     public Object findBrandList(@RequestParam(defaultValue = "1") Integer page,
                                 @RequestParam(defaultValue = "10") Integer limit)
     {
-        List<BrandPo> brandPoList= brandService.findBrandList(page,limit);
-        if(brandPoList.size()==0){
+        List<BrandPo> brandList= brandService.findBrandList(page,limit);
+        if(brandList.size()==0){
             return ResponseUtil.fail(795,"获取品牌列表失败");
         }
-        return ResponseUtil.ok(brandPoList);
+        return ResponseUtil.ok(brandList);
     };
 
     @GetMapping("/categories/l2")
     @ApiOperation(value = "获取二级种类/getsecondgoodsCategory", notes = "获取二级种类")
-    public Object listSecondLevelGoodsCategory()
+    public Object findSecondLevelGoodsCategoryList()
     {
-        List<GoodsCategoryPo> goodsCategoryPoList=goodsCategoryService.findSecondLevelGoodsCategoryList();
-        if(goodsCategoryPoList.size()==0) {
+        List<GoodsCategoryPo> goodsCategoryList=goodsCategoryService.findSecondLevelGoodsCategoryList();
+        if(goodsCategoryList.size()==0) {
             return ResponseUtil.fail(805,"获取分类列表失败");
         }
-        return ResponseUtil.ok(goodsCategoryPoList);
+        return ResponseUtil.ok(goodsCategoryList);
     };
 
     /**
@@ -517,13 +579,13 @@ public class GoodsController {
      */
     @GetMapping("categories/l1/{id}/l2")
     @ApiOperation(value = "获取当前一级分类下的二级分类 /current", notes = "获取分类栏目")
-    public Object listSecondLevelGoodsCategoryById(@PathVariable Integer id)
+    public Object findSecondLevelGoodsCategoryListByPid(@PathVariable Integer id)
     {
-        List<GoodsCategoryPo> goodsCategoryPoList=goodsCategoryService.findSecondLevelGoodsCategoryListById(id);
-        if(goodsCategoryPoList.size()==0) {
+        List<GoodsCategoryPo> goodsCategoryList=goodsCategoryService.findSecondLevelGoodsCategoryListByPid(id);
+        if(goodsCategoryList.size()==0) {
             return ResponseUtil.fail(805,"获取分类列表失败");
         }
-        return ResponseUtil.ok(goodsCategoryPoList);
+        return ResponseUtil.ok(goodsCategoryList);
 
     };
 
@@ -540,8 +602,8 @@ public class GoodsController {
                                 @RequestParam(defaultValue = "1") Integer page,
                                 @RequestParam(defaultValue = "10") Integer limit)
     {
-        List<GoodsPo> goodsPoList=goodsService.userFindGoodsList(name);
-        if(goodsPoList.size()==0)
+        List<GoodsPo> goodsList=goodsService.userFindGoodsList(name,page,limit);
+        if(goodsList.size()==0)
         {
             return ResponseUtil.fail(776,"获取商品列表失败");
         }

@@ -7,6 +7,7 @@ package xmu.oomall.service;
 
 import org.springframework.stereotype.Service;
 import xmu.oomall.domain.Goods;
+import xmu.oomall.domain.GoodsPo;
 
 import javax.validation.OverridesAttribute;
 import java.util.List;
@@ -14,63 +15,51 @@ import java.util.List;
 @Service
 public interface GoodsService {
     /**
-     * @param goodsn
+     * @param goodsSn
      * @param name
-     * @return 查找到的goods列表
+     * @param page
+     * @param limit
+     * @return 商品列表(包括下架的）
      */
-    public List<Goods> findGoodsList(String goodsn,String name);
+    List<GoodsPo> adminFindGoodsList(String goodsSn, String name,Integer page,Integer limit);
 
     /**
      * @param id
-     * @return 查找到的商品
+     * @return 商品信息(包括下架的）
      */
-    public Goods findGoodsById(Integer id);
+    GoodsPo adminFindGoodsById(Integer id);
 
     /**
-     * @param goods
+     * @param goodsPo
+     * @return 更新后的商品
+     */
+    GoodsPo updateGoods(GoodsPo goodsPo);
+
+    /**
+     * @param id
      * @return 返回操作结果
      */
-    public int updateGoods(Goods goods);
+    int deleteGoods(Integer id);
+
+    /**
+     * @param goodsPo
+     * @return 新增的商品
+     */
+    GoodsPo addGoods(GoodsPo goodsPo);
 
     /**
      * @param id
-     * @return 返回操作结果
+     * @return 商品信息(不包括下架的）
      */
-    public int deleteGoodsById(Integer id);
+    GoodsPo userFindGoodsById(Integer id);
 
     /**
-     * @param goods
-     * @return 操作结果
+     * @param name
+     * @param page
+     * @param limit
+     * @return 商品列表(不包括下架的）
      */
-    public int addGoods(Goods goods);
-
-    /**
-     * @param userId
-     * @param id
-     * @return 返回的是找到的商品
-     */
-    public Goods findGoodsById(Integer userId,Integer id);
-
-    /**
-     * @param goodsCategoryId
-     * @param brandId
-     * @param keyword
-     * @param isNew
-     * @param isHot
-     * @return 找到的商品列表
-     */
-    public List<Goods>findGoodsListBySearchInfo(Integer goodsCategoryId, Integer brandId, String keyword, Boolean isNew, Boolean isHot);
-
-    /**
-     * @param id
-     * @return 找到的推荐商品列表
-     */
-    public Goods findRecommendedGoods(Integer id);
-
-    /**
-     * @return 在售商品总数
-     */
-    public int findGoodsCounts();
+    List<GoodsPo> userFindGoodsList(String name,Integer page,Integer limit);
 
 }
 
