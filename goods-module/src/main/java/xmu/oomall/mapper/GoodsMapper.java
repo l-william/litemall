@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import xmu.oomall.domain.Goods;
 import xmu.oomall.domain.GoodsPo;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -35,9 +36,10 @@ public interface GoodsMapper {
 
     /**
      * @param id
+     * @param deleteTime
      * @return 操作结果码
      */
-    int deleteGoods(Integer id);
+    int deleteGoods(Integer id, LocalDateTime deleteTime);
 
     /**
      * @param goodsPo

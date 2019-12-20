@@ -30,9 +30,17 @@ public interface ProductMapper {
 
     /**
      * @param id
+     * @param deleteTime
      * @return status
      */
-    int deleteProduct(Integer id);
+    int deleteProduct(Integer id,LocalDateTime deleteTime);
+
+    /**
+     * @param goodsId
+     * @param deleteTime
+     * @return status
+     */
+    int deleteProductByGoodsId(Integer goodsId,LocalDateTime deleteTime);
 
     /**
      * @param productPo
@@ -44,6 +52,7 @@ public interface ProductMapper {
      * @return
      */
     List<ProductPo> findProductListByGoodsId(Integer goodsId);
+
 
     /**
      * @param id

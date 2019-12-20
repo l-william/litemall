@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import xmu.oomall.domain.GoodsCategory;
 import xmu.oomall.domain.GoodsCategoryPo;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -46,13 +47,13 @@ public interface GoodsCategoryMapper {
      * @param id
      * @return 操作状态码
      */
-    int deleteGoodsCategory(Integer id);
+    int deleteGoodsCategory(Integer id, LocalDateTime deleteTime);
 
     /**
      * @param pid
      * @return 操作状态码
      */
-    int deleteGoodsCategoryByPid(Integer pid);
+    int deleteGoodsCategoryByPid(Integer pid,LocalDateTime deleteTime);
 
     /**
      * @return 所有的商品分类

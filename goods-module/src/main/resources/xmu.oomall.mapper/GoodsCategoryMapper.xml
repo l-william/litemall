@@ -37,11 +37,13 @@
             <if test="name!=null">
                 name = #{name},
             </if>
-            <if test="pid!=null">
-                pid = #{pid},
-            </if>
+            <!--
+                <if test="pid!=null">
+                    pid = #{pid},
+                </if>
+            -->
             <if test="picUrl!=null">
-                pic_url = #{picUrl}
+                pic_url = #{picUrl},
             </if>
             <if test="gmtCreate!=null">
                 gmt_create = #{gmtCreate},
@@ -62,15 +64,17 @@
         where id = #{id} and is_deleted = 0
     </update>
 
-    <update id="deleteGoodsCategory" parameterType="Integer">
+    <update id="deleteGoodsCategory">
         update oomall_goods_category
-        set is_deleted = 1
+        set is_deleted = 1,
+            gmt_modified = #{deleteTime}
         where id = #{id} and is_deleted = 0
     </update>
 
-    <update id="deleteGoodsCategoryByPid" parameterType="Integer">
+    <update id="deleteGoodsCategoryByPid">
         update oomall_goods_category
-        set is_deleted = 1
+        set is_deleted = 1,
+            gmt_modified = #{deleteTime}
         where pid = #{pid} and is_deleted = 0
     </update>
 

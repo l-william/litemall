@@ -529,7 +529,7 @@ public class GoodsController {
     @GetMapping("/brands")
     @ApiOperation(value="查看所有品牌 /list")
     public Object userFindBrandList(@RequestParam(defaultValue = "1") Integer page,
-                                @RequestParam(defaultValue = "10") Integer limit)
+                                    @RequestParam(defaultValue = "10") Integer limit)
     {
         List<BrandPo> brandList= brandService.findBrandList(page,limit);
         if(brandList.size()==0){
@@ -627,9 +627,9 @@ public class GoodsController {
      */
     @GetMapping("/goods")
     @ApiOperation(value = "根据条件搜素商品/list", notes = "根据条件搜素商品")
-    public Object userFindGoodsL(@RequestParam String name,
-                                @RequestParam(defaultValue = "1") Integer page,
-                                @RequestParam(defaultValue = "10") Integer limit)
+    public Object userFindGoodsList(@RequestParam String name,
+                                    @RequestParam(defaultValue = "1") Integer page,
+                                    @RequestParam(defaultValue = "10") Integer limit)
     {
         List<GoodsPo> goodsList=goodsService.userFindGoodsList(name,page,limit);
         if(goodsList.size()==0)

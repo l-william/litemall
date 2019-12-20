@@ -60,18 +60,14 @@ public class GoodsCategoryDao {
      */
     public int deleteGoodsCategory(Integer id)
     {
-        GoodsCategoryPo goodsCategoryPo=goodsCategoryMapper.findGoodsCategoryById(id);
-        if(goodsCategoryPo!=null)
-        {
-            goodsCategoryPo.setGmtModified(LocalDateTime.now());
-            goodsCategoryMapper.updateGoodsCategory(goodsCategoryPo);
-        }
-        return goodsCategoryMapper.deleteGoodsCategory(id);
+        LocalDateTime deleteTime=LocalDateTime.now();
+        return goodsCategoryMapper.deleteGoodsCategory(id,deleteTime);
     }
 
     public int deleteGoodsCategoryByPid(Integer pid)
     {
-        return goodsCategoryMapper.deleteGoodsCategoryByPid(pid);
+        LocalDateTime deleteTime=LocalDateTime.now();
+        return goodsCategoryMapper.deleteGoodsCategoryByPid(pid,deleteTime);
     }
 
     /**
@@ -133,7 +129,7 @@ public class GoodsCategoryDao {
     }
 
     /**
-     * 查看商品二级目录列表
+     * 查看商品二级目录列表(不使用）
      *
      * @return 商品分类列表
      */
