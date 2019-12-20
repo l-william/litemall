@@ -756,17 +756,13 @@ public class GoodsController {
 
     @GetMapping("/test/goods/{id}")
     public GoodsPo findGoodsByIdF(@PathVariable  Integer id){
-        System.out.println("02020202");
-        System.out.println(id);
         GoodsPo goodsPo=goodsService.adminFindGoodsById(id);
-        System.out.println("03030303");
         if(goodsPo==null)
         {
             return null;
         }
         else
         {
-            System.out.println("03030303");
             return goodsPo;
         }
     }
