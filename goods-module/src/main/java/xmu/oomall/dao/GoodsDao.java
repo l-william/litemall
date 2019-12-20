@@ -117,13 +117,8 @@ public class GoodsDao {
      */
     public int deleteGoods(Integer id)
     {
-        GoodsPo goodsPo=goodsMapper.adminFindGoodsById(id);
-        if(goodsPo!=null)
-        {
-            goodsPo.setGmtModified(LocalDateTime.now());
-            goodsMapper.updateGoods(goodsPo);
-        }
-        return goodsMapper.deleteGoods(id);
+        LocalDateTime deleteTime=LocalDateTime.now();
+        return goodsMapper.deleteGoods(id,deleteTime);
     }
 
     public List<GoodsPo> findGoodsListByBrandId(Integer brandId)

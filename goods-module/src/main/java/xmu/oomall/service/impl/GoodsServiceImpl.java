@@ -9,6 +9,7 @@ package xmu.oomall.service.impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xmu.oomall.dao.GoodsDao;
+import xmu.oomall.dao.ProductDao;
 import xmu.oomall.domain.Goods;
 import xmu.oomall.domain.GoodsPo;
 import xmu.oomall.service.GoodsService;
@@ -19,6 +20,8 @@ import java.util.List;
 public class GoodsServiceImpl implements GoodsService {
     @Autowired
     private GoodsDao goodsDao;
+    @Autowired
+    private ProductDao productDao;
 
     /**
      * 管理员查看商品列表
@@ -106,7 +109,11 @@ public class GoodsServiceImpl implements GoodsService {
      */
     @Override
     public int deleteGoods(Integer id) {
-        return goodsDao.deleteGoods(id);
+        int ret = goodsDao.deleteGoods(id);
+        if(ret!=0){
+            productDao.deleteProductByGoodsId(id);
+        }
+        return ret;
     }
 
     /**

@@ -529,7 +529,7 @@ public class GoodsController {
     @GetMapping("/brands")
     @ApiOperation(value="查看所有品牌 /list")
     public Object userFindBrandList(@RequestParam(defaultValue = "1") Integer page,
-                                @RequestParam(defaultValue = "10") Integer limit)
+                                    @RequestParam(defaultValue = "10") Integer limit)
     {
         List<BrandPo> brandList= brandService.findBrandList(page,limit);
         if(brandList.size()==0){

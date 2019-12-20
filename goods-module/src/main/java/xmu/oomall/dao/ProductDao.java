@@ -54,13 +54,19 @@ public class ProductDao {
      * @return 操作成功与否
      */
     public int deleteProduct(Integer id){
-        ProductPo productPo=productMapper.findProductById(id);
-        if(productPo!=null)
-        {
-            productPo.setGmtModified(LocalDateTime.now());
-            productMapper.updateProduct(productPo);
-        }
-        return productMapper.deleteProduct(id);
+        LocalDateTime deleteTime=LocalDateTime.now();
+        return productMapper.deleteProduct(id,deleteTime);
+    }
+
+    /**
+     * 根据商品ID删除相关产品
+     *
+     * @param goodsId
+     * @return
+     */
+    public int deleteProductByGoodsId(Integer goodsId){
+        LocalDateTime deleteTime=LocalDateTime.now();
+        return productMapper.deleteProductByGoodsId(goodsId,deleteTime);
     }
 
     /**
@@ -92,6 +98,13 @@ public class ProductDao {
         return productMapper.findProductListByGoodsId(goodsId);
     }
 
+    /**
+     * 更新库存
+     *
+     * @param id
+     * @param number
+     * @return
+     */
     public int updateStock(Integer id,Integer number){
         LocalDateTime updateTime=LocalDateTime.now();
         return productMapper.updateStock(id,number,updateTime);

@@ -37,11 +37,13 @@
             <if test="name!=null">
                 name = #{name},
             </if>
-            <if test="pid!=null">
-                pid = #{pid},
-            </if>
+            <!--
+                <if test="pid!=null">
+                    pid = #{pid},
+                </if>
+            -->
             <if test="picUrl!=null">
-                pic_url = #{picUrl}
+                pic_url = #{picUrl},
             </if>
             <if test="gmtCreate!=null">
                 gmt_create = #{gmtCreate},

@@ -18,21 +18,46 @@
 
     <update id="updateProduct" parameterType="ProductPo">
         update oomall_product
-        set pic_url = #{picUrl},
-            specifications = #{specifications},
-            goods_id = #{goodsId},
-            price = #{price},
-            safety_stock = #{safetyStock},
-            gmt_create = #{gmtCreate},
-            gmt_modified = #{gmtModified},
-            is_deleted = #{beDeleted}
+        <trim prefix="set" suffixOverrides="," suffix=" where id = #{id} and is_deleted = 0">
+            <if test="picUrl!=null">
+                pic_url = #{picUrl},
+            </if>
+            <if test="specifications!=null">
+                specifications = #{specifications},
+            </if>
+            <if test="goodsId!=null">
+                goods_id = #{goodsId},
+            </if>
+            <if test="price!=null">
+                price = #{price},
+            </if>
+            <if test="safetyStock!=null">
+                safety_stock = #{safetyStock},
+            </if>
+            <if test="gmtCreate!=null">
+                gmt_create = #{gmtCreate},
+            </if>
+            <if test="gmtModified">
+                gmt_modified = #{gmtModified},
+            </if>
+            <if test="beDeleted!=null">
+                is_deleted = #{beDeleted},
+            </if>
+        </trim>
+    </update>
+
+    <update id="deleteProduct">
+        update oomall_product
+        set is_deleted = 1,
+            gmt_modified = #{deleteTime}
         where id = #{id} and is_deleted = 0
     </update>
 
-    <update id="deleteProduct" parameterType="Integer">
+    <update id="deleteProductByGoodsId">
         update oomall_product
-        set is_deleted = 1
-        where id = #{id} and is_deleted = 0
+        set is_deleted = 1,
+            gmt_modified = #{deleteTime}
+        where goods_id = #{goodsId} and is_deleted = 0
     </update>
 
     <update id="updateStock">
