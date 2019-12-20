@@ -66,6 +66,12 @@ public interface GoodsService {
      * @return
      */
     List<GoodsPo> findGoodsListByBrandId(Integer brandId);
+
+    /**
+     * @param categoryId
+     * @return
+     */
+    List<GoodsPo> findGoodsListByCategoryId(Integer categoryId);
 }
 
 

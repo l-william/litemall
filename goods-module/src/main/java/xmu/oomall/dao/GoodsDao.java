@@ -130,5 +130,10 @@ public class GoodsDao {
     {
         return goodsMapper.findGoodsListByBrandId(brandId);
     }
+
+    public List<GoodsPo> findGoodsListByCategoryId(Integer categoryId)
+    {
+        return goodsMapper.findGoodsListByCategoryId(categoryId);
+    }
 }
 

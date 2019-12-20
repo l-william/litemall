@@ -568,6 +568,16 @@ public class GoodsController {
         return ResponseUtil.ok(goodsList);
     }
 
+    @GetMapping("/categories/{id}/goods")
+    @ApiOperation(value = "获取分类下的商品列表")
+    public Object findGoodsListByCategoryId(@PathVariable Integer id){
+        List<GoodsPo> goodsList=goodsService.findGoodsListByCategoryId(id);
+        if(goodsList.size()==0){
+            return ResponseUtil.fail(776,"获取商品列表失败");
+        }
+        return ResponseUtil.ok(goodsList);
+    }
+
     @GetMapping("/categories/l2")
     @ApiOperation(value = "获取二级种类/getsecondgoodsCategory", notes = "获取二级种类")
     public Object findSecondLevelGoodsCategoryList()
