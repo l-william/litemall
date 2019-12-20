@@ -1,5 +1,7 @@
 package xmu.oomall.publictest.goods;
 
+
+
 /**
  * @author 24320172203264
  * @version 1.0
@@ -46,7 +48,7 @@ public class GetGoodsCategory {
         Integer errno = JacksonUtil.parseInteger(body, "errno");
         assertEquals(0, errno);
 
-        GoodsCategory goodsCategory = JacksonUtil.parseObject(body,"data",GoodsCategory.class);
+        GoodsCategory goodsCategory =JacksonUtil.parseObject(body,"data",GoodsCategory.class);
         assertEquals(1005007,goodsCategory.getId());
         assertEquals("锅具",goodsCategory.getName());
         assertEquals("http://yanxuan.nosdn.127.net/4aab4598017b5749e3b63309d25e9f6b.png",goodsCategory.getPicUrl());
