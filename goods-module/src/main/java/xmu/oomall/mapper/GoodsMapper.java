@@ -57,4 +57,9 @@ public interface GoodsMapper {
      */
     List<GoodsPo> userFindGoodsList(String name);
 
+    /**
+     * @param brandId
+     * @return 商品列表
+     */
+    List<GoodsPo> findGoodsListByBrandId(Integer brandId);
 }

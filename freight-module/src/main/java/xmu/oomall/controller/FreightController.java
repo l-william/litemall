@@ -570,14 +570,17 @@ public class FreightController {
     @ApiOperation(value = "获取运费", notes = "")
     public BigDecimal getFreight(@RequestBody Order order)
     {
-        System.out.println("6666");
-        double freight=freightService.getFreight(order);
-        System.out.println("7777");
-        if(freight==-1)
-        {
+        try {
+            double freight=freightService.getFreight(order);
+            if(freight==-1)
+            {
+                return null;
+            }
+            return BigDecimal.valueOf(freight);
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
         }
-        return BigDecimal.valueOf(freight);
     };
 
 }

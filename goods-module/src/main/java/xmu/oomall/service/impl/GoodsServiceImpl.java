@@ -50,6 +50,17 @@ public class GoodsServiceImpl implements GoodsService {
     }
 
     /**
+     * 查找品牌下的所有商品
+     *
+     * @param brandId
+     * @return 商品列表
+     */
+    @Override
+    public List<GoodsPo> findGoodsListByBrandId(Integer brandId) {
+        return goodsDao.findGoodsListByBrandId(brandId);
+    }
+
+    /**
      * 管理员通过id查找商品
      *
      * @param id

@@ -61,6 +61,11 @@ public interface GoodsService {
      */
     List<GoodsPo> userFindGoodsList(String name,Integer page,Integer limit);
 
+    /**
+     * @param brandId
+     * @return
+     */
+    List<GoodsPo> findGoodsListByBrandId(Integer brandId);
 }
 
 
