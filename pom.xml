@@ -11,6 +11,7 @@
         <module>server-module</module>
         <module>public-test</module>
         <module>domain-module</module>
+        <module>picture-module</module>
     </modules>
 
     <parent>
