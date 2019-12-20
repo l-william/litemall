@@ -42,8 +42,8 @@ public class GoodsController {
     @GetMapping("/admin/brands")
     @ApiOperation(value="根据条件搜索品牌/list")
     public Object adminFindBrandList(HttpServletRequest request,
-                                    @RequestParam Integer id,
-                                    @RequestParam String name,
+                                    @RequestParam("BrandId") Integer id,
+                                    @RequestParam("BrandName") String name,
                                     @RequestParam(defaultValue = "1") Integer page,
                                     @RequestParam(defaultValue = "10") Integer limit)
     {

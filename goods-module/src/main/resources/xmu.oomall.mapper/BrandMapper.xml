@@ -11,13 +11,13 @@
         where is_deleted = 0
     </select>
 
-    <select id="findBrandListByIdAndName" resultMap="BrandPo" parameterType="String">
+    <select id="findBrandListByIdAndName" resultMap="BrandPo">
         select * from oomall_brand
         <where>
-            <if test="id!=null">
+            <if test="id != null">
                 id = #{id} and
             </if>
-            <if test="name!=null">
+            <if test="name != null">
                 name = #{name} and
             </if>
             is_deleted = 0
