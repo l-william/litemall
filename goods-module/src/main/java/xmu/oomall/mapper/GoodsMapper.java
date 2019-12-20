@@ -62,4 +62,10 @@ public interface GoodsMapper {
      * @return 商品列表
      */
     List<GoodsPo> findGoodsListByBrandId(Integer brandId);
+
+    /**
+     * @param categoryId
+     * @return 商品列表
+     */
+    List<GoodsPo> findGoodsListByCategoryId(Integer categoryId);
 }

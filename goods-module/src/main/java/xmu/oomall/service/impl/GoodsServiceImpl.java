@@ -60,6 +60,11 @@ public class GoodsServiceImpl implements GoodsService {
         return goodsDao.findGoodsListByBrandId(brandId);
     }
 
+    @Override
+    public List<GoodsPo> findGoodsListByCategoryId(Integer categoryId) {
+        return goodsDao.findGoodsListByCategoryId(categoryId);
+    }
+
     /**
      * 管理员通过id查找商品
      *
