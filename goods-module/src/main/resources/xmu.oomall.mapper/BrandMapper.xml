@@ -29,13 +29,26 @@
 
     <update id="updateBrand" parameterType="BrandPo">
         update oomall_brand
-        set name = #{name},
-            description = #{description},
-            pic_url = #{picUrl},
-            gmt_create = #{gmtCreate},
-            gmt_modified = #{gmtModified},
-            is_deleted = #{beDeleted}
-        where id = #{id} and is_deleted = 0
+        <trim prefix="set" suffixOverrides="," suffix=" where id = #{id} and is_deleted = 0">
+            <if test="name!=null">
+                name = #{name},
+            </if>
+            <if test="description!=null">
+                description = #{description},
+            </if>
+            <if test="picUrl!=null">
+                pic_url = #{picUrl},
+            </if>
+            <if test="gmtCreate!=null">
+                gmt_create = #{gmtCreate},
+            </if>
+            <if test="gmtModified!=null">
+                gmt_modified = #{gmtModified},
+            </if>
+            <if test="beDeleted!=null">
+                is_deleted = #{beDeleted},
+            </if>
+        </trim>
     </update>
 
     <update id="deleteBrand">

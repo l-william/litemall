@@ -286,29 +286,6 @@ public class GoodsController {
 
 
     /**
-     * 可能被删除
-     */
-    @GetMapping("/categories/l1")
-    @ApiOperation(value = "获取一级种类/getOneGoodsCategory", notes = "获取一级种类")
-    public Object findFirstLevelGoodsCategoryList(HttpServletRequest request)
-    {
-        List<GoodsCategoryPo> goodsCategoryList=goodsCategoryService.findFirstLevelGoodsCategoryList();
-        if(goodsCategoryList.size()==0){
-            Log log=createLog(request, 0, 0, "查看一级商品分类",null);
-            if(log!=null) { writeLog(log); }
-            else { return ResponseUtil.unlogin(); }
-            return ResponseUtil.fail(805,"获取分类列表失败");
-        }
-        else {
-            Log log=createLog(request, 0, 1, "查看一级商品分类",null);
-            if(log!=null) { writeLog(log); }
-            else { return ResponseUtil.unlogin(); }
-            return ResponseUtil.ok(goodsCategoryList);
-        }
-    };
-
-
-    /**
      * 查询商品
      * @param goodsSn
      * @param name
@@ -603,6 +580,21 @@ public class GoodsController {
     };
 
     /**
+     * 内部接口？
+     */
+    @GetMapping("/categories/l1")
+    @ApiOperation(value = "获取一级种类/getOneGoodsCategory", notes = "获取一级种类")
+    public Object findFirstLevelGoodsCategoryList()
+    {
+        List<GoodsCategoryPo> goodsCategoryList=goodsCategoryService.findFirstLevelGoodsCategoryList();
+        if(goodsCategoryList.size()==0){
+            return ResponseUtil.fail(805,"获取分类列表失败");
+        }
+        return ResponseUtil.ok(goodsCategoryList);
+    };
+
+
+    /**
      * 当前分类栏目
      *
      * @param id 分类类目ID
@@ -629,7 +621,7 @@ public class GoodsController {
      */
     @GetMapping("/goods")
     @ApiOperation(value = "根据条件搜素商品/list", notes = "根据条件搜素商品")
-    public Object userFindGoods(@RequestParam String name,
+    public Object userFindGoodsL(@RequestParam String name,
                                 @RequestParam(defaultValue = "1") Integer page,
                                 @RequestParam(defaultValue = "10") Integer limit)
     {
