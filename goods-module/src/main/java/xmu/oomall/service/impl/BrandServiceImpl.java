@@ -6,7 +6,6 @@
 
 package xmu.oomall.service.impl;
 
-import org.omg.CORBA.INTERNAL;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xmu.oomall.dao.BrandDao;

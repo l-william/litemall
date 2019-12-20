@@ -41,11 +41,11 @@ public class GoodsController {
 
     @GetMapping("/admin/brands")
     @ApiOperation(value="根据条件搜索品牌/list")
-    public Object findBrandList(HttpServletRequest request,
-                                @RequestParam("BrandId") Integer id,
-                                @RequestParam("BrandName") String name,
-                                @RequestParam(defaultValue = "1") Integer page,
-                                @RequestParam(defaultValue = "10") Integer limit)
+    public Object adminFindBrandList(HttpServletRequest request,
+                                    @RequestParam("BrandId") Integer id,
+                                    @RequestParam("BrandName") String name,
+                                    @RequestParam(defaultValue = "1") Integer page,
+                                    @RequestParam(defaultValue = "10") Integer limit)
     {
         List<BrandPo> brandList= brandService.findBrandListByIdAndName(id,name,page,limit);
         if(brandList.size()==0){
@@ -551,7 +551,7 @@ public class GoodsController {
      */
     @GetMapping("/brands")
     @ApiOperation(value="查看所有品牌 /list")
-    public Object findBrandList(@RequestParam(defaultValue = "1") Integer page,
+    public Object userFindBrandList(@RequestParam(defaultValue = "1") Integer page,
                                 @RequestParam(defaultValue = "10") Integer limit)
     {
         List<BrandPo> brandList= brandService.findBrandList(page,limit);
