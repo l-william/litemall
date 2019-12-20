@@ -49,10 +49,7 @@ public class FreightServiceImpl implements FreightService {
     private GoodsPo findGoodsPoById(Integer id) {
         RestTemplate restTemplate = new RestTemplate();
         ServiceInstance instance = loadBalancerClient.choose("Goods");
-        System.out.println(instance.getHost());
-        System.out.println(instance.getPort());
         String reqURL = String.format("http://%s:%s", instance.getHost(), instance.getPort() + "/test/goods/" + id);
-        System.out.println(reqURL);
         return restTemplate.getForObject(reqURL, GoodsPo.class);
     }
 

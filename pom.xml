@@ -9,7 +9,8 @@
         <module>freight-module</module>
         <module>goods-module</module>
         <module>server-module</module>
-        <module>standard-test-module</module>
+        <module>public-test</module>
+        <module>domain-module</module>
     </modules>
 
     <parent>
