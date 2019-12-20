@@ -165,19 +165,14 @@ public class FreightServiceImpl implements FreightService {
         //此处本应调用order模块
         List <OrderItem> orderItemList=freightDao.findItemsInAOrder(order);
         List<Integer> SpecialFreightID = new ArrayList<>();
-        System.out.println("test1");
         //记录特殊模板的id
         List<Double> weight= new ArrayList<>();
-        System.out.println("test*********");
         //记录每个商品的重量
         List<Integer> nums= new ArrayList<>();
         //记录每个商品的件数
-        System.out.println("test*********");
         String address=order.getAddress();
-        System.out.println("test*********");
         System.out.println(AddressResolutionUtil.addressResolution(address).size());
         Map<String,String> addressInfo = AddressResolutionUtil.addressResolution(address).get(0);
-        System.out.println("test???????");
         String province=addressInfo.get("province");
         String city=addressInfo.get("city");
         String county=addressInfo.get("county");
@@ -186,17 +181,14 @@ public class FreightServiceImpl implements FreightService {
         {
             addresscode.add(freightDao.findIdFromRegion1(county,freightDao.findIdFromRegion(city)));
         }
-        System.out.println("99999");
         if(freightDao.findIdFromRegion1(city,freightDao.findIdFromRegion(province))!=null)
         {
-            System.out.println("99999");
             addresscode.add(freightDao.findIdFromRegion1(city,freightDao.findIdFromRegion(province)));
         }
         if(freightDao.findIdFromRegion(province)!=null)
         {
             addresscode.add(freightDao.findIdFromRegion(province).get(0));
         }
-        System.out.println("test!!!!!");
         //订单配送地址
         for(OrderItem orderItem:orderItemList)
         {
@@ -204,10 +196,8 @@ public class FreightServiceImpl implements FreightService {
             //调用商品服务中的findgoodsbyid查看其运费模板类别
             //暂时不知道怎么调用，先占位模拟逻辑过程
             GoodsPo goodsPo=new GoodsPo();
-            System.out.println("99999");
             goodsPo= findGoodsPoById(goodsId);
             System.out.println(goodsPo);
-            System.out.println("99999");
             if(goodsPo.getBeSpecial())
             {
                 SpecialFreightID.add(goodsPo.getSpecialFreightId());
@@ -220,7 +210,6 @@ public class FreightServiceImpl implements FreightService {
         if(order.getGoodsPrice().doubleValue()>=freeFreightPrice) {
             return 0;
         }
-        System.out.println("test2");
         //？？？？？？？？？？？？
         //要将所有的模板放到redis中方便频繁查询
         //？？？？？？？？？？？？
@@ -306,7 +295,6 @@ public class FreightServiceImpl implements FreightService {
         }
 
         //再计算特殊运费模板(多种特殊运费模板)：
-        System.out.println("test3");
         List<Double> specialPrice = new ArrayList<>();
         Integer numsAll=nums.stream().reduce(Integer::sum).orElse(0);
         for(Integer id:SpecialFreightID)
@@ -364,14 +352,14 @@ public class FreightServiceImpl implements FreightService {
                 }
             }
         }
-        System.out.println("test4");
-        double specialPriceMax=specialPrice.stream().max((a, b) -> {
-            if (a > b) {
-                return 1;
-            } else {
-                return -1;
+        double specialPriceMax=0.0;
+        for(double item:specialPrice)
+        {
+            if(item>specialPriceMax)
+            {
+                specialPriceMax=item;
             }
-        }).get();
+        }
         if(specialPriceMax>defaultPrice)
         {
             return specialPriceMax;

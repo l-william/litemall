@@ -324,6 +324,14 @@ public class GoodsController {
                                 @RequestParam(defaultValue = "1") Integer page,
                                 @RequestParam(defaultValue = "10") Integer limit)
     {
+        if(goodsSn=="")
+        {
+            goodsSn=null;
+        }
+        if(name=="")
+        {
+            name=null;
+        }
         List<GoodsPo> goodsList=goodsService.adminFindGoodsList(goodsSn,name,page,limit);
         if(goodsList.size()==0){
             Log log=createLog(request, 0, 0, "获取商品列表",null);
@@ -630,7 +638,7 @@ public class GoodsController {
         {
             return ResponseUtil.fail(776,"获取商品列表失败");
         }
-        return ResponseUtil.ok();
+        return ResponseUtil.ok(goodsList);
     };
 
     @GetMapping("/goods/{id}")
@@ -649,8 +657,8 @@ public class GoodsController {
 
     @GetMapping("/goods/{id}/isOnSale")
     @ApiOperation(value = "判断商品是否在售")
-    public boolean beOnSale(@PathVariable Integer goodsId){
-        GoodsPo goodsPo=goodsService.userFindGoodsById(goodsId);
+    public boolean beOnSale(@PathVariable Integer id){
+        GoodsPo goodsPo=goodsService.userFindGoodsById(id);
         if(goodsPo==null){
             return false;
         }
@@ -756,17 +764,13 @@ public class GoodsController {
 
     @GetMapping("/test/goods/{id}")
     public GoodsPo findGoodsByIdF(@PathVariable  Integer id){
-        System.out.println("02020202");
-        System.out.println(id);
         GoodsPo goodsPo=goodsService.adminFindGoodsById(id);
-        System.out.println("03030303");
         if(goodsPo==null)
         {
             return null;
         }
         else
         {
-            System.out.println("03030303");
             return goodsPo;
         }
     }

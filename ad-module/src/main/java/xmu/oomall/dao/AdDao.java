@@ -12,6 +12,7 @@ import xmu.oomall.domain.Ad;
 import xmu.oomall.mapper.AdMapper;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.List;
 
 /**
@@ -63,6 +64,7 @@ public class AdDao {
      */
     public int addAd(Ad ad)
     {
+        //ZoneId.of("UTC-8")
         ad.setGmtCreate(LocalDateTime.now());
         ad.setBeDeleted(false);
         ad.setGmtModified(LocalDateTime.now());
