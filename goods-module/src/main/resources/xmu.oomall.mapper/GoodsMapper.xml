@@ -8,7 +8,7 @@
 
     <select id="userFindGoodsById" resultMap="GoodsPo" parameterType="Integer">
         select * from oomall_goods
-        where id = #{id} and is_deleted = 0 and status = 1
+        where id = #{id} and is_deleted = 0 and status != 0
     </select>
 
     <select id="adminFindGoodsList" resultMap="GoodsPo" parameterType="String">
