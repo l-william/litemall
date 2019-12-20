@@ -1,14 +1,11 @@
 package xmu.oomall.publictest.goods;
 
-import package xmu.oomall.goods.util.JacksonUtil;
-
 /**
  * @author 24320172203264
  * @version 1.0
  * @date 2019/12/10 20:04
  */
 
-import cxmu.oomall.domain.GoodsCategory;
 import org.junit.runner.RunWith;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +15,9 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.*;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.http.ResponseEntity;
+import xmu.oomall.domain.GoodsCategory;
+import xmu.oomall.util.JacksonUtil;
+
 import java.net.URI;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -46,7 +46,7 @@ public class GetGoodsCategory {
         Integer errno = JacksonUtil.parseInteger(body, "errno");
         assertEquals(0, errno);
 
-        GoodsCategory goodsCategory =JacksonUtil.parseObject(body,"data",GoodsCategory.class);
+        GoodsCategory goodsCategory = JacksonUtil.parseObject(body,"data",GoodsCategory.class);
         assertEquals(1005007,goodsCategory.getId());
         assertEquals("锅具",goodsCategory.getName());
         assertEquals("http://yanxuan.nosdn.127.net/4aab4598017b5749e3b63309d25e9f6b.png",goodsCategory.getPicUrl());
