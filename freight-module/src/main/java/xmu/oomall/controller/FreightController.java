@@ -568,18 +568,18 @@ public class FreightController {
 
     @GetMapping("/freightPrice")
     @ApiOperation(value = "获取运费", notes = "")
-    public BigDecimal getFreight(@RequestBody Order order)
+    public Object getFreight(@RequestBody Order order)
     {
         try {
             double freight=freightService.getFreight(order);
             if(freight==-1)
             {
-                return null;
+                return ResponseUtil.badArgumentValue();
             }
-            return BigDecimal.valueOf(freight);
+            return ResponseUtil.ok(BigDecimal.valueOf(freight));
         } catch (Exception e) {
             e.printStackTrace();
-            return null;
+            return ResponseUtil.badArgumentValue();
         }
     };
 
