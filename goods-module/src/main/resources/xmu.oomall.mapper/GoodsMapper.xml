@@ -14,13 +14,13 @@
     <select id="adminFindGoodsList" resultMap="GoodsPo" parameterType="String">
         select * from oomall_goods
         <where>
-            <if test="goodsSn != null">
-            goods_sn = #{goodsSn} and
-            </if>
-            <if test="name != null">
-            name = #{name} and
-            </if>
             is_deleted = 0
+            <if test="goodsSn != null and goodsSn != ''">
+                and goods_sn = #{goodsSn}
+            </if>
+            <if test="name != null and name != ''">
+                and name = #{name}
+            </if>
         </where>
     </select>
 

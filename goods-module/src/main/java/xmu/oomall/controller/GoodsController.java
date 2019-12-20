@@ -301,14 +301,6 @@ public class GoodsController {
                                 @RequestParam(defaultValue = "1") Integer page,
                                 @RequestParam(defaultValue = "10") Integer limit)
     {
-        if(goodsSn=="")
-        {
-            goodsSn=null;
-        }
-        if(name=="")
-        {
-            name=null;
-        }
         List<GoodsPo> goodsList=goodsService.adminFindGoodsList(goodsSn,name,page,limit);
         if(goodsList.size()==0){
             Log log=createLog(request, 0, 0, "获取商品列表",null);
@@ -578,6 +570,10 @@ public class GoodsController {
         return ResponseUtil.ok(goodsList);
     }
 
+
+    /**
+     * 接口需求已删除
+     */
     @GetMapping("/categories/l2")
     @ApiOperation(value = "获取二级种类/getsecondgoodsCategory", notes = "获取二级种类")
     public Object findSecondLevelGoodsCategoryList()
@@ -659,17 +655,17 @@ public class GoodsController {
 
     @GetMapping("/goods/{id}/isOnSale")
     @ApiOperation(value = "判断商品是否在售")
-    public boolean beOnSale(@PathVariable Integer id){
+    public Object beOnSale(@PathVariable Integer id){
         GoodsPo goodsPo=goodsService.userFindGoodsById(id);
         if(goodsPo==null){
-            return false;
+            return ResponseUtil.ok(false);
         }
-        return true;
+        return ResponseUtil.ok(true);
     }
 
     @PutMapping("/product/list/deduct")
     @ApiOperation(value = "根据订单物品列表修改库存",notes = "operation：true代表加库存，false代表减库存")
-    public boolean operateStock(@RequestBody List<OrderItem> orderItemList,@RequestParam boolean operation){
+    public Object operateStock(@RequestBody List<OrderItem> orderItemList,@RequestParam boolean operation){
         List<Integer> productIdList=new ArrayList<Integer>();
         List<Integer> numberList=new ArrayList<Integer>();
         for(OrderItem orderItem:orderItemList){
@@ -678,7 +674,7 @@ public class GoodsController {
             ProductPo productPo=productService.findProductById(productId);
             boolean operable=productPo!=null&&productPo.getSafetyStock()+number>=0;
             if(!operable){
-                return false;
+                return ResponseUtil.ok(false);
             }
             productIdList.add(productId);
             numberList.add(number);
@@ -687,18 +683,18 @@ public class GoodsController {
         for(int i=0;i<size;i++){
             int ret=productService.updateStock(productIdList.get(i),numberList.get(i));
             if(ret==0){
-                return false;
+                return ResponseUtil.ok(false);
             }
         }
-        return true;
+        return ResponseUtil.ok(true);
     }
 
     @GetMapping("/user/product/{id}")
     @ApiOperation(value = "根据产品ID返回封装的Product")
-    public Product getProductById(@PathVariable Integer id){
+    public Object getProductById(@PathVariable Integer id){
         ProductPo productPo=productService.findProductById(id);
         if(productPo==null){
-            return null;
+            return ResponseUtil.fail(784,"该产品不存在");
         }
         Integer goodsId=productPo.getGoodsId();
         GoodsPo goodsPo=goodsService.adminFindGoodsById(goodsId);
@@ -713,7 +709,7 @@ public class GoodsController {
         product.setGmtCreate(productPo.getGmtCreate());
         product.setGmtModified(productPo.getGmtModified());
         product.setBeDeleted(productPo.getBeDeleted());
-        return product;
+        return ResponseUtil.ok(product);
     }
 
 
