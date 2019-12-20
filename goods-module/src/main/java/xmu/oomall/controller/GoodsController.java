@@ -301,14 +301,6 @@ public class GoodsController {
                                 @RequestParam(defaultValue = "1") Integer page,
                                 @RequestParam(defaultValue = "10") Integer limit)
     {
-        if(goodsSn=="")
-        {
-            goodsSn=null;
-        }
-        if(name=="")
-        {
-            name=null;
-        }
         List<GoodsPo> goodsList=goodsService.adminFindGoodsList(goodsSn,name,page,limit);
         if(goodsList.size()==0){
             Log log=createLog(request, 0, 0, "获取商品列表",null);
