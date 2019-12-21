@@ -50,6 +50,7 @@ public class AdsIdTest {
         HttpHeaders httpHeaders = adminAccount.createHeaderWithToken();
         HttpEntity httpEntity = new HttpEntity(httpHeaders);
 
+
         ResponseEntity<String> response = this.restTemplate.exchange(uri, HttpMethod.DELETE, httpEntity, String.class);
         assertEquals(response.getStatusCode(), HttpStatus.OK);
         String body = response.getBody();
