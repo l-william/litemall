@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
+import xmu.oomall.PublicTestApplication;
 import xmu.oomall.domain.AddressPo;
 import xmu.oomall.publictest.AdminAccount;
 import xmu.oomall.publictest.UserAccount;
@@ -17,9 +18,10 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest
+@SpringBootTest(classes = PublicTestApplication.class)
 public class AddressTest {
-    @Value("http://${oomall.host}:${oomall.port}/addressService/addresses")
+    //@Value("http://${oomall.host}:${oomall.port}/addressService/addresses")
+    @Value("http://localhost:5001/addresses")
     String url;
 
     @Autowired
