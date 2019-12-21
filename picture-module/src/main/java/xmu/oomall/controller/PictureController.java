@@ -29,13 +29,14 @@ public class PictureController {
         if (file == null) {
             return ResponseUtil.badArgument();
         }
-        String path = "E:/testPic/"
-                + IdUtil.genImageName()
+        String newfilename=IdUtil.genImageName();
+        String path = "/www/server/nginx/root/images/"
+                + newfilename
                 + file.getOriginalFilename();
         String ok = "Success";
         if (ok.equals(FileUploadUtil.upload(file, path))) {
-            String prefix = "http://localhost";
-            return ResponseUtil.ok(prefix + path);
+            String prefix = "http://139.196.212.100/images/";
+            return ResponseUtil.ok(prefix  + newfilename+ file.getOriginalFilename());
         }
         return ResponseUtil.fail();
     }
