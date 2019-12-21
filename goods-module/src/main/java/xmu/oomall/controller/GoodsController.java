@@ -743,12 +743,12 @@ public class GoodsController {
      */
     private Log createLog(HttpServletRequest request,Integer type,Integer status,String action,Integer actionId)
     {
-        String adminId= request.getHeader("id");
-        if (adminId==null){
-            return null;
-        }
+//        String adminId= request.getHeader("id");
+//        if (adminId==null){
+//            return null;
+//        }
         Log log=new Log();
-        log.setAdminId(Integer.valueOf(adminId));
+//        log.setAdminId(Integer.valueOf(adminId));
         log.setIp(request.getRemoteAddr());
         log.setType(type);
         log.setActions(action);
