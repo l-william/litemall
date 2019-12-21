@@ -6,6 +6,8 @@ spring:
 eureka:
   instance:
     hostname: localhost
+  server:
+    enable-self-preservation: false
   client:
     registerWithEureka: false
     fetchRegistry: false
