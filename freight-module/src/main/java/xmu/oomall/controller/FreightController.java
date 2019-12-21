@@ -241,7 +241,7 @@ public class FreightController {
         }
         else
         {
-            return ResponseUtil.unlogin();
+            //return ResponseUtil.unlogin();
         }
 
         List<DefaultFreightPo> defaultFreightPoList =freightService.findDefaultFreightsList(page,limit);
