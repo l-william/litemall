@@ -24,7 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 @SpringBootTest(classes = PublicTestApplication.class)
 public class BrandsIdTest {
 
-    @Value("http://${oomall.host}:${oomall.port}/goodsInfoService/brands/{id}")
+    //@Value("http://${oomall.host}:${oomall.port}/goodsInfoService/brands/{id}")
+    @Value("http://localhost:5001/brands/{id}")
     String url;
 
     @Autowired
