@@ -17,7 +17,6 @@
             <version>2.2.0.RELEASE</version>
             <scope>compile</scope>
         </dependency>
-
         <!--Eureka 客户端-->
         <dependency>
             <groupId>org.springframework.cloud</groupId>

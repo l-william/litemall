@@ -25,7 +25,8 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest(classes = PublicTestApplication.class)
 public class AdsIdTest {
 
-    @Value("http://${oomall.host}:${oomall.port}/adService/ads/{id}")
+    //@Value("http://${oomall.host}:${oomall.port}/adService/ads/{id}")
+    @Value("http://localhost:5000/ads/{id}")
     private String url;
 
     @Autowired
