@@ -1,14 +1,14 @@
 server:
-  port: 8080
+  port: 5000
 
 eureka:
   client:
     service-url:
-      defaultZone: http://localhost:8765/eureka/
+      defaultZone: http://139.196.212.100:8761/eureka/
 
 spring:
   application:
-    name: ad provider
+    name: adService
   profiles:
     active: dev
 
@@ -43,10 +43,6 @@ logging:
     xmu.oomall.mapper: error
     xmu.oomall.domain: debug
     xmu.oomall.util: debug
-  #使用logback日志，取代默认的common日志
-#  file:
-#    path: C:\Users\Ming Qiu\log
-#  config: classpath:logback-spring.xml
 
 oomall:
   #最大付款时间, 单位分钟
