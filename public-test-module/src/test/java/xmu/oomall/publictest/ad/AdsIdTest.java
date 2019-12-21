@@ -9,6 +9,7 @@ import org.springframework.web.client.RestTemplate;
 import xmu.oomall.PublicTestApplication;
 import xmu.oomall.domain.Ad;
 import xmu.oomall.publictest.AdminAccount;
+import xmu.oomall.publictest.NoAdminAccount;
 import xmu.oomall.util.JacksonUtil;
 
 import java.net.URI;
@@ -25,8 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest(classes = PublicTestApplication.class)
 public class AdsIdTest {
 
-    //@Value("http://${oomall.host}:${oomall.port}/adService/ads/{id}")
-    @Value("http://localhost:5000/ads/{id}")
+    @Value("http://${oomall.host}:${oomall.port}/adService/ads/{id}")
     private String url;
 
     @Autowired
@@ -34,6 +34,7 @@ public class AdsIdTest {
 
     @Autowired
     private AdminAccount adminAccount;
+
 
 
     /*********************************************************
@@ -49,7 +50,6 @@ public class AdsIdTest {
         URI uri = new URI(url.replace("{id}", "121"));
         HttpHeaders httpHeaders = adminAccount.createHeaderWithToken();
         HttpEntity httpEntity = new HttpEntity(httpHeaders);
-
 
         ResponseEntity<String> response = this.restTemplate.exchange(uri, HttpMethod.DELETE, httpEntity, String.class);
         assertEquals(response.getStatusCode(), HttpStatus.OK);
@@ -78,7 +78,7 @@ public class AdsIdTest {
         String body = response.getBody();
         Integer errNo = JacksonUtil.parseInteger(body, "errno");
         assertEquals(response.getStatusCode(), HttpStatus.OK);
-        assertEquals(errNo, 660); //用户无操作权限
+        assertEquals(660, errNo); //用户无操作权限
 
         //原来的对象还在
         response = this.restTemplate.exchange(uri, HttpMethod.GET, httpEntity, String.class);
@@ -131,7 +131,7 @@ public class AdsIdTest {
         assertEquals(response.getStatusCode(), HttpStatus.OK);
         String body = response.getBody();
         Integer errNo = JacksonUtil.parseInteger(body, "errno");
-        assertEquals(errNo, 0);
+        assertEquals(0, errNo);
         List<HashMap> adsList = JacksonUtil.parseObject(body,"data", List.class);
         assertEquals(40, adsList.size());
     }
