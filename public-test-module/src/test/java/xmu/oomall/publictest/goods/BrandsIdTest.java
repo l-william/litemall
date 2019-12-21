@@ -19,6 +19,7 @@ import java.time.LocalDateTime;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 @SpringBootTest(classes = PublicTestApplication.class)
 public class BrandsIdTest {
@@ -72,7 +73,7 @@ public class BrandsIdTest {
     @Test
     public void tc_BrandsId_002() throws Exception
     {
-        URI uri = new URI(url.replace("{id}","0"));
+        URI uri = new URI(url.replace("{id}","10000"));
 
         HttpHeaders headers = adminAccount.createHeaderWithToken();
         HttpEntity httpEntity = new HttpEntity(headers);
@@ -125,7 +126,7 @@ public class BrandsIdTest {
     {
         URI uri = new URI(url.replace("{id}","72"));
 
-        HttpHeaders headers = adminAccount.createHeaderWithToken();
+        HttpHeaders headers = noAdminAccount.createHeaderWithToken();
         HttpEntity httpEntity = new HttpEntity(headers);
 
         ResponseEntity<String> responseEntity = restTemplate.exchange(uri, HttpMethod.DELETE, httpEntity, String.class);
@@ -156,7 +157,7 @@ public class BrandsIdTest {
     @Test
     public void tc_BrandsId_005() throws Exception
     {
-        URI uri = new URI(url.replace("{id}","72"));
+        URI uri = new URI(url.replace("{id}","84"));
 
         HttpHeaders headers = adminAccount.createHeaderWithToken();
         HttpEntity httpEntity = new HttpEntity(headers);
@@ -237,9 +238,9 @@ public class BrandsIdTest {
         Brand responseBrand = JacksonUtil.parseObject(response.getBody(), "data", Brand.class);
 
         // 比较值是否相等
-        assertEquals(brand.getId(), responseBrand.getId());
+        assertEquals(108, responseBrand.getId());
         assertEquals(brand.getName(), responseBrand.getName());
-        assertEquals(brand.getGmtModified(), responseBrand.getGmtModified());
+        assertNotEquals(brand.getGmtModified(), responseBrand.getGmtModified());
     }
 
 }
