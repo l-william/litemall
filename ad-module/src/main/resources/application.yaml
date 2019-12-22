@@ -17,7 +17,6 @@ spring:
       enabled: true
       force-response: true
 
-
 management:
   endpoint:
     health:
