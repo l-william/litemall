@@ -1,11 +1,16 @@
 spring:
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://47.52.88.176:3306/DB1_8?useUnicode=true&useJDBCCompliantTimezoneShift=true&serverTimezone=GMT%2B8&characterEncoding=utf8
+#    #url: jdbc:mysql://139.196.212.100:3306/oomall?useUnicode=true&useJDBCCompliantTimezoneShift=true&serverTimezone=GMT%2B8&characterEncoding=utf8
+#    #url: jdbc:mysql://localhost:3306/oomall?useUnicode=true&useJDBCCompliantTimezoneShift=true&serverTimezone=GMT%2B8&characterEncoding=utf8
+#    username: user1_8
+#    password: ooad8
   datasource:
+    username: user1_6
+    password: ooad6
+    url: jdbc:mysql://47.52.88.176:3306/DB1_6?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://47.52.88.176:3306/DB1_8?useUnicode=true&useJDBCCompliantTimezoneShift=true&serverTimezone=GMT%2B8&characterEncoding=utf8
-    #url: jdbc:mysql://139.196.212.100:3306/oomall?useUnicode=true&useJDBCCompliantTimezoneShift=true&serverTimezone=GMT%2B8&characterEncoding=utf8
-    #url: jdbc:mysql://localhost:3306/oomall?useUnicode=true&useJDBCCompliantTimezoneShift=true&serverTimezone=GMT%2B8&characterEncoding=utf8
-    username: user1_8
-    password: ooad8
 
 
 

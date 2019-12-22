@@ -125,6 +125,7 @@ public class AdsIdTest {
     @Test
     public void tc_adsId_004() throws URISyntaxException {
         URI uri = new URI(url.replace("/{id}",""));
+        System.out.println(uri);
 
         HttpHeaders headers = adminAccount.createHeaders();
         HttpEntity httpEntity = new HttpEntity(headers);
