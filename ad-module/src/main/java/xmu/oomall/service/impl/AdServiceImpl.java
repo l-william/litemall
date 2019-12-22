@@ -60,7 +60,13 @@ public class AdServiceImpl implements AdService {
         Iterator<Ad> iterator1 =adList1.iterator();
         while (iterator.hasNext()) {
             Ad ad = iterator.next();
-            boolean visible=!ad.getBeDefault()&&!ad.getBeDeleted()&&ad.getBeEnabled()&&ad.getStartTime().isBefore(now)&&ad.getEndTime().isAfter(now);
+            boolean visible=!ad.getBeDefault()&&!ad.getBeDeleted()&&ad.getBeEnabled();
+            if(ad.getStartTime()!=null){
+                visible = visible && ad.getStartTime().isBefore(now);
+            }
+            if(ad.getEndTime()!=null) {
+                visible = visible && ad.getEndTime().isAfter(now);
+            }
             if (!visible) {
                 iterator.remove();
             }
