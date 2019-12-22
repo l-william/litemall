@@ -24,7 +24,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(classes = PublicTestApplication.class)
 public class GoodsTest {
-    @Value("http://${oomall.host}:${oomall.port}/goodsInfoService/goods")
+    //@Value("http://${oomall.host}:${oomall.port}/goodsInfoService/goods")
+    @Value("http://localhost:5003/goods")
     String url;
 
     @Autowired
