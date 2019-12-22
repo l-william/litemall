@@ -47,7 +47,7 @@ public class AddressController {
                                      @RequestParam(defaultValue = "1") Integer page,
                                      @RequestParam(defaultValue = "10") Integer limit) {
         Integer userId= request.getIntHeader("userId");
-        if(userId==0){
+        if(userId==null||userId==0){
             return ResponseUtil.unlogin();
         }
         List<Address> addressList=addressService.findAddressListByUserId(userId,page,limit);

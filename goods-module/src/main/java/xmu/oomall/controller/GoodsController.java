@@ -674,7 +674,7 @@ public class GoodsController {
             ProductPo productPo=productService.findProductById(productId);
             boolean operable=productPo!=null&&productPo.getSafetyStock()+number>=0;
             if(!operable){
-                return ResponseUtil.ok(false);
+                return ResponseUtil.fail(786,"修改库存失败");
             }
             productIdList.add(productId);
             numberList.add(number);
@@ -683,7 +683,7 @@ public class GoodsController {
         for(int i=0;i<size;i++){
             int ret=productService.updateStock(productIdList.get(i),numberList.get(i));
             if(ret==0){
-                return ResponseUtil.ok(false);
+                return ResponseUtil.fail(786,"修改库存失败");
             }
         }
         return ResponseUtil.ok(true);
