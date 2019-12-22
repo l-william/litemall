@@ -125,10 +125,6 @@ public class GoodsController {
     @DeleteMapping("/brands/{id}")
     @ApiOperation(value = "删除一个品牌/delete")
     public Object deleteBrand(HttpServletRequest request,@PathVariable Integer id){
-        String token=request.getHeader("authorization");
-        if(token==null) {
-            return ResponseUtil.fail(660,"用户无操作权限");
-        }
         int ret= brandService.deleteBrand(id);
         if(ret==0){
             Log log=createLog(request, 0, 0, "删除品牌",id);
@@ -388,11 +384,6 @@ public class GoodsController {
     @ApiOperation(value = "新建/上架一个商品/create", notes = "新建/上架一个商品")
     public Object addGoods(HttpServletRequest request,@RequestBody GoodsPo goodsPo)
     {
-        String token=request.getHeader("authorization");
-        if(token==null)
-        {
-            return ResponseUtil.fail(660,"用户无操作权限");
-        }
         GoodsPo retPo=goodsService.addGoods(goodsPo);
         if(retPo==null)
         {
