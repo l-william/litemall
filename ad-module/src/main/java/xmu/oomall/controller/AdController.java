@@ -163,6 +163,11 @@ public class AdController {
     @ApiOperation(value="新建一条广告 /create")
     public Object adminCreateAd(HttpServletRequest request,@RequestBody Ad ad) {
         Object re=validate(ad);
+        String token=request.getHeader("authorization");
+        if(token==null)
+        {
+            return ResponseUtil.fail(660,"用户无操作权限");
+        }
         if(re!=null)
         {
             Log log=createLog(request, 0, 0, "新建广告",null);
@@ -287,6 +292,11 @@ public class AdController {
     @ApiOperation(value="删除一条广告 /delete")
     public Object adminDeleteAd(HttpServletRequest request,@PathVariable Integer id)
     {
+        String token=request.getHeader("authorization");
+        if(token==null)
+        {
+            return ResponseUtil.fail(660,"用户无操作权限");
+        }
         int ret=adService.deleteAd(id);
         if(ret==0){
             Log log=createLog(request, 0, 0, "删除广告",id);
