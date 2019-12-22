@@ -14,15 +14,13 @@
 
     <select id="findAddressListByUserIdAndConsignee" resultMap="Address">
         select * from oomall_address
-        <where>
+        where is_deleted = 0
             <if test="userId !=null">
-                `user_id`=#{userId} and
+                and `user_id`=#{userId}
             </if>
             <if test="consignee !=null">
-                `consignee` like CONCAT('%',#{consignee},'%') and
+                and `consignee` like CONCAT('%',#{consignee},'%')
             </if>
-            is_deleted=0
-        </where>
     </select>
 
     <insert id="addAddress" parameterType="AddressPo" useGeneratedKeys="true" keyProperty="id">
@@ -32,26 +30,51 @@
 
     <update id="updateAddress" parameterType="AddressPo">
         update oomall_address
-        set user_id = #{userId},
-        city_id = #{cityId},
-        province_id = #{provinceId},
-        county_id =#{countyId},
-        address_detail = #{addressDetail},
-        postal_code = #{postalCode},
-        consignee = #{consignee},
-        mobile = #{mobile},
-        is_default = #{beDefault},
-        gmt_create = #{gmtCreate},
-        gmt_modified = #{gmtModified},
-        is_deleted = #{beDeleted}
-        where id = #{id}
+        <trim prefix="set" suffixOverrides="," suffix=" where id = #{id} and is_deleted = 0">
+            <if test="userId!=null">
+                user_id = #{userId},
+            </if>
+            <if test="cityId!=null">
+                city_id = #{cityId},
+            </if>
+            <if test="provinceId!=null">
+                province_id = #{provinceId},
+            </if>
+            <if test="countyId!=null">
+                county_id =#{countyId},
+            </if>
+            <if test="addressDetail!=null">
+                address_detail = #{addressDetail},
+            </if>
+            <if test="postalCode!=null">
+                postal_code = #{postalCode},
+            </if>
+            <if test="consignee!=null">
+                consignee = #{consignee},
+            </if>
+            <if test="mobile!=null">
+                mobile = #{mobile},
+            </if>
+            <if test="beDefault!=null">
+                is_default = #{beDefault},
+            </if>
+            <if test="gmtCreate!=null">
+                gmt_create = #{gmtCreate},
+            </if>
+            <if test="gmtModified!=null">
+                gmt_modified = #{gmtModified},
+            </if>
+            <if test="beDeleted!=null">
+                is_deleted = #{beDeleted},
+            </if>
+        </trim>
     </update>
 
     <update id="deleteAddress">
         update oomall_address
         set is_deleted = 1,
         gmt_modified = #{deleteTime}
-        where id = #{id}
+        where id = #{id} and is_deleted = 0
     </update>
 
     <resultMap id="Address" type="Address">

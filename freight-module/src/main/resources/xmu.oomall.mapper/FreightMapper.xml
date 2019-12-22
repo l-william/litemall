@@ -23,7 +23,7 @@
 
     <select id="findSpecialFreightById" parameterType="Integer" resultMap="SpecialFreight">
             select * from oomall_special_freight
-            where id=#{id} and is_deleted=0
+            where id = #{id} and is_deleted = 0
     </select>
 
     <insert id="addDefaultFreight" parameterType="DefaultFreightPo" useGeneratedKeys="true" keyProperty="id">
@@ -34,24 +34,47 @@
 
     <update id="updateDefaultFreight" parameterType="DefaultFreightPo">
         update oomall_default_freight
-        set destination = #{destination},
-            first_heavy_price = #{firstHeavyPrice},
-            continue_heavy_price = #{continueHeavyPrice},
-            over10_price = #{over10Price},
-            over50_price = #{over50Price},
-            over100_price = #{over100Price},
-            over300_price = #{over300Price},
-            require_days = #{requireDays},
-            gmt_create = #{gmtCreate},
-            gmt_modified = #{gmtModified},
-            is_deleted=#{beDeleted}
-        where id = #{id}
+        <trim prefix="set" suffixOverrides="," suffix=" where id = #{id} and is_deleted = 0">
+            <if test="destination!=null">
+                destination = #{destination},
+            </if>
+            <if test="firstHeavyPrice!=null">
+                first_heavy_price = #{firstHeavyPrice},
+            </if>
+            <if test="continueHeavyPrice!=null">
+                continue_heavy_price = #{continueHeavyPrice},
+            </if>
+            <if test="over10Price!=null">
+                over10_price = #{over10Price},
+            </if>
+            <if test="over50Price!=null">
+                over50_price = #{over50Price},
+            </if>
+            <if test="over100Price!=null">
+                over100_price = #{over100Price},
+            </if>
+            <if test="over300Price!=null">
+                over300_price = #{over300Price},
+            </if>
+            <if test="requireDays!=null">
+                require_days = #{requireDays},
+            </if>
+            <if test="gmtCreate!=null">
+                gmt_create = #{gmtCreate},
+            </if>
+            <if test="gmtModified!=null">
+                gmt_modified = #{gmtModified},
+            </if>
+            <if test="beDeleted!=null">
+                is_deleted = #{beDeleted},
+            </if>
+        </trim>
     </update>
 
     <update id="deleteDefaultFreightById" parameterType="Integer">
         update oomall_default_freight
         set is_deleted = 1
-        where id = #{id}
+        where id = #{id} and is_deleted = 0
     </update>
 
     <select id="findDefaultPieceFreightById" resultMap="DefaultPieceFreight" parameterType="Integer">
@@ -90,37 +113,65 @@
 
     <update id="updateDefaultPieceFreight" parameterType="DefaultPieceFreightPo">
         update oomall_default_piece_freight
-        set destination = #{destination},
-            unit_rate = #{unitRate},
-            gmt_modified = #{gmtCreate},
-            gmt_create = #{gmtModified},
-            is_deleted=#{beDeleted},
-            require_days = #{requireDays}
-        where id = #{id}
+        <trim prefix="set" suffixOverrides="," suffix=" where id = #{id} and is_deleted = 0">
+            <if test="destination!=null">
+                destination = #{destination},
+            </if>
+            <if test="unitRate!=null">
+                unit_rate = #{unitRate},
+            </if>
+            <if test="requireDays!=null">
+                require_days = #{requireDays},
+            </if>
+            <if test="gmtCreate!=null">
+                gmt_create = #{gmtCreate},
+            </if>
+            <if test="gmtModified!=null">
+                gmt_modified = #{gmtModified},
+            </if>
+            <if test="beDeleted!=null">
+                is_deleted = #{beDeleted},
+            </if>
+        </trim>
     </update>
 
     <update id="updateSpecialFreight" parameterType="SpecialFreight">
         update oomall_special_freight
-        set first_num_piece=#{firstNumPiece},
-            first_num_piece_price=#{firstNumPiecePrice},
-            continue_num_piece=#{continueNumPiece},
-            continue_num_piece_price=#{continueNumPiecePrice},
-            gmt_modified = #{gmtCreate},
-            gmt_create = #{gmtModified},
-            is_deleted=#{beDeleted}
-        where id = #{id}
+        <trim prefix="set" suffixOverrides="," suffix=" where id = #{id} and is_deleted = 0">
+            <if test="firstNumPiece!=null">
+                first_num_piece=#{firstNumPiece},
+            </if>
+            <if test="firstNumPiecePrice!=null">
+                first_num_piece_price=#{firstNumPiecePrice},
+            </if>
+            <if test="continueNumPiece!=null">
+                continue_num_piece=#{continueNumPiece},
+            </if>
+            <if test="continueNumPiecePrice!=null">
+                continue_num_piece_price=#{continueNumPiecePrice},
+            </if>
+            <if test="gmtCreate!=null">
+                gmt_create = #{gmtCreate},
+            </if>
+            <if test="gmtModified!=null">
+                gmt_modified = #{gmtModified},
+            </if>
+            <if test="beDeleted!=null">
+                is_deleted = #{beDeleted},
+            </if>
+        </trim>
     </update>
 
     <update id="deleteDefaultPieceFreightById" parameterType="Integer">
         update oomall_default_piece_freight
         set is_deleted = 1
-        where id = #{id}
+        where id = #{id} and is_deleted = 0
     </update>
 
     <update id="deleteSpecialFreight" parameterType="Integer">
         update oomall_special_freight
         set is_deleted = 1
-        where id = #{id}
+        where id = #{id}  and is_deleted = 0
     </update>
 
 <!--    <select id="findOrderItemListByOrderId" parameterType="Integer" resultMap="OrderItem">-->
