@@ -18,9 +18,7 @@ import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import sun.awt.image.SurfaceManager;
-import xmu.oomall.controller.GoodsController;
 import xmu.oomall.dao.FreightDao;
-import xmu.oomall.dao.GoodsDao;
 import xmu.oomall.domain.*;
 import xmu.oomall.service.FreightService;
 import xmu.oomall.util.AddressResolutionUtil;
@@ -41,8 +39,6 @@ import java.util.Map;
 public class FreightServiceImpl implements FreightService {
     @Autowired
     private FreightDao freightDao;
-    @Autowired
-    private  GoodsController controller;
     @Autowired
     private LoadBalancerClient loadBalancerClient;
 

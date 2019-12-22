@@ -12,8 +12,8 @@ oomall:
   port: 6000
   user: 1940203832
   password: 123456
-  adminuser: nan
-  adminpassword: nan123
+  adminuser: root1
+  adminpassword: 10086
   norightuser: oomall
   norightpassword: oomall
 
