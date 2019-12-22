@@ -8,8 +8,8 @@ spring:
     password: ooad8
 
 oomall:
-  host: 47.97.26.168
-  port: 8899
+  host: 139.196.212.100
+  port: 6000
   user: 1940203832
   password: 123456
   adminuser: nan

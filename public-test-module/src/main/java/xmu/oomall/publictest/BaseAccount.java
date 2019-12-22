@@ -32,6 +32,7 @@ public abstract class BaseAccount {
         loginVo.setPassword(this.getPassword());
 
         URI uri = new URI(this.getUrl());
+        System.out.println(uri);
         HttpEntity httpEntity = new HttpEntity(loginVo, httpHeaders);
         ResponseEntity<String> response = this.getRestTemplate().postForEntity(uri, httpEntity, String.class);
         String body = response.getBody();
