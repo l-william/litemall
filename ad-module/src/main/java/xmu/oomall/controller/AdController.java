@@ -124,7 +124,7 @@ public class AdController {
         }
         else
         {
-            return ResponseUtil.unlogin();
+            //return ResponseUtil.unlogin();
         }
         List<Ad> adList = adService.adminFindAdList(page,limit,name, content);
         return ResponseUtil.ok(adList);
@@ -171,7 +171,7 @@ public class AdController {
             }
             else
             {
-                return ResponseUtil.unlogin();
+                //return ResponseUtil.unlogin();
             }
             return re;
         }
@@ -183,7 +183,7 @@ public class AdController {
             }
             else
             {
-                return ResponseUtil.unlogin();
+                //return ResponseUtil.unlogin();
             }
             int res=adService.createAd(ad);
             if(res==1) {
@@ -216,7 +216,7 @@ public class AdController {
             }
             else
             {
-                return ResponseUtil.unlogin();
+                //return ResponseUtil.unlogin();
             }
             Object object = ResponseUtil.ok(ad);
             return object;
@@ -229,7 +229,7 @@ public class AdController {
             }
             else
             {
-                return ResponseUtil.unlogin();
+                //return ResponseUtil.unlogin();
             }
             Object object = ResponseUtil.fail(680, "获取广告失败");
             return object;
@@ -256,7 +256,7 @@ public class AdController {
             }
             else
             {
-                return ResponseUtil.unlogin();
+                //return ResponseUtil.unlogin();
             }
             Object object = ResponseUtil.ok(ad);
             return object;
@@ -269,7 +269,7 @@ public class AdController {
             }
             else
             {
-                return ResponseUtil.unlogin();
+                //return ResponseUtil.unlogin();
             }
             Object object=ResponseUtil.fail(682, "修改广告失败");
             return object;
@@ -295,7 +295,7 @@ public class AdController {
             }
             else
             {
-                return ResponseUtil.unlogin();
+                //return ResponseUtil.unlogin();
             }
             return ResponseUtil.fail(683, "删除广告失败");
         }
@@ -305,7 +305,7 @@ public class AdController {
         }
         else
         {
-            return ResponseUtil.unlogin();
+            //return ResponseUtil.unlogin();
         }
         return ResponseUtil.ok();
     };

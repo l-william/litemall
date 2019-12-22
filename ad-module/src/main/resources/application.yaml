@@ -11,6 +11,12 @@ spring:
     name: adService
   profiles:
     active: dev
+  http:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force-response: true
+
 
 management:
   endpoint:
