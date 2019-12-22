@@ -24,7 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 @SpringBootTest(classes = PublicTestApplication.class)
 public class CategoryIdTest {
 
-    @Value("http://${oomall.host}:${oomall.port}/goodsInfoService/categories/{id}")
+    //@Value("http://${oomall.host}:${oomall.port}/goodsInfoService/categories/{id}")
+    @Value("http://localhost:5003/categories/{id}")
     String url;
 
     @Autowired
