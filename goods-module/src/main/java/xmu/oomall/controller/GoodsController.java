@@ -384,6 +384,11 @@ public class GoodsController {
     @ApiOperation(value = "新建/上架一个商品/create", notes = "新建/上架一个商品")
     public Object addGoods(HttpServletRequest request,@RequestBody GoodsPo goodsPo)
     {
+        String token=request.getHeader("authorization");
+        if(token==null)
+        {
+            return ResponseUtil.fail(660,"用户无操作权限");
+        }
         GoodsPo retPo=goodsService.addGoods(goodsPo);
         if(retPo==null)
         {
