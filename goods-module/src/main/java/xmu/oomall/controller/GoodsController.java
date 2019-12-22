@@ -130,7 +130,7 @@ public class GoodsController {
             Log log=createLog(request, 0, 0, "删除品牌",id);
             if(log!=null) { writeLog(log); }
             else { return ResponseUtil.unlogin(); }
-            return ResponseUtil.fail(793,"品牌删除失败");
+            return ResponseUtil.fail(794,"该品牌不存在");
         }
         else {
             Log log=createLog(request, 0, 1, "删除品牌",id);
