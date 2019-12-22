@@ -121,6 +121,7 @@ public class GoodsTest {
 
         /* 取得响应体 */
         String body = response.getBody();
+        System.out.println(body);
         Integer errno = JacksonUtil.parseInteger(body, "errno");
         assertEquals(675, errno); //管理员无权限
     }
@@ -145,7 +146,7 @@ public class GoodsTest {
         good.setBrandId(119);
         good.setWeight(new BigDecimal(100.05));
         good.setVolume("500ml");
-        good.setSpecialFreightId(0);
+        good.setSpecialFreightId(1001000);
         good.setBeSpecial(false);
         good.setBeDeleted(false);
 
