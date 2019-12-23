@@ -656,62 +656,80 @@ public class GoodsController {
 
     @GetMapping("/goods/{id}/isOnSale")
     @ApiOperation(value = "判断商品是否在售")
-    public Object beOnSale(@PathVariable Integer id){
+    public Boolean beOnSale(@PathVariable Integer id){
         GoodsPo goodsPo=goodsService.userFindGoodsById(id);
         if(goodsPo==null){
-            return ResponseUtil.ok(false);
+            return false;
         }
-        return ResponseUtil.ok(true);
+        return true;
     }
 
-    @PutMapping("/product/list/deduct")
-    @ApiOperation(value = "根据订单物品列表修改库存",notes = "operation：true代表加库存，false代表减库存")
-    public Object operateStock(@RequestBody List<OrderItem> orderItemList,@RequestParam boolean operation){
-        List<Integer> productIdList=new ArrayList<Integer>();
-        List<Integer> numberList=new ArrayList<Integer>();
-        for(OrderItem orderItem:orderItemList){
-            Integer productId=orderItem.getProductId();
-            Integer number=(operation?1:-1)*orderItem.getNumber();
-            ProductPo productPo=productService.findProductById(productId);
-            boolean operable=productPo!=null&&productPo.getSafetyStock()+number>=0;
-            if(!operable){
-                return ResponseUtil.fail(786,"修改库存失败");
-            }
-            productIdList.add(productId);
-            numberList.add(number);
-        }
-        Integer size=orderItemList.size();
-        for(int i=0;i<size;i++){
-            int ret=productService.updateStock(productIdList.get(i),numberList.get(i));
-            if(ret==0){
-                return ResponseUtil.fail(786,"修改库存失败");
-            }
-        }
-        return ResponseUtil.ok(true);
+    @PutMapping("/product/{productId}/deduct")
+    @ApiOperation(value = "修改库存")
+    public Boolean operateStock(@PathVariable Integer productId, @RequestParam Integer quantity){
+       ProductPo productPo=productService.findProductById(productId);
+       if(productPo==null){
+           return false;
+       }
+       if(productPo.getSafetyStock()<quantity){
+           return false;
+       }
+       int ret=productService.updateStock(productId,quantity);
+       if(ret==0) {
+           return false;
+       }
+       return  true;
     }
 
-//    @GetMapping("/products/{id}")
-//    @ApiOperation(value = "根据产品ID返回封装的Product")
-//    public Object getProductById2(@PathVariable Integer id){
-//        ProductPo productPo=productService.findProductById(id);
-//        if(productPo==null){
-//            return ResponseUtil.fail(784,"该产品不存在");
+
+//    @PutMapping("/product/list/deduct")
+//    @ApiOperation(value = "根据订单物品列表修改库存",notes = "operation：true代表加库存，false代表减库存")
+//    public Object operateStock(@RequestBody List<OrderItem> orderItemList,@RequestParam boolean operation){
+//        List<Integer> productIdList=new ArrayList<Integer>();
+//        List<Integer> numberList=new ArrayList<Integer>();
+//        for(OrderItem orderItem:orderItemList){
+//            Integer productId=orderItem.getProductId();
+//            Integer number=(operation?1:-1)*orderItem.getNumber();
+//            ProductPo productPo=productService.findProductById(productId);
+//            boolean operable=productPo!=null&&productPo.getSafetyStock()+number>=0;
+//            if(!operable){
+//                return ResponseUtil.fail(786,"修改库存失败");
+//            }
+//            productIdList.add(productId);
+//            numberList.add(number);
 //        }
-//        Integer goodsId=productPo.getGoodsId();
-//        GoodsPo goodsPo=goodsService.adminFindGoodsById(goodsId);
-//        Product product=new Product();
-//        product.setId(productPo.getId());
-//        product.setGoodsId(productPo.getGoodsId());
-//        product.setSpecifications(productPo.getSpecifications());
-//        product.setSafetyStock(productPo.getSafetyStock());
-//        product.setPicUrl(productPo.getPicUrl());
-//        product.setPrice(productPo.getPrice());
-//        product.setGoodsPo(goodsPo);
-//        product.setGmtCreate(productPo.getGmtCreate());
-//        product.setGmtModified(productPo.getGmtModified());
-//        product.setBeDeleted(productPo.getBeDeleted());
-//        return ResponseUtil.ok(product);
+//        Integer size=orderItemList.size();
+//        for(int i=0;i<size;i++){
+//            int ret=productService.updateStock(productIdList.get(i),numberList.get(i));
+//            if(ret==0){
+//                return ResponseUtil.fail(786,"修改库存失败");
+//            }
+//        }
+//        return ResponseUtil.ok(true);
 //    }
+
+    @GetMapping("/products/{id}")
+    @ApiOperation(value = "根据产品ID返回封装的Product")
+    public String getProductById2(@PathVariable Integer id){
+        ProductPo productPo=productService.findProductById(id);
+        if(productPo==null){
+            return null;
+        }
+        Integer goodsId=productPo.getGoodsId();
+        GoodsPo goodsPo=goodsService.adminFindGoodsById(goodsId);
+        Product product=new Product();
+        product.setId(productPo.getId());
+        product.setGoodsId(productPo.getGoodsId());
+        product.setSpecifications(productPo.getSpecifications());
+        product.setSafetyStock(productPo.getSafetyStock());
+        product.setPicUrl(productPo.getPicUrl());
+        product.setPrice(productPo.getPrice());
+        product.setGoodsPo(goodsPo);
+        product.setGmtCreate(productPo.getGmtCreate());
+        product.setGmtModified(productPo.getGmtModified());
+        product.setBeDeleted(productPo.getBeDeleted());
+        return JacksonUtil.toJson(product);
+    }
 
 //    @PutMapping("/products/{id}")
 //    @ApiOperation(value = "更新Product")

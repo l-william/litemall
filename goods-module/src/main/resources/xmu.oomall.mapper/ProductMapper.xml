@@ -62,7 +62,7 @@
 
     <update id="updateStock">
         update oomall_product
-        set safety_stock = safety_stock + #{number},
+        set safety_stock = safety_stock - #{number},
             gmt_modified = #{updateTime}
         where id = #{id} and is_deleted = 0
     </update>
