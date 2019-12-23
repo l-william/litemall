@@ -1,5 +1,5 @@
 server:
-  port: 5002
+  port: 5010
 
 eureka:
   client:
@@ -8,7 +8,7 @@ eureka:
 
 spring:
   application:
-    name: freightService
+    name: addressService
   profiles:
     active: dev
   http:
@@ -34,7 +34,6 @@ mybatis:
   configuration:
     #自动将SQL中查出来的带下划线的字段，转换为驼峰标志，再去匹配类中的属性
     map-underscore-to-camel-case: true
-    #log-xmu.oomall.service.impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
 logging:
   #设置日志打印级别
