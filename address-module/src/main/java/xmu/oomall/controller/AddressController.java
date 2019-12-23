@@ -166,9 +166,9 @@ public class AddressController {
      * @return 是否合法
      */
     private boolean validate(AddressPo addressPo){
-        boolean notValidate=addressPo.getCityId()==0
-                ||addressPo.getCountyId()==0
-                ||addressPo.getProvinceId()==0
+        boolean notValidate=addressPo.getCityId()==null
+                ||addressPo.getCountyId()==null
+                ||addressPo.getProvinceId()==null
                 ||StringUtils.isEmpty(addressPo.getAddressDetail())
                 ||StringUtils.isEmpty(addressPo.getPostalCode())
                 ||StringUtils.isEmpty(addressPo.getConsignee())
