@@ -17,6 +17,7 @@ import xmu.oomall.service.BrandService;
 import xmu.oomall.service.GoodsCategoryService;
 import xmu.oomall.service.GoodsService;
 import xmu.oomall.service.ProductService;
+import xmu.oomall.util.JacksonUtil;
 import xmu.oomall.util.ResponseUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -473,29 +474,29 @@ public class GoodsController {
         }
     }
 
-    @PutMapping("/products/{id}")
-    @ApiOperation(value = "修改产品信息")
-    public Object updateProduct(HttpServletRequest request,
-                                @PathVariable Integer id,
-                                @RequestBody ProductPo productPo)
-    {
-        productPo.setId(id);
-        ProductPo retPo=productService.updateProduct(productPo);
-        if(retPo==null)
-        {
-            Log log=createLog(request, 0, 0, "更新产品",id);
-            if(log!=null) { writeLog(log); }
-            else { return ResponseUtil.unlogin(); }
-            return ResponseUtil.fail(782,"产品修改失败");
-        }
-        else
-        {
-            Log log=createLog(request, 0, 1, "更新产品",id);
-            if(log!=null) { writeLog(log); }
-            else { return ResponseUtil.unlogin(); }
-            return ResponseUtil.ok(retPo);
-        }
-    }
+//    @PutMapping("/products/{id}")
+//    @ApiOperation(value = "修改产品信息")
+//    public Object updateProduct(HttpServletRequest request,
+//                                @PathVariable Integer id,
+//                                @RequestBody ProductPo productPo)
+//    {
+//        productPo.setId(id);
+//        ProductPo retPo=productService.updateProduct(productPo);
+//        if(retPo==null)
+//        {
+//            Log log=createLog(request, 0, 0, "更新产品",id);
+//            if(log!=null) { writeLog(log); }
+//            else { return ResponseUtil.unlogin(); }
+//            return ResponseUtil.fail(782,"产品修改失败");
+//        }
+//        else
+//        {
+//            Log log=createLog(request, 0, 1, "更新产品",id);
+//            if(log!=null) { writeLog(log); }
+//            else { return ResponseUtil.unlogin(); }
+//            return ResponseUtil.ok(retPo);
+//        }
+//    }
 
     @DeleteMapping("/products/{id}")
     @ApiOperation(value = "删除产品信息")
@@ -688,6 +689,46 @@ public class GoodsController {
         }
         return ResponseUtil.ok(true);
     }
+
+    @GetMapping("/products/{id}")
+    @ApiOperation(value = "根据产品ID返回封装的Product")
+    public Object getProductById2(@PathVariable Integer id){
+        ProductPo productPo=productService.findProductById(id);
+        if(productPo==null){
+            return ResponseUtil.fail(784,"该产品不存在");
+        }
+        Integer goodsId=productPo.getGoodsId();
+        GoodsPo goodsPo=goodsService.adminFindGoodsById(goodsId);
+        Product product=new Product();
+        product.setId(productPo.getId());
+        product.setGoodsId(productPo.getGoodsId());
+        product.setSpecifications(productPo.getSpecifications());
+        product.setSafetyStock(productPo.getSafetyStock());
+        product.setPicUrl(productPo.getPicUrl());
+        product.setPrice(productPo.getPrice());
+        product.setGoodsPo(goodsPo);
+        product.setGmtCreate(productPo.getGmtCreate());
+        product.setGmtModified(productPo.getGmtModified());
+        product.setBeDeleted(productPo.getBeDeleted());
+        return ResponseUtil.ok(product);
+    }
+
+    @PutMapping("/products/{id}")
+    @ApiOperation(value = "更新Product")
+    public Object updateProductById2(@PathVariable Integer id,@RequestBody Product product){
+        ProductPo productPo=productService.findProductById(id);
+        if(productPo==null){
+            return ResponseUtil.fail(784,"该产品不存在");
+        }
+        product.setId(id);
+        ProductPo retPo=productService.updateProduct(product);
+        if(retPo==null) {
+            return ResponseUtil.fail(782, "产品修改失败");
+        }
+            return ResponseUtil.ok(retPo);
+    }
+
+    //!!!!
 
     @GetMapping("/user/product/{id}")
     @ApiOperation(value = "根据产品ID返回封装的Product")
