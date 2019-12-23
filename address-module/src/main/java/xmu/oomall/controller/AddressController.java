@@ -172,7 +172,8 @@ public class AddressController {
                 ||StringUtils.isEmpty(addressPo.getAddressDetail())
                 ||StringUtils.isEmpty(addressPo.getPostalCode())
                 ||StringUtils.isEmpty(addressPo.getConsignee())
-                ||StringUtils.isEmpty(addressPo.getMobile());
+                ||StringUtils.isEmpty(addressPo.getMobile())
+                ||addressPo.getMobile().length()!=11;
         return !notValidate;
     }
 
