@@ -39,6 +39,9 @@ public class LogController {
     @PostMapping("/log")
     public Object addLog(@RequestBody Log log){
         Log retLog=logService.addLog(log);
+        if(log==null){
+            return ResponseUtil.fail(907,"写入日志失败");
+        }
         return ResponseUtil.ok(retLog);
     }
 

@@ -25,7 +25,10 @@ public class LogDao {
     public Log addLog(Log log){
         log.setGmtCreate(LocalDateTime.now());
         log.setGmtModified(LocalDateTime.now());
-        logMapper.addLog(log);
+        int ret=logMapper.addLog(log);
+        if(ret==0){
+            return null;
+        }
         return log;
     }
 }

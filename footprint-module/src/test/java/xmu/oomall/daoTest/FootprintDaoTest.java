@@ -37,6 +37,8 @@ public class FootprintDaoTest {
     void addFootprint()
     {
         FootprintItemPo footprintItemPo=new FootprintItemPo();
+        footprintItemPo.setUserId(123);
+        footprintItemPo.setGoodsId(25);
         footprintItemDao.addFootprint(footprintItemPo);
     }
 }

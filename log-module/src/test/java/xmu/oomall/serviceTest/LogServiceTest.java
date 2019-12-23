@@ -27,7 +27,7 @@ public class LogServiceTest {
     void addLog()
     {
         Log log=new Log();
+        log.setAdminId(122);
         logService.addLog(log);
-
     }
 }
