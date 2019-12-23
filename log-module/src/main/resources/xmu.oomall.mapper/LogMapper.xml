@@ -10,7 +10,7 @@
 
 
     <insert id="addLog" parameterType="Log" useGeneratedKeys="true" keyProperty="id">
-        insert into oomall_log(admin_id, ip, type, actions, status_code, action_id, gmt_create, gmt_modified)
+        insert into oomall_log(admin_id, ip, type, actions, status, action_id, gmt_create, gmt_modified)
         values (#{adminId}, #{ip}, #{type}, #{actions}, #{statusCode}, #{actionId}, #{gmtCreate}, #{gmtModified})
     </insert>
 
@@ -20,7 +20,7 @@
         <result column="ip" property="ip"/>
         <result column="type" property="type"/>
         <result column="actions" property="actions"/>
-        <result column="status_code" property="statusCode"/>
+        <result column="status" property="statusCode"/>
         <result column="action_id" property="actionId"/>
         <result column="gmt_create" property="gmtCreate"/>
         <result column="gmt_modified" property="gmtModified"/>
