@@ -33,7 +33,7 @@ public class FootprintItemController {
                                    @RequestParam(defaultValue = "1") Integer page,
                                    @RequestParam(defaultValue = "10") Integer limit) {
         Integer userId= request.getIntHeader("userId");
-        if(userId==null||userId==0){
+        if(userId==null){
             return ResponseUtil.unlogin();
         }
         List<FootprintItem> footprintList=footprintItemService.userFindFootprintList(userId,page,limit);
