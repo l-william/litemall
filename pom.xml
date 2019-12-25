@@ -12,6 +12,8 @@
         <module>domain-module</module>
         <module>picture-module</module>
         <module>public-test-module</module>
+        <module>footprint-module</module>
+        <module>log-module</module>
     </modules>
 
     <parent>
