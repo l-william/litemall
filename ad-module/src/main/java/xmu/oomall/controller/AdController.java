@@ -56,12 +56,12 @@ public class AdController {
      * @param log
      */
     private void writeLog(Log log) {
-//        RestTemplate restTemplate = new RestTemplate();
-//        ServiceInstance instance = loadBalancerClient.choose("Log");
-//        System.out.println(instance.getHost());
-//        System.out.println(instance.getPort());
-//        String reqURL = String.format("http://%s:%s", instance.getHost(), instance.getPort() + "/logs");
-//        restTemplate.postForObject(reqURL,log,Log.class);
+        RestTemplate restTemplate = new RestTemplate();
+        ServiceInstance instance = loadBalancerClient.choose("Log");
+        System.out.println(instance.getHost());
+        System.out.println(instance.getPort());
+        String reqURL = String.format("http://%s:%s", instance.getHost(), instance.getPort() + "/logs");
+        restTemplate.postForObject(reqURL,log,Log.class);
     }
 
     /**
@@ -93,12 +93,12 @@ public class AdController {
     /**
      * 管理员查看所有的广告
      *
-     * @param request
-     * @param page
-     * @param limit
-     * @param name
-     * @param content
-     * @return Object
+     * @param request 网页请求
+     * @param page 分页页号
+     * @param limit 分页大小
+     * @param name 广告名称
+     * @param content 广告内容
+     * @return 广告列表
      */
     @GetMapping("/admin/ads")
     @ApiOperation(value="管理员查看所有的广告  /list")
@@ -156,8 +156,8 @@ public class AdController {
     /**
      * 管理员新建一条广告
      *
-     * @param ad
-     * @return Object
+     * @param ad 待添加的广告信息
+     * @return 新增的广告
      */
     @PostMapping("/ads")
     @ApiOperation(value="新建一条广告 /create")
@@ -204,8 +204,8 @@ public class AdController {
     /**
      * 管理员查看单条广告
      *
-     * @param id
-     * @return Object
+     * @param id 广告ID
+     * @return 广告信息
      */
     @GetMapping("/ads/{id}")
     @ApiOperation(value="查看单条广告 /read")
@@ -244,9 +244,9 @@ public class AdController {
     /**
      * 管理员修改广告
      *
-     * @param id
-     * @param ad
-     * @return Object
+     * @param id 广告ID
+     * @param ad 用于更新的信息
+     * @return 更新后的广告
      */
     @PutMapping("/ads/{id}")
     @ApiOperation(value="修改广告信息 /update")
@@ -285,8 +285,8 @@ public class AdController {
     /**
      * 管理员删除广告
      *
-     * @param id
-     * @return Object
+     * @param id 广告ID
+     * @return 无
      */
     @DeleteMapping("/ads/{id}")
     @ApiOperation(value="删除一条广告 /delete")
@@ -323,7 +323,7 @@ public class AdController {
     /**
      * 用户端获得广告，获取在当前时间点可以播放的广告列表，如果没有，则返回默认广告
      *
-     * @return Object
+     * @return 广告列表
      */
     @GetMapping("/ads")
     @ApiOperation(value="用户查询广告")
