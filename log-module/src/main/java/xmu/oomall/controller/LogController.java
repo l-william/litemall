@@ -22,6 +22,15 @@ public class LogController {
     @Autowired
     private LogService logService;
 
+    /**
+     * 根据管理员ID查找相关的日志列表
+     *
+     * @param request 网页请求
+     * @param adminId 管理员ID
+     * @param page 分页页号
+     * @param limit 分页大小
+     * @return 该管理员的操作日志列表
+     */
     @GetMapping("/logs")
     public Object findLogList(HttpServletRequest request,
                                 @RequestParam Integer adminId,
@@ -29,13 +38,16 @@ public class LogController {
                                 @RequestParam(defaultValue = "10") Integer limit)
     {
         List<Log> logList=logService.findLogListByAdminId(adminId,page,limit);
-        if(logList.size()==0){
-            return ResponseUtil.fail(901,"查看日志失败");
-        }
         return ResponseUtil.ok(logList);
     }
-    
 
+
+    /**
+     * 添加日志
+     *
+     * @param log 待新增的日志信息
+     * @return 新增的日志
+     */
     @PostMapping("/log")
     public Object addLog(@RequestBody Log log){
         Log retLog=logService.addLog(log);

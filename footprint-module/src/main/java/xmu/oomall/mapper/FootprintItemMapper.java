@@ -21,7 +21,7 @@ public interface FootprintItemMapper {
     List<FootprintItem> userFindFootprintList(Integer userId);
 
     /**
-     *
+     * 管理员根据条件查询足迹列表
      *
      * @param userId 用户ID
      * @param goodsId 商品ID
@@ -32,7 +32,7 @@ public interface FootprintItemMapper {
     /**
      * 添加足迹
      *
-     * @param footprintItemPo 足迹
+     * @param footprintItemPo 待添加的足迹信息
      * @return 操作码
      */
     int addFootprint(FootprintItemPo footprintItemPo);

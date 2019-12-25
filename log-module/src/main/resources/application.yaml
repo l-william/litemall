@@ -5,10 +5,13 @@ eureka:
   client:
     service-url:
       defaultZone: http://139.196.212.100:8761/eureka/
+  instance:
+    prefer-ip-address: true
+    ip-address: 182.92.198.52
 
 spring:
   application:
-    name: addressService
+    name: logService
   profiles:
     active: dev
   http:

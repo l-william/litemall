@@ -28,6 +28,14 @@ public class FootprintItemController {
     @Autowired
     private FootprintItemService footprintItemService;
 
+    /**
+     * 用户浏览自己的足迹
+     *
+     * @param request 网页请求
+     * @param page 分页页号
+     * @param limit 分页大小
+     * @return 用户的足迹列表
+     */
     @GetMapping("/footprints")
     public Object userGetFootprintList(HttpServletRequest request,
                                    @RequestParam(defaultValue = "1") Integer page,
@@ -43,6 +51,16 @@ public class FootprintItemController {
         return ResponseUtil.ok(footprintList);
     }
 
+    /**
+     * 管理员根据条件查询足迹列表
+     *
+     * @param request 网页请求
+     * @param userId 用户ID
+     * @param goodsId 商品ID
+     * @param page 分页页号
+     * @param limit 分页大小
+     * @return 足迹列表
+     */
     @GetMapping("/admin/footprints")
     public Object adminGetFootprintList(HttpServletRequest request,
                                         @RequestParam Integer userId,
@@ -57,6 +75,12 @@ public class FootprintItemController {
         return ResponseUtil.ok(footprintList);
     }
 
+    /**
+     * 添加足迹
+     *
+     * @param footprintItemPo 待添加的足迹信息
+     * @return 新增的足迹
+     */
     @PostMapping("/footprints")
     public Object addFootprint(@RequestBody FootprintItemPo footprintItemPo){
         FootprintItemPo retPo=footprintItemService.addFootprint(footprintItemPo);
