@@ -140,82 +140,20 @@ public class FreightServiceImpl implements FreightService {
     }
 
     /**
-     * 计算运费所需要的值
+     *计算默认运费
      *
-     * @param order
-     * @return 计算好的运费
+     * @param addresscode
+     * @param weight
+     * @return double
      */
-    @Override
-    public double getFreight(Order order) {
-        //思路：
-        /*
-        先从找到order对应的orderitem
-        然后根据orderitem对应的goods判断商品的运费模板的模式
-        然后根据运费模板计算运费。。。
-         */
-        if(order==null) {
-            return -1;
-        }
-        //此处本应调用order模块
-        List <OrderItem> orderItemList=freightDao.findItemsInAOrder(order);
-        List<Integer> SpecialFreightID = new ArrayList<>();
-        //记录特殊模板的id
-        List<Double> weight= new ArrayList<>();
-        //记录每个商品的重量
-        List<Integer> nums= new ArrayList<>();
-        //记录每个商品的件数
-        String address=order.getAddress();
-        System.out.println(AddressResolutionUtil.addressResolution(address).size());
-        Map<String,String> addressInfo = AddressResolutionUtil.addressResolution(address).get(0);
-        String province=addressInfo.get("province");
-        String city=addressInfo.get("city");
-        String county=addressInfo.get("county");
-        List<Integer> addresscode = new ArrayList<>();
-        if(freightDao.findIdFromRegion1(county,freightDao.findIdFromRegion(city))!=null)
-        {
-            addresscode.add(freightDao.findIdFromRegion1(county,freightDao.findIdFromRegion(city)));
-        }
-        if(freightDao.findIdFromRegion1(city,freightDao.findIdFromRegion(province))!=null)
-        {
-            addresscode.add(freightDao.findIdFromRegion1(city,freightDao.findIdFromRegion(province)));
-        }
-        if(freightDao.findIdFromRegion(province)!=null)
-        {
-            addresscode.add(freightDao.findIdFromRegion(province).get(0));
-        }
-        //订单配送地址
-        for(OrderItem orderItem:orderItemList)
-        {
-            Integer goodsId=orderItem.getGoodsId();
-            //调用商品服务中的findgoodsbyid查看其运费模板类别
-            //暂时不知道怎么调用，先占位模拟逻辑过程
-            GoodsPo goodsPo=new GoodsPo();
-            goodsPo= findGoodsPoById(goodsId);
-            System.out.println(goodsPo);
-            if(goodsPo.getBeSpecial())
-            {
-                SpecialFreightID.add(goodsPo.getSpecialFreightId());
-            }
-            weight.add(goodsPo.getWeight().doubleValue()*orderItem.getNumber());
-            nums.add(orderItem.getNumber());
-        }
-        double freeFreightPrice =88;
-        //包邮的阀值价格
-        if(order.getGoodsPrice().doubleValue()>=freeFreightPrice) {
-            return 0;
-        }
-        //？？？？？？？？？？？？
-        //要将所有的模板放到redis中方便频繁查询
-        //？？？？？？？？？？？？
-        //先计算默认运费模板：
+    public double getDefaultPrice(List<Integer> addresscode,List<Double> weight)
+    {
         double defaultPrice=0.0;
         DefaultFreight defaultFreight = null;
-        //defaultFreight=find(address,DefaultFreightRedis);
         //通过address找到对应的默认运费模板
         List<DefaultFreightPo> defaultFreightPoList=freightDao.findDefaultFreightList();
         List<DefaultFreight> defaultFreightList = new ArrayList<>();
-        for(DefaultFreightPo defaultFreightPo1:defaultFreightPoList)
-        {
+        for(DefaultFreightPo defaultFreightPo1:defaultFreightPoList) {
             DefaultFreight defaultFreight1=new DefaultFreight();
             defaultFreight1.setRegionIds(JacksonUtil.parseIntegerList(defaultFreightPo1.getDestination(), "dest"));
             defaultFreight1.setFirstHeavyPrice(defaultFreightPo1.getFirstHeavyPrice());
@@ -224,71 +162,61 @@ public class FreightServiceImpl implements FreightService {
             defaultFreight1.setOver50Price(defaultFreightPo1.getOver50Price());
             defaultFreight1.setOver100Price(defaultFreightPo1.getOver100Price());
             defaultFreight1.setOver300Price(defaultFreightPo1.getOver300Price());
-            defaultFreightList.add(defaultFreight1);
-        }
+            defaultFreightList.add(defaultFreight1); }
         boolean find=false;
-        for(Integer temp :addresscode)
-        {
-            for(DefaultFreight defaultFreight1:defaultFreightList)
-            {
-                if(defaultFreight1.getRegionIds().contains(temp))
-                {
+        for(Integer temp :addresscode) {
+            for(DefaultFreight defaultFreight1:defaultFreightList) {
+                if(defaultFreight1.getRegionIds().contains(temp)) {
                     defaultFreight=defaultFreight1;
                     find=true;
-                    break;
-                }
-            }
-            if(find==true)
-            {
-                break;
-            }
-        }
+                    break; } }
+            if(find==true) {
+                break; } }
         double weightsum=weight.stream().reduce(Double::sum).orElse(0.0);
         double firstHevay=0.5;
         double continueHeavy=10.0;
         double thirdHeavy=50.0;
         double fourthHeavy=100.0;
         double topHeavy=300.0;
-        if(weightsum<=firstHevay)
-        {
-            defaultPrice=defaultFreight.getFirstHeavyPrice().doubleValue();
-        }
-        else if(weightsum>firstHevay&&weightsum<=continueHeavy)
-        {
-            defaultPrice=defaultFreight.getFirstHeavyPrice().doubleValue()+defaultFreight.getContinueHeavyPrice().doubleValue()*((weightsum-0.5)/0.5);
-        }
-        else if(weightsum>continueHeavy&&weightsum<=thirdHeavy)
-        {
+        if(weightsum<=firstHevay) {
+            defaultPrice=defaultFreight.getFirstHeavyPrice().doubleValue(); }
+        else if(weightsum>firstHevay&&weightsum<=continueHeavy) {
+            defaultPrice=defaultFreight.getFirstHeavyPrice().doubleValue()+defaultFreight.getContinueHeavyPrice().doubleValue()*((weightsum-0.5)/0.5); }
+        else if(weightsum>continueHeavy&&weightsum<=thirdHeavy) {
             defaultPrice+=defaultFreight.getFirstHeavyPrice().doubleValue();
             defaultPrice+=defaultFreight.getContinueHeavyPrice().doubleValue()*19.0;
-            defaultPrice+=defaultFreight.getOver10Price().doubleValue()*(weightsum-10.0);
-        }
-        else if(weightsum>thirdHeavy&&weightsum<=fourthHeavy)
-        {
+            defaultPrice+=defaultFreight.getOver10Price().doubleValue()*(weightsum-10.0); }
+        else if(weightsum>thirdHeavy&&weightsum<=fourthHeavy) {
             defaultPrice+=defaultFreight.getFirstHeavyPrice().doubleValue();
             defaultPrice+=defaultFreight.getContinueHeavyPrice().doubleValue()*19.0;
             defaultPrice+=defaultFreight.getOver10Price().doubleValue()*(40.0);
-            defaultPrice+=defaultFreight.getOver50Price().doubleValue()*(weightsum-50.0);
-        }
-        else if(weightsum>fourthHeavy&&weightsum<=topHeavy)
-        {
+            defaultPrice+=defaultFreight.getOver50Price().doubleValue()*(weightsum-50.0); }
+        else if(weightsum>fourthHeavy&&weightsum<=topHeavy) {
             defaultPrice+=defaultFreight.getFirstHeavyPrice().doubleValue();
             defaultPrice+=defaultFreight.getContinueHeavyPrice().doubleValue()*19.0;
             defaultPrice+=defaultFreight.getOver10Price().doubleValue()*(40.0);
             defaultPrice+=defaultFreight.getOver50Price().doubleValue()*(50.0);
-            defaultPrice+=defaultFreight.getOver100Price().doubleValue()*(weightsum-100.0);
-        }
-        else
-        {
+            defaultPrice+=defaultFreight.getOver100Price().doubleValue()*(weightsum-100.0); }
+        else {
             defaultPrice+=defaultFreight.getFirstHeavyPrice().doubleValue();
             defaultPrice+=defaultFreight.getContinueHeavyPrice().doubleValue()*19.0;
             defaultPrice+=defaultFreight.getOver10Price().doubleValue()*(40.0);
             defaultPrice+=defaultFreight.getOver50Price().doubleValue()*(50.0);
             defaultPrice+=defaultFreight.getOver100Price().doubleValue()*(200.0);
-            defaultPrice+=defaultFreight.getOver300Price().doubleValue()*(weightsum-300.0);
-        }
+            defaultPrice+=defaultFreight.getOver300Price().doubleValue()*(weightsum-300.0); }
+        return  defaultPrice;
+    }
 
-        //再计算特殊运费模板(多种特殊运费模板)：
+    /**
+     * 计算所有类型的特殊运费模板的运费
+     *
+     * @param addresscode
+     * @param nums
+     * @param SpecialFreightID
+     * @return List<Double>
+     */
+    public  List<Double> getSpecialPrice(List<Integer> addresscode,List<Integer> nums,List<Integer> SpecialFreightID)
+    {
         List<Double> specialPrice = new ArrayList<>();
         Integer numsAll=nums.stream().reduce(Integer::sum).orElse(0);
         for(Integer id:SpecialFreightID)
@@ -296,9 +224,7 @@ public class FreightServiceImpl implements FreightService {
             SpecialFreight specialFreight=freightDao.findSpecialFreightById(id);
             if(specialFreight!=null)
             {
-                //从redis中取单件比率表
                 DefaultPieceFreight defaultPieceFreight=null;
-                //defaultPieceFreight=find(address,specialFreightRedis);
                 List<DefaultPieceFreightPo> defaultPieceFreightPoList=freightDao.findDefaultPieceFreightList();
                 List<DefaultPieceFreight> defaultPieceFreightList = new ArrayList<>();
                 for(DefaultPieceFreightPo defaultPieceFreightPo:defaultPieceFreightPoList)
@@ -346,6 +272,70 @@ public class FreightServiceImpl implements FreightService {
                 }
             }
         }
+        return specialPrice;
+    }
+    /**
+     * 计算运费所需要的值
+     *
+     * @param order
+     * @return 计算好的运费
+     */
+    @Override
+    public double getFreight(Order order) {
+        if(order==null) {
+            return -1;
+        }
+        //调用order模块
+        List <OrderItem> orderItemList=freightDao.findItemsInAOrder(order);
+        List<Integer> SpecialFreightID = new ArrayList<>();
+        //记录特殊模板的id
+        List<Double> weight= new ArrayList<>();
+        //记录每个商品的重量
+        List<Integer> nums= new ArrayList<>();
+        //记录每个商品的件数
+        String address=order.getAddress();
+        System.out.println(AddressResolutionUtil.addressResolution(address).size());
+        Map<String,String> addressInfo = AddressResolutionUtil.addressResolution(address).get(0);
+        String province=addressInfo.get("province");
+        String city=addressInfo.get("city");
+        String county=addressInfo.get("county");
+        List<Integer> addresscode = new ArrayList<>();
+        if(freightDao.findIdFromRegion1(county,freightDao.findIdFromRegion(city))!=null)
+        {
+            addresscode.add(freightDao.findIdFromRegion1(county,freightDao.findIdFromRegion(city)));
+        }
+        if(freightDao.findIdFromRegion1(city,freightDao.findIdFromRegion(province))!=null)
+        {
+            addresscode.add(freightDao.findIdFromRegion1(city,freightDao.findIdFromRegion(province)));
+        }
+        if(freightDao.findIdFromRegion(province)!=null)
+        {
+            addresscode.add(freightDao.findIdFromRegion(province).get(0));
+        }
+        //订单配送地址
+        for(OrderItem orderItem:orderItemList)
+        {
+            Integer goodsId=orderItem.getGoodsId();
+            GoodsPo goodsPo;
+            goodsPo= findGoodsPoById(goodsId);
+            System.out.println(goodsPo);
+            if(goodsPo.getBeSpecial())
+            {
+                SpecialFreightID.add(goodsPo.getSpecialFreightId());
+            }
+            weight.add(goodsPo.getWeight().doubleValue()*orderItem.getNumber());
+            nums.add(orderItem.getNumber());
+        }
+        double freeFreightPrice =88;
+        //包邮的阀值价格
+        if(order.getGoodsPrice().doubleValue()>=freeFreightPrice) {
+            return 0;
+        }
+        //先计算默认运费模板：
+        double defaultPrice=getDefaultPrice(addresscode,weight);
+
+        //再计算特殊运费模板(多种特殊运费模板)：
+        List<Double> specialPrice = getSpecialPrice(addresscode, nums, SpecialFreightID);
         double specialPriceMax=0.0;
         for(double item:specialPrice)
         {
