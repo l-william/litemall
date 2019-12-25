@@ -40,7 +40,7 @@ public class GetShareRules {
     @Test
     public void getShareRule() throws URISyntaxException {
         /* 设置请求头部*/
-        URI uri=new URI(url.replace("{id}","1006239"));
+        URI uri=new URI(url.replace("{id}","401"));
         HttpHeaders httpHeaders = userAccount.createHeaderWithToken();
         HttpEntity httpEntity = new HttpEntity(httpHeaders);
 
