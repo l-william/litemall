@@ -1,12 +1,14 @@
 server:
-  port: 5010
-#  port: 5004
+  port: 5004
 
 eureka:
   client:
     service-url:
-      defaultZone: http://122.51.215.246:8761/eureka/
-      #defaultZone: http://139.196.212.100:8761/eureka/
+      #defaultZone: http://122.51.215.246:8761/eureka/
+      defaultZone: http://139.196.212.100:8761/eureka/
+  instance:
+    prefer-ip-address: true
+    ip-address: 182.92.198.52
 
 spring:
   application:

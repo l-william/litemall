@@ -18,18 +18,41 @@ public class FootprintItemServiceImpl implements FootprintItemService {
     @Autowired
     private FootprintItemDao footprintItemDao;
 
+    /**
+     * 用户浏览自己的足迹
+     *
+     * @param userId 用户ID
+     * @param page   分页页号
+     * @param limit  分页大小
+     * @return 用户的足迹列表
+     */
     @Override
     public List<FootprintItem> userFindFootprintList(Integer userId, Integer page, Integer limit) {
         List<FootprintItem> footprintList=footprintItemDao.userFindFootprintList(userId);
         return divideByPage(footprintList,page,limit);
     }
 
+    /**
+     * 管理员根据条件查询足迹列表
+     *
+     * @param userId 用户ID
+     * @param goodsId 商品ID
+     * @param page 分页页号
+     * @param limit 分页大小
+     * @return 足迹列表
+     */
     @Override
     public List<FootprintItem> adminFindFootprintList(Integer userId, Integer goodsId, Integer page, Integer limit) {
         List<FootprintItem> footprintList=footprintItemDao.adminFindFootprintList(userId,goodsId);
         return divideByPage(footprintList,page,limit);
     }
 
+    /**
+     * 添加足迹
+     *
+     * @param footprintItemPo 待添加的足迹信息
+     * @return 新增的足迹
+     */
     @Override
     public FootprintItemPo addFootprint(FootprintItemPo footprintItemPo) {
         return footprintItemDao.addFootprint(footprintItemPo);

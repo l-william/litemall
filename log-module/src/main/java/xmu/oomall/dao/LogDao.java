@@ -18,10 +18,22 @@ public class LogDao {
     @Autowired(required = false)
     LogMapper logMapper;
 
+    /**
+     * 根据管理员ID查找日志列表
+     *
+     * @param adminId 管理员ID
+     * @return 该管理员的操作日志列表
+     */
     public List<Log> findLogListByAdminId(Integer adminId){
         return logMapper.findLogListByAdminId(adminId);
     }
 
+    /**
+     * 添加日志
+     *
+     * @param log 待新增的日志信息
+     * @return 新增的日志
+     */
     public Log addLog(Log log){
         log.setGmtCreate(LocalDateTime.now());
         log.setGmtModified(LocalDateTime.now());

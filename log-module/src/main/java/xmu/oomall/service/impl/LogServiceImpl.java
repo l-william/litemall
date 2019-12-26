@@ -20,12 +20,26 @@ public class LogServiceImpl implements LogService {
     private LogDao logDao;
 
 
+    /**
+     * 根据管理员ID查找日志列表
+     *
+     * @param adminId 管理员ID
+     * @param page    分页页号
+     * @param limit   分页大小
+     * @return 该管理员的操作日志列表
+     */
     @Override
     public List<Log> findLogListByAdminId(Integer adminId, Integer page, Integer limit) {
         List<Log> logList=logDao.findLogListByAdminId(adminId);
         return divideByPage(logList,page,limit);
     }
 
+    /**
+     * 添加日志
+     *
+     * @param log 待添加的日志信息
+     * @return 新增的日志
+     */
     @Override
     public Log addLog(Log log) {
         return logDao.addLog(log);
