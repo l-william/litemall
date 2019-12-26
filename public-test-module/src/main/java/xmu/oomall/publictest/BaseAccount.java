@@ -15,9 +15,32 @@ import java.net.URISyntaxException;
  */
 public abstract class BaseAccount {
 
+    /**
+     * 获取姓名
+     *
+     * @return String
+     */
     protected abstract String getUserName();
+
+    /**
+     * 获取密码
+     *
+     * @return String
+     */
     protected abstract String getPassword();
+
+    /**
+     * 获取url
+     *
+     * @return String
+     */
     protected abstract String getUrl();
+
+    /**
+     * RestTemplate
+     *
+     * @return RestTemplate
+     */
     protected abstract RestTemplate getRestTemplate();
 
     protected String token = "";

@@ -12,12 +12,14 @@ import java.util.List;
 
 /**
  * 运费的service接口
+ * @author Administrator
  */
 @Service
 public interface FreightService {
     /**
      * 查找默认运费模板
-     *
+     * @param page
+     * @param limit
      * @return 默认运费模板
      */
     public List<DefaultFreightPo> findDefaultFreightsList(Integer page,Integer limit);
@@ -25,6 +27,8 @@ public interface FreightService {
     /**
      * 查找默认运费比率表
      *
+     * @param page
+     * @param limit
      * @return 返回默认运费比率表
      */
     public List<DefaultPieceFreightPo> findDefaultPieceFreightList(Integer page, Integer limit);

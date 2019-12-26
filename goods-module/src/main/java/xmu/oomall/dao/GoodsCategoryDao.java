@@ -17,6 +17,7 @@ import java.util.List;
 
 /**
  * 商品分类的dao层
+ * @author Administrator
  */
 @Repository
 public class GoodsCategoryDao {

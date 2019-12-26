@@ -227,14 +227,14 @@ public class FreightServiceImpl implements FreightService {
      *
      * @param addresscode
      * @param nums
-     * @param SpecialFreightId
+     * @param specialFreightId
      * @return List<Double>
      */
-    public  List<Double> getSpecialPrice(List<Integer> addresscode,List<Integer> nums,List<Integer> SpecialFreightId)
+    public  List<Double> getSpecialPrice(List<Integer> addresscode,List<Integer> nums,List<Integer> specialFreightId)
     {
         List<Double> specialPrice = new ArrayList<>();
         Integer numsAll=nums.stream().reduce(Integer::sum).orElse(0);
-        for(Integer id:SpecialFreightId)
+        for(Integer id:specialFreightId)
         {
             SpecialFreight specialFreight=freightDao.findSpecialFreightById(id);
             if(specialFreight!=null)
@@ -302,7 +302,7 @@ public class FreightServiceImpl implements FreightService {
         }
         //调用order模块
         List <OrderItem> orderItemList=findItemsInaOrder(order);
-        List<Integer> SpecialFreightId = new ArrayList<>();
+        List<Integer> specialFreightId = new ArrayList<>();
         //记录特殊模板的id
         List<Double> weight= new ArrayList<>();
         //记录每个商品的重量
@@ -336,7 +336,7 @@ public class FreightServiceImpl implements FreightService {
             System.out.println(goodsPo);
             if(goodsPo.getBeSpecial())
             {
-                SpecialFreightId.add(goodsPo.getSpecialFreightId());
+                specialFreightId.add(goodsPo.getSpecialFreightId());
             }
             weight.add(goodsPo.getWeight().doubleValue()*orderItem.getNumber());
             nums.add(orderItem.getNumber());
@@ -350,7 +350,7 @@ public class FreightServiceImpl implements FreightService {
         double defaultPrice=getDefaultPrice(addresscode,weight);
 
         //再计算特殊运费模板(多种特殊运费模板)：
-        List<Double> specialPrice = getSpecialPrice(addresscode, nums, SpecialFreightId);
+        List<Double> specialPrice = getSpecialPrice(addresscode, nums, specialFreightId);
         double specialPriceMax=0.0;
         for(double item:specialPrice)
         {
