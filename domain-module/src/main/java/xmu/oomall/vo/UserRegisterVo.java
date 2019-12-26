@@ -2,7 +2,8 @@ package xmu.oomall.vo;
 
 /**
  * 用户注册VO
- * 
+ *
+ * @author Administrator
  */
 public class UserRegisterVo {
     private String username;

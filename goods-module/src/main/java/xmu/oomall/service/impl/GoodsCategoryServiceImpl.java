@@ -17,6 +17,7 @@ import java.util.List;
 
 /**
  * 商品分类的service实现类
+ * @author Administrator
  */
 @Service
 public class GoodsCategoryServiceImpl implements GoodsCategoryService {

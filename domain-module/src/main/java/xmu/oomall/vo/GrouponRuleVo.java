@@ -3,6 +3,9 @@ package xmu.oomall.vo;
 import xmu.oomall.domain.GoodsPo;
 import xmu.oomall.domain.GrouponRulePo;
 
+/**
+ * @author Administrator
+ */
 public class GrouponRuleVo {
     private GrouponRulePo grouponRulePo;
     private GoodsPo goodsPo;

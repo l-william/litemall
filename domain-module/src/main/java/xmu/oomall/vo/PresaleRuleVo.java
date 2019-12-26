@@ -3,6 +3,9 @@ package xmu.oomall.vo;
 import xmu.oomall.domain.GoodsPo;
 
 import xmu.oomall.domain.PresaleRule;
+/**
+ * @author Administrator
+ */
 
 public class PresaleRuleVo {
 

@@ -3,6 +3,9 @@ package xmu.oomall.controller.vo;
 import java.util.List;
 import xmu.oomall.domain.*;
 
+/**
+ * @author Administrator
+ */
 public class ProductVo{
 
     /**

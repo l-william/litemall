@@ -17,18 +17,24 @@ import java.util.List;
 public interface ProductMapper {
 
     /**
+     * 寻找产品
+     *
      * @param id
      * @return
      */
     ProductPo findProductById(Integer id);
 
     /**
+     * 添加产品
+     *
      * @param productPo
      * @return status
      */
     int addProduct(ProductPo productPo);
 
     /**
+     * 删除产品
+     *
      * @param id
      * @param deleteTime
      * @return status
@@ -36,6 +42,8 @@ public interface ProductMapper {
     int deleteProduct(Integer id,LocalDateTime deleteTime);
 
     /**
+     * 删除产品
+     *
      * @param goodsId
      * @param deleteTime
      * @return status
@@ -43,18 +51,25 @@ public interface ProductMapper {
     int deleteProductByGoodsId(Integer goodsId,LocalDateTime deleteTime);
 
     /**
+     * 更新产品
+     *
      * @param productPo
      * @return status
      */
     int updateProduct(ProductPo productPo);
 
     /**
+     * 选产品
+     *
+     * @param goodsId
      * @return
      */
     List<ProductPo> findProductListByGoodsId(Integer goodsId);
 
 
     /**
+     * 更新库存
+     *
      * @param id
      * @param number
      * @param updateTime

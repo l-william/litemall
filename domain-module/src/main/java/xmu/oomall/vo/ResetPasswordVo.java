@@ -3,6 +3,7 @@ package xmu.oomall.vo;
 /**
  * 重置密码的Vo，这里不需要username和userId，因为telephone对每一个用户唯一
  * 而且你可能就是因为忘记用户名才要重置密码的^_^
+ * @author Administrator
  */
 public class ResetPasswordVo {
     private String telephone;

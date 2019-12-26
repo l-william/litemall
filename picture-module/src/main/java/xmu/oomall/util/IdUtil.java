@@ -11,6 +11,7 @@ import java.util.Random;
 /**
  * 各种id生成策略
  *
+ * @author Administrator
  * @version 1.0
  */
 public class IdUtil {

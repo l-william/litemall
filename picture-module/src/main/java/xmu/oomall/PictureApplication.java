@@ -6,6 +6,9 @@ package xmu.oomall;
 
 @SpringBootApplication
 @EnableEurekaClient
+/**
+ * @author Administrator
+ */
 public class PictureApplication {
 
     public static void main(String[] args) {

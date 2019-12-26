@@ -2,6 +2,7 @@ package xmu.oomall.vo;
 
 /**
  * 重置手机号的vo
+ * @author Administrator
  */
 public class ResetPhoneVo {
     /**

@@ -34,6 +34,7 @@ import java.util.Map;
 /**
  * 运费的service实现类
  *
+ * @author Administrator
  */
 @Service
 public class FreightServiceImpl implements FreightService {

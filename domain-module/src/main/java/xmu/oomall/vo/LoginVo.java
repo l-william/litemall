@@ -1,7 +1,8 @@
 package xmu.oomall.vo;
 /**
  * 用户和管理员登录VO
- * 
+ *
+ * @author Administrator
  */
 public class LoginVo {
     private String username;

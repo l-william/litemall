@@ -12,6 +12,8 @@ import java.util.List;
 
 /**
  * 产品的service实现类
+ * @author Administrator
+ *
  */
 @Service
 public class ProductServiceImpl implements ProductService {

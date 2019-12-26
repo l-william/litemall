@@ -7,6 +7,7 @@ import java.util.List;
 
 /**
  * WX端 GET /goods/{id}的返回值VO
+ * @author Administrator
  */
 public class GoodsVo {
 

@@ -23,6 +23,8 @@ public interface LogService {
     List<Log> findLogListByAdminId(Integer adminId,Integer page,Integer limit);
 
     /**
+     * 添加日志
+     *
      * @param log 待添加的日志信息
      * @return 新增的日志
      */

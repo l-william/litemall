@@ -6,6 +6,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * @author Administrator
+ */
 @SpringBootApplication
 public class PublicTestApplication {
 
