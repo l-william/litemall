@@ -75,8 +75,8 @@ public class LogController {
         ServiceInstance instance = loadBalancerClient.choose("Log");
         System.out.println(instance.getHost());
         System.out.println(instance.getPort());
-        String reqURL = String.format("http://%s:%s", instance.getHost(), instance.getPort() + "/logs");
-        restTemplate.postForObject(reqURL,log,Log.class);
+        String reqUrl = String.format("http://%s:%s", instance.getHost(), instance.getPort() + "/logs");
+        restTemplate.postForObject(reqUrl,log,Log.class);
     }
 
     /**
