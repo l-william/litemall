@@ -13,10 +13,12 @@ import java.util.List;
 public interface FootprintItemService {
 
     /**
+     *
+     *
      * @param userId
      * @param page
      * @param limit
-     * @return
+     * @return  List<FootprintItem>
      */
     List<FootprintItem> userFindFootprintList(Integer userId,Integer page,Integer limit);
 

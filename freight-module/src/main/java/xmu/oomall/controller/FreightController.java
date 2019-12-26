@@ -9,8 +9,10 @@ package xmu.oomall.controller;
 
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import xmu.oomall.domain.*;
 import xmu.oomall.service.FreightService;
 import xmu.oomall.util.ResponseUtil;
@@ -36,12 +38,12 @@ public class FreightController {
      * @param log
      */
     private void writeLog(Log log) {
-//        RestTemplate restTemplate = new RestTemplate();
-//        ServiceInstance instance = loadBalancerClient.choose("Log");
-//        System.out.println(instance.getHost());
-//        System.out.println(instance.getPort());
-//        String reqURL = String.format("http://%s:%s", instance.getHost(), instance.getPort() + "/logs");
-//        restTemplate.postForObject(reqURL,log,Log.class);
+        RestTemplate restTemplate = new RestTemplate();
+        ServiceInstance instance = loadBalancerClient.choose("Log");
+        System.out.println(instance.getHost());
+        System.out.println(instance.getPort());
+        String reqUrl = String.format("http://%s:%s", instance.getHost(), instance.getPort() + "/logs");
+        restTemplate.postForObject(reqUrl,log,Log.class);
     }
 
     /**
@@ -92,7 +94,7 @@ public class FreightController {
         }
         else
         {
-            //return ResponseUtil.unlogin();
+            return ResponseUtil.unlogin();
         }
         List<DefaultPieceFreightPo> defaultPieceFreightPoList=freightService.findDefaultPieceFreightList(page,limit);
         Object object= ResponseUtil.ok(defaultPieceFreightPoList);
@@ -121,7 +123,7 @@ public class FreightController {
             }
             else
             {
-                //return ResponseUtil.unlogin();
+                return ResponseUtil.unlogin();
             }
             return ResponseUtil.ok(defaultPieceFreightPo);
         }
@@ -134,7 +136,7 @@ public class FreightController {
             }
             else
             {
-               // return ResponseUtil.unlogin();
+                return ResponseUtil.unlogin();
             }
             return ResponseUtil.fail(636,"默认每件运费规则添加失败");
         }
@@ -163,7 +165,7 @@ public class FreightController {
             }
             else
             {
-                //return ResponseUtil.unlogin();
+                return ResponseUtil.unlogin();
             }
             return ResponseUtil.ok(defaultPieceFreightPo);
         }
@@ -176,7 +178,7 @@ public class FreightController {
             }
             else
             {
-               // return ResponseUtil.unlogin();
+                return ResponseUtil.unlogin();
             }
             return ResponseUtil.fail(635, "默认每件运费规则更新失败");
         }
@@ -203,7 +205,7 @@ public class FreightController {
             }
             else
             {
-                //return ResponseUtil.unlogin();
+                return ResponseUtil.unlogin();
             }
             return ResponseUtil.ok();
         }
@@ -216,7 +218,7 @@ public class FreightController {
             }
             else
             {
-                //return ResponseUtil.unlogin();
+                return ResponseUtil.unlogin();
             }
             return ResponseUtil.fail(637, "默认每件运费规则删除失败");
         }
@@ -241,7 +243,7 @@ public class FreightController {
         }
         else
         {
-            //return ResponseUtil.unlogin();
+            return ResponseUtil.unlogin();
         }
 
         List<DefaultFreightPo> defaultFreightPoList =freightService.findDefaultFreightsList(page,limit);
@@ -271,7 +273,7 @@ public class FreightController {
         }
         else
         {
-            //return ResponseUtil.unlogin();
+            return ResponseUtil.unlogin();
         }
         List<SpecialFreight> specialFreightList =freightService.findSpecialFreightList(page,limit);
         Object object = xmu.oomall.util.ResponseUtil.ok(specialFreightList);
@@ -299,7 +301,7 @@ public class FreightController {
             }
             else
             {
-               // return ResponseUtil.unlogin();
+                return ResponseUtil.unlogin();
             }
             return ResponseUtil.ok(specialFreight);
         }
@@ -312,7 +314,7 @@ public class FreightController {
             }
             else
             {
-               // return ResponseUtil.unlogin();
+                return ResponseUtil.unlogin();
             }
             return ResponseUtil.fail(638,"该特殊运费规则是无效运费规则");
         }
@@ -338,7 +340,7 @@ public class FreightController {
             }
             else
             {
-                //return ResponseUtil.unlogin();
+                return ResponseUtil.unlogin();
             }
             Object object = xmu.oomall.util.ResponseUtil.ok(body);
             return object;
@@ -352,7 +354,7 @@ public class FreightController {
             }
             else
             {
-                //return ResponseUtil.unlogin();
+                return ResponseUtil.unlogin();
             }
             Object object = ResponseUtil.fail(632, "默认运费规则添加失败");
             return object;
@@ -379,7 +381,7 @@ public class FreightController {
             }
             else
             {
-                //return ResponseUtil.unlogin();
+                return ResponseUtil.unlogin();
             }
             Object object = ResponseUtil.ok(specialFreight);
             return object;
@@ -393,7 +395,7 @@ public class FreightController {
             }
             else
             {
-                //return ResponseUtil.unlogin();
+                return ResponseUtil.unlogin();
             }
             Object object = ResponseUtil.fail(640,"特殊运费规则添加失败");
             return object;
@@ -420,7 +422,7 @@ public class FreightController {
             }
             else
             {
-                //return ResponseUtil.unlogin();
+                return ResponseUtil.unlogin();
             }
             Object object = xmu.oomall.util.ResponseUtil.ok();
             return object;
@@ -434,7 +436,7 @@ public class FreightController {
             }
             else
             {
-                //return ResponseUtil.unlogin();
+                return ResponseUtil.unlogin();
             }
             Object object = ResponseUtil.fail(633, "默认运费规则删除失败");
             return object;
@@ -461,7 +463,7 @@ public class FreightController {
             }
             else
             {
-                //return ResponseUtil.unlogin();
+                return ResponseUtil.unlogin();
             }
             Object object = xmu.oomall.util.ResponseUtil.ok();
             return object;
@@ -475,7 +477,7 @@ public class FreightController {
             }
             else
             {
-                //return ResponseUtil.unlogin();
+                return ResponseUtil.unlogin();
             }
             Object object = ResponseUtil.fail(641,"特殊运费规则删除失败");
             return object;
@@ -503,7 +505,7 @@ public class FreightController {
             }
             else
             {
-                //return ResponseUtil.unlogin();
+                return ResponseUtil.unlogin();
             }
             Object object = xmu.oomall.util.ResponseUtil.ok(specialFreight);
             return object;
@@ -517,7 +519,7 @@ public class FreightController {
             }
             else
             {
-                //return ResponseUtil.unlogin();
+                return ResponseUtil.unlogin();
             }
             Object object = ResponseUtil.fail(639, "特殊运费规则更新失败");
             return object;
@@ -545,7 +547,7 @@ public class FreightController {
             }
             else
             {
-                //return ResponseUtil.unlogin();
+                return ResponseUtil.unlogin();
             }
             Object object = xmu.oomall.util.ResponseUtil.ok(defaultFreightsPo);
             return object;
@@ -559,7 +561,7 @@ public class FreightController {
             }
             else
             {
-                //return ResponseUtil.unlogin();
+                return ResponseUtil.unlogin();
             }
             Object object = ResponseUtil.fail(631,"默认运费规则更新失败");
             return object;

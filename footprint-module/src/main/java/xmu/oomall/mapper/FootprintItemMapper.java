@@ -21,7 +21,7 @@ public interface FootprintItemMapper {
     List<FootprintItem> userFindFootprintList(Integer userId);
 
     /**
-     *
+     *寻找足迹
      *
      * @param userId 用户ID
      * @param goodsId 商品ID

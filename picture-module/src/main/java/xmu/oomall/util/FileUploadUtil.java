@@ -19,11 +19,7 @@ public class FileUploadUtil {
     public static String upload(MultipartFile file, String path) {
         if (!file.isEmpty()) {
             try {
-//                URL url =new URL(path);
-//                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//                conn.setDoOutput(true);
                 BufferedOutputStream out = new BufferedOutputStream(new FileOutputStream(new File(path)));
-                //BufferedOutputStream out = new BufferedOutputStream(conn.getOutputStream());
                 System.out.println(file.getOriginalFilename());
                 out.write(file.getBytes());
                 out.flush();

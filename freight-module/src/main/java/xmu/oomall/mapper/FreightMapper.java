@@ -98,15 +98,6 @@ public interface FreightMapper {
     int deleteDefaultPieceFreightById(Integer id);
 
     /**
-     * 【测试】
-     * 通过订单ID查找所对应的订单物品列表
-     *
-     * @param orderId 订单ID
-     * @return
-     */
-    List<OrderItem> findOrderItemListByOrderId(Integer orderId);
-
-    /**
      * 通过地址返回对应的运费模板
      *
      * @param place

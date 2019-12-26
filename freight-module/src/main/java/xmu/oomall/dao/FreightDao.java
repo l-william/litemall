@@ -190,18 +190,6 @@ public class FreightDao {
         return freightMapper.addSpecialFreight(specialFreight);
     }
 
-
-    /**
-     * 查找一个订单中的所有orderItem
-     *
-     * @param order
-     * @return OrderItem list
-     */
-    public List<OrderItem> findItemsInAOrder(Order order)
-    {
-        return freightMapper.findOrderItemListByOrderId(order.getId());
-    }
-
     /**
      * 删除特殊运费模板
      *

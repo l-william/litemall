@@ -39,7 +39,6 @@ public class GoodsVo {
      * todo
      * 商品的预售规则
      */
-    // private PreSaleGoods preSaleGoods;
 
     /**
      * 商品的特殊运费规则，若无，则为null

@@ -682,32 +682,6 @@ public class GoodsController {
     }
 
 
-//    @PutMapping("/product/list/deduct")
-//    @ApiOperation(value = "根据订单物品列表修改库存",notes = "operation：true代表加库存，false代表减库存")
-//    public Object operateStock(@RequestBody List<OrderItem> orderItemList,@RequestParam boolean operation){
-//        List<Integer> productIdList=new ArrayList<Integer>();
-//        List<Integer> numberList=new ArrayList<Integer>();
-//        for(OrderItem orderItem:orderItemList){
-//            Integer productId=orderItem.getProductId();
-//            Integer number=(operation?1:-1)*orderItem.getNumber();
-//            ProductPo productPo=productService.findProductById(productId);
-//            boolean operable=productPo!=null&&productPo.getSafetyStock()+number>=0;
-//            if(!operable){
-//                return ResponseUtil.fail(786,"修改库存失败");
-//            }
-//            productIdList.add(productId);
-//            numberList.add(number);
-//        }
-//        Integer size=orderItemList.size();
-//        for(int i=0;i<size;i++){
-//            int ret=productService.updateStock(productIdList.get(i),numberList.get(i));
-//            if(ret==0){
-//                return ResponseUtil.fail(786,"修改库存失败");
-//            }
-//        }
-//        return ResponseUtil.ok(true);
-//    }
-
     @GetMapping("/products/{id}")
     @ApiOperation(value = "根据产品ID返回封装的Product")
     public String getProductById2(@PathVariable Integer id){
@@ -731,22 +705,6 @@ public class GoodsController {
         return JacksonUtil.toJson(product);
     }
 
-//    @PutMapping("/products/{id}")
-//    @ApiOperation(value = "更新Product")
-//    public Object updateProductById2(@PathVariable Integer id,@RequestBody Product product){
-//        ProductPo productPo=productService.findProductById(id);
-//        if(productPo==null){
-//            return ResponseUtil.fail(784,"该产品不存在");
-//        }
-//        product.setId(id);
-//        ProductPo retPo=productService.updateProduct(product);
-//        if(retPo==null) {
-//            return ResponseUtil.fail(782, "产品修改失败");
-//        }
-//            return ResponseUtil.ok(retPo);
-//    }
-//
-//    //!!!!
 
     @GetMapping("/user/product/{id}")
     @ApiOperation(value = "根据产品ID返回封装的Product")
@@ -782,15 +740,15 @@ public class GoodsController {
      * @param log 日志
      */
     private void writeLog(Log log) {
-//        RestTemplate restTemplate = new RestTemplate();
-//        ServiceInstance instance = loadBalancerClient.choose("Log");
-//        System.out.println(instance.getHost());
-//        System.out.println(instance.getPort());
-//        String reqURL = String.format("http://%s:%s", instance.getHost(), instance.getPort() + "/logs");
-//        restTemplate.postForObject(reqURL,log,Log.class);
+        RestTemplate restTemplate = new RestTemplate();
+        ServiceInstance instance = loadBalancerClient.choose("Log");
+        System.out.println(instance.getHost());
+        System.out.println(instance.getPort());
+        String reqUrL = String.format("http://%s:%s", instance.getHost(), instance.getPort() + "/logs");
+        restTemplate.postForObject(reqUrL,log,Log.class);
     }
 
-    /**
+     /**
      * 生成日志函数
      *
      * @param request
@@ -802,34 +760,18 @@ public class GoodsController {
      */
     private Log createLog(HttpServletRequest request,Integer type,Integer status,String action,Integer actionId)
     {
-//        String adminId= request.getHeader("id");
-//        if (adminId==null){
-//            return null;
-//        }
+        String adminId= request.getHeader("id");
+        if (adminId==null){
+            return null;
+        }
         Log log=new Log();
-//        log.setAdminId(Integer.valueOf(adminId));
+        log.setAdminId(Integer.valueOf(adminId));
         log.setIp(request.getRemoteAddr());
         log.setType(type);
         log.setActions(action);
         log.setActionId(actionId);
         log.setStatusCode(status);
         return log;
-    }
-
-    //----------------测试
-
-
-    @GetMapping("/test/goods/{id}")
-    public GoodsPo findGoodsByIdF(@PathVariable  Integer id){
-        GoodsPo goodsPo=goodsService.adminFindGoodsById(id);
-        if(goodsPo==null)
-        {
-            return null;
-        }
-        else
-        {
-            return goodsPo;
-        }
     }
 
 

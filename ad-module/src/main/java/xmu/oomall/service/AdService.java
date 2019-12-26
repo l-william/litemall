@@ -37,7 +37,8 @@ public interface AdService {
     boolean updateAd(Ad ad);
     /**
      * 管理员查询广告列表
-     *
+     * @param limit
+     * @param page
      * @param name 广告名称
      * @param content 广告内容
      * @return 包含相应关键信息的广告列表

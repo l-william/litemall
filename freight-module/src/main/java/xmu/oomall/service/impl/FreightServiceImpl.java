@@ -42,12 +42,26 @@ public class FreightServiceImpl implements FreightService {
     @Autowired
     private LoadBalancerClient loadBalancerClient;
 
+    /**
+     * 调用Goods模块
+     *
+     * @param id
+     * @return GoodsPo
+     */
     private GoodsPo findGoodsPoById(Integer id) {
         RestTemplate restTemplate = new RestTemplate();
         ServiceInstance instance = loadBalancerClient.choose("Goods");
         System.out.println(instance);
-        String reqURL = String.format("http://%s:%s", instance.getHost(), instance.getPort() + "/goods/" + id);
-        return restTemplate.getForObject(reqURL, GoodsPo.class);
+        String reqUrl = String.format("http://%s:%s", instance.getHost(), instance.getPort() + "/goods/" + id);
+        return restTemplate.getForObject(reqUrl, GoodsPo.class);
+    }
+
+    private List<OrderItem> findItemsInaOrder(Order order) {
+        RestTemplate restTemplate = new RestTemplate();
+        ServiceInstance instance = loadBalancerClient.choose("Order");
+        System.out.println(instance);
+        String reqUrl = String.format("http://%s:%s", instance.getHost(), instance.getPort() + "/orderItems/" + order.getId());
+        return restTemplate.getForObject(reqUrl, List.class);
     }
 
     /**
@@ -212,14 +226,14 @@ public class FreightServiceImpl implements FreightService {
      *
      * @param addresscode
      * @param nums
-     * @param SpecialFreightID
+     * @param SpecialFreightId
      * @return List<Double>
      */
-    public  List<Double> getSpecialPrice(List<Integer> addresscode,List<Integer> nums,List<Integer> SpecialFreightID)
+    public  List<Double> getSpecialPrice(List<Integer> addresscode,List<Integer> nums,List<Integer> SpecialFreightId)
     {
         List<Double> specialPrice = new ArrayList<>();
         Integer numsAll=nums.stream().reduce(Integer::sum).orElse(0);
-        for(Integer id:SpecialFreightID)
+        for(Integer id:SpecialFreightId)
         {
             SpecialFreight specialFreight=freightDao.findSpecialFreightById(id);
             if(specialFreight!=null)
@@ -286,8 +300,8 @@ public class FreightServiceImpl implements FreightService {
             return -1;
         }
         //调用order模块
-        List <OrderItem> orderItemList=freightDao.findItemsInAOrder(order);
-        List<Integer> SpecialFreightID = new ArrayList<>();
+        List <OrderItem> orderItemList=findItemsInaOrder(order);
+        List<Integer> SpecialFreightId = new ArrayList<>();
         //记录特殊模板的id
         List<Double> weight= new ArrayList<>();
         //记录每个商品的重量
@@ -321,7 +335,7 @@ public class FreightServiceImpl implements FreightService {
             System.out.println(goodsPo);
             if(goodsPo.getBeSpecial())
             {
-                SpecialFreightID.add(goodsPo.getSpecialFreightId());
+                SpecialFreightId.add(goodsPo.getSpecialFreightId());
             }
             weight.add(goodsPo.getWeight().doubleValue()*orderItem.getNumber());
             nums.add(orderItem.getNumber());
@@ -335,7 +349,7 @@ public class FreightServiceImpl implements FreightService {
         double defaultPrice=getDefaultPrice(addresscode,weight);
 
         //再计算特殊运费模板(多种特殊运费模板)：
-        List<Double> specialPrice = getSpecialPrice(addresscode, nums, SpecialFreightID);
+        List<Double> specialPrice = getSpecialPrice(addresscode, nums, SpecialFreightId);
         double specialPriceMax=0.0;
         for(double item:specialPrice)
         {

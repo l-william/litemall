@@ -16,11 +16,6 @@
         where contains(destination,#{place})
     </select>
 
-    <select id="findOrderItemListByOrderId" parameterType="Integer" resultMap="OrderItem">
-    	select * from oomall_order_item
-    	where order_id = #{orderId} and is_deleted = 0
-    </select>
-
     <select id="findSpecialFreightById" parameterType="Integer" resultMap="SpecialFreight">
             select * from oomall_special_freight
             where id = #{id} and is_deleted = 0
@@ -174,11 +169,6 @@
         where id = #{id}  and is_deleted = 0
     </update>
 
-<!--    <select id="findOrderItemListByOrderId" parameterType="Integer" resultMap="OrderItem">-->
-<!--        select * from oomall_order_item-->
-<!--        where order_id = #{OrderId} and is_deleted = 0-->
-<!--    </select>-->
-    
     <resultMap id="DefaultFreight" type="DefaultFreight">
         <id column="id" property="id"/>
         <result column="destination" property="destination"/>
@@ -238,23 +228,6 @@
         <result column="gmt_modified" property="gmtModified"/>
         <result column="is_deleted" property="beDeleted"/>
         <result column="require_days" property="requireDays"/>
-    </resultMap>
-
-    <resultMap id="OrderItem" type="OrderItem">
-        <id column="id" property="id"/>
-        <result column="order_id" property="orderId"/>
-        <result column="item_type" property="itemType"/>
-        <result column="status" property="statusCode"/>
-        <result column="number" property="number"/>
-        <result column="price" property="price"/>
-        <result column="deal_price" property="dealPrice"/>
-        <result column="product_id" property="productId"/>
-        <result column="gmt_create" property="gmtCreate"/>
-        <result column="gmt_modified" property="gmtModified"/>
-        <result column="is_deleted" property="beDeleted"/>
-        <result column="goods_id" property="goodsId"/>
-        <result column="pic_url" property="picUrl"/>
-        <result column="name_with_specifications" property="nameWithSpecifications"/>
     </resultMap>
 
 </mapper>

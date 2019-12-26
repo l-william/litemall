@@ -56,12 +56,12 @@ public class AdController {
      * @param log
      */
     private void writeLog(Log log) {
-//        RestTemplate restTemplate = new RestTemplate();
-//        ServiceInstance instance = loadBalancerClient.choose("Log");
-//        System.out.println(instance.getHost());
-//        System.out.println(instance.getPort());
-//        String reqURL = String.format("http://%s:%s", instance.getHost(), instance.getPort() + "/logs");
-//        restTemplate.postForObject(reqURL,log,Log.class);
+        RestTemplate restTemplate = new RestTemplate();
+        ServiceInstance instance = loadBalancerClient.choose("Log");
+        System.out.println(instance.getHost());
+        System.out.println(instance.getPort());
+        String reqUrl = String.format("http://%s:%s", instance.getHost(), instance.getPort() + "/logs");
+        restTemplate.postForObject(reqUrl,log,Log.class);
     }
 
     /**
@@ -108,11 +108,11 @@ public class AdController {
                                   @RequestParam String name,
                                   @RequestParam String content
     ) {
-        if(name.equals(""))
+        if("".equals(name))
         {
             name=null;
         }
-        if(content.equals(""))
+        if("".equals(content))
         {
             content=null;
         }
@@ -124,7 +124,7 @@ public class AdController {
         }
         else
         {
-            //return ResponseUtil.unlogin();
+            return ResponseUtil.unlogin();
         }
         List<Ad> adList = adService.adminFindAdList(page,limit,name, content);
         return ResponseUtil.ok(adList);
@@ -176,7 +176,7 @@ public class AdController {
             }
             else
             {
-                //return ResponseUtil.unlogin();
+                return ResponseUtil.unlogin();
             }
             return re;
         }
@@ -188,7 +188,7 @@ public class AdController {
             }
             else
             {
-                //return ResponseUtil.unlogin();
+                return ResponseUtil.unlogin();
             }
             int res=adService.createAd(ad);
             if(res==1) {
@@ -221,7 +221,7 @@ public class AdController {
             }
             else
             {
-                //return ResponseUtil.unlogin();
+                return ResponseUtil.unlogin();
             }
             Object object = ResponseUtil.ok(ad);
             return object;
@@ -234,7 +234,7 @@ public class AdController {
             }
             else
             {
-                //return ResponseUtil.unlogin();
+                return ResponseUtil.unlogin();
             }
             Object object = ResponseUtil.fail(680, "获取广告失败");
             return object;
@@ -261,7 +261,7 @@ public class AdController {
             }
             else
             {
-                //return ResponseUtil.unlogin();
+                return ResponseUtil.unlogin();
             }
             Object object = ResponseUtil.ok(ad);
             return object;
@@ -274,7 +274,7 @@ public class AdController {
             }
             else
             {
-                //return ResponseUtil.unlogin();
+                return ResponseUtil.unlogin();
             }
             Object object=ResponseUtil.fail(682, "修改广告失败");
             return object;
@@ -305,7 +305,7 @@ public class AdController {
             }
             else
             {
-                //return ResponseUtil.unlogin();
+                return ResponseUtil.unlogin();
             }
             return ResponseUtil.fail(683, "删除广告失败");
         }
@@ -315,7 +315,7 @@ public class AdController {
         }
         else
         {
-            //return ResponseUtil.unlogin();
+            return ResponseUtil.unlogin();
         }
         return ResponseUtil.ok();
     };
